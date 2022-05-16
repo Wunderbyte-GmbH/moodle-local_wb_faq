@@ -114,7 +114,10 @@ function renderedit(id, type, data) {
         container.classList.add(hidden);
     }).then(() =>  {
     let dynamicForm = new DynamicForm(document.querySelector(td), 'local_wb_faq\\form\\dynamiceditform');
-    dynamicForm.load({'id' : id});
+    dynamicForm.load({
+        'id' : id,
+        'type' : type
+        });
     console.log("dynamis");
     return dynamicForm;
     }).then((dynamicForm) => {

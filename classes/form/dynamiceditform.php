@@ -75,11 +75,7 @@ class dynamiceditform extends dynamic_form {
             $data->content['format'] = 1;
         } else {
             // No semesters found in DB.
-            $data->semesters = 0;
-            $data->semesteridentifier = [];
-            $data->semestername = [];
-            $data->semesterstart = [];
-            $data->semesterend = [];
+            $data->type = $this->_ajaxformdata['type'];
         }
 
         $this->set_data($data);
@@ -121,8 +117,7 @@ class dynamiceditform extends dynamic_form {
 
         $faqtype[0] = 'category';
         $faqtype[1] = 'question';
-        $mform->addElement('select', 'type', get_string('input:type', 'local_wb_faq'),
-        $faqtype);
+        $mform->addElement('hidden', 'type', get_string('input:type', 'local_wb_faq'));
 
         $mform->addElement('html', '</div><div class="col-md-6">');
         $mform->addElement('text', 'sortorder', get_string('input:sortorder', 'local_wb_faq'));
@@ -135,7 +130,7 @@ class dynamiceditform extends dynamic_form {
         }
         $mform->addElement('select', 'parentid', get_string('input:parentid', 'local_wb_faq'), $selectinput);
         $mform->addElement('html', '</div></div><div class="row"><div class="col-md-12">');
-        if ($this->_ajaxformdata['id']) {
+        if ($this->_ajaxformdata['type'] != 0) {
             $context = \context_system::instance();
             $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' => $context);
             $mform->addElement('editor', 'content', get_string('input:content', 'local_wb_faq'),
