@@ -26,21 +26,31 @@ import Templates from 'core/templates';
  * Gets called from mustache template.
  *
  */
-export const init = (data) => {
+export const init = (data, root) => {
     console.log(data);
-    render('0', data);
-    addEvents(data);
+    render(root, data);
+    addEvents(data, root);
 };
 
 /**
  * adds Evente to toggle switch
  */
-function addEvents(data) {
+function addEvents(data, root) {
     let select = document.getElementById('local_wb_faq');
     select.addEventListener('click', (e) => {
         if (e.target.dataset.action == "goto") {
             render(e.target.dataset.targetid, data);
         }
+    });
+    let category = document.querySelector('#id_categorypicker');
+    category.addEventListener('change', (e) => {
+        let faqid = category.value;
+        if (category.value == '') {
+            faqid = root;
+            console.log(category.value);
+            console.log(root);
+        }
+        render(faqid, data);
     });
 }
 

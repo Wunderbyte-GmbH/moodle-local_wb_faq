@@ -22,7 +22,8 @@
  */
 
 
-
+use MoodleQuickForm;
+use local_wb_faq\settings_manager;
 require_once('../../config.php');
 
 
@@ -246,32 +247,83 @@ $json2 =
 }
 }';
 
-//$data['json'] = $json2;
-
-// loading data for entries
+/*
 global $DB;
 
-$records = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} faq ORDER BY parentid, type ASC");
+$records = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} faq ORDER BY parentid, type ASC LIMIT 40");
+$categoryrecords = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} WHERE type = '0' ORDER BY parentid, type ");
+
+$catarr = array_values($categoryrecords);
+
+function buildtree($elements, $parentid = 0, $depth = 0) {
+    $branch = array();
+    foreach ($elements as $element) {
+        if ($element->parentid == $parentid) {
+            $children = buildTree($elements, $element->id, $depth++);
+            if ($children) {
+                $element->children[] = $children;
+            }
+            $prefix = "";
+            for ($i = 0; $i <= $depth; $i++) {
+                $prefix .= "-";
+            }
+            $branch[] = $element;
+        }
+    }
+    return $branch;
+}
+
+function buildchildren(&$array, $node, $delimiter) {
+    foreach ($node->children as $row => $child) {
+        foreach ($child as $row2 => $c) {
+            $array[$c->id] = $delimiter."".$c->title;
+
+            if ($c->children) {
+                buildchildren($array, $c, $delimiter.'-');
+            }
+        }
+    }
+}
+
+$tree = buildtree($catarr, 30239);
+$option = [];
+$nodes = $tree;
+
+foreach ($nodes as $node) {
+    $option[$node->id] = $node->title;
+    if ($node->children) {
+        buildchildren($option, $node, '-');
+    }
+}
+
+
 $recordsvalues = array_values($records);
 $dataarr = [];
 $i = 1;
 foreach ($recordsvalues as $record) {
-  if ($record->type == 0) {
-    $dataarr[$record->id] = $record;
-    $dataarr[$record->parentid]->categories[] = $record;
-    if ($record->parentid == 0) {
-      $dataarr[$record->parentid]->title = "";
-      $dataarr[$record->parentid]->toplevel = true;
+    if ($record->type == 0) {
+        $dataarr[$record->id] = $record;
+        $dataarr[$record->parentid]->categories[] = $record;
+        if ($record->parentid == 0) {
+            $dataarr[$record->parentid]->title = "";
+            $dataarr[$record->parentid]->toplevel = true;
+        }
     }
-  }
-  if ($record->type == 1) {
-    $dataarr[$record->parentid]->entries[] = $record;
-  }
+    if ($record->type == 1) {
+        $dataarr[$record->parentid]->entries[] = $record;
+    }
 }
-$data['json'] = json_encode($dataarr, true);
+*/
+$test = new settings_manager();
+$d = $test->load_from_cache();
 
+$root = 0;
+$o = $test->buildselect(0);
 
+$data['json'] = json_encode($d, true);
+$data['root'] = 0;
 echo $OUTPUT->header();
-
+$mform = new local_wb_faq\form\categories($o);
+$mform->display();
 echo $OUTPUT->render_from_template('local_wb_faq/js', $data);
 echo $OUTPUT->footer();

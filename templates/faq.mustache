@@ -36,8 +36,10 @@
 
   <h2>{{name}}</h2>
   {{^toplevel}}
-    <div class="btn btn-primary mb-2" data-action="goto" data-targetid='{{parentid}}'>go back</div>
+    <div class="btn btn-primary mb-2 px-4 fa fa-chevron-left" data-action="goto" data-targetid='{{parentid}}'></div>
   {{/toplevel}}
+
+
   {{#categories}}
     {{>local_wb_faq/category}}
   {{/categories}}
@@ -47,7 +49,3 @@
     {{>local_wb_faq/entry}}
   {{/entries}}
 </div>
-
-{{#allowcontact}}
-  {{>local_wb_faq/contactform}}
-{{/allowcontact}}

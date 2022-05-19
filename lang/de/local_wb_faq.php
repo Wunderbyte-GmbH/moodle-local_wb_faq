@@ -59,3 +59,12 @@ $string['categories:description'] = "Set the Standardcategory from the list of t
 $string['er_wb_faqname'] = "Ausgewählte Entität";
 $string['addcategory'] = "Kategorie hinzufügen";
 
+$string['input:title'] = 'Title/Question';
+$string['input:content'] = 'Content';
+$string['input:sortorder'] = 'Sortorder';
+$string['input:type'] = 'Category';
+$string['input:parentid'] = 'Parent';
+$string['searchcategory'] = '... search category';
+$string['root'] = 'Top Level';
+
+$string['wb_faq:canedit'] = 'Manage FAQ';

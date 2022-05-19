@@ -105,7 +105,7 @@ function renderedit(id, type, data) {
         editrow = '#local_wb_faq_admin #local_wb_faq_new_entry form';
         container = document.querySelector('#local_wb_faq_new_entry');
         td = '#local_wb_faq_admin #local_wb_faq_new_entry';
-        type = 'edit';
+        type = type;
         hidden = 'addnew';
     }
 

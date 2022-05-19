@@ -65,3 +65,7 @@ $string['input:content'] = 'Content';
 $string['input:sortorder'] = 'Sortorder';
 $string['input:type'] = 'Category';
 $string['input:parentid'] = 'Parent';
+$string['searchcategory'] = '... search category';
+$string['root'] = 'Top Level';
+
+$string['wb_faq:canedit'] = 'Manage FAQ';

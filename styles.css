@@ -116,3 +116,11 @@ input:checked+.slider:before {
 #wb_faqrelation-form ul li {
     border-top: 1px solid rgba(0, 0, 0, 0.125);
 }
+
+#local_wb_faq {
+    min-height: 300px;
+}
+
+#fitem_id_categorypicker .col-form-label {
+    display: none !important;
+}
