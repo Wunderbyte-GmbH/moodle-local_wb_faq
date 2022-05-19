@@ -19,6 +19,7 @@
  * @copyright  Wunderbyte GmbH <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+import Templates from 'core/templates';
 
 export const searchInput = (listContainer, elementToHide, elementToSearch) => {
     let input, filter, li, a, i, txtValue;
@@ -37,17 +38,42 @@ export const searchInput = (listContainer, elementToHide, elementToSearch) => {
     }
 };
 
-export const searchJSON = (json) => {
-    input = document.querySelector(listContainer);
-    filter = input.value.toUpperCase();
-    
+export const searchJSON = (listContainer, json) => {
+    let arr = [];
+    // Select Container
+    let container = document.getElementById('wb_faq_searchbox');
+    // Empty Container
+    container.innerHTML = "";
+    let searchVal = document.querySelector(listContainer).value.toUpperCase();
+    if (searchVal.length > 3) {
+        let i = 0;
+        Object.values(json).forEach(e=>{
+             if((e.content && e.content.toUpperCase().indexOf(searchVal) > -1) || (e.title && e.title.toUpperCase().indexOf(searchVal) > -1)) {
+                arr[i] = e;
+                if (e.type == 0) {
+                    arr[i].iscategory = true;
+                }
+                i++;
+            }
+        });
+        render(arr, container);
+    }
 };
 
-export const init = (searchInputID, listContainer, elementToHide, elementToSearch) => {
-    document.getElementById(searchInputID).addEventListener('keyup', function () {
+export const init = (searchInputID, listContainer, elementToHide, elementToSearch, json = null) => {
+    /*document.getElementById(searchInputID).addEventListener('keyup', function () {
         searchInput(listContainer, elementToHide, elementToSearch);
-    });
+    }); */
     document.getElementById(searchInputID).addEventListener('keyup', function () {
-        searchJSON(listContainer, elementToHide, elementToSearch);
+        searchJSON(listContainer, json);
     });
 };
+
+
+export const render = (data, container) => {
+    // Render
+    Templates.renderForPromise('local_wb_faq/searchbox', data).then(({html}) => {
+        container.innerHTML = "";
+        container.insertAdjacentHTML('afterbegin', html);
+    });
+}

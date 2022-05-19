@@ -27,7 +27,6 @@ import Templates from 'core/templates';
  *
  */
 export const init = (data, root) => {
-    console.log(data);
     render(root, data);
     addEvents(data, root);
 };

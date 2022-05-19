@@ -116,21 +116,66 @@ class settings_manager {
         return $option;
     }
 
+    public function buildsearch($elements, $parentid = 0, $depth = 0) {
+        $branch = array();
+        foreach ($elements as $element) {
+            if ($element->parentid == $parentid) {
+                $children = $this->buildsearch($elements, $element->id, $depth++);
+                if ($children) {
+                    $element->children[] = $children;
+                }
+                $branch[] = $element;
+            }
+        }
+        return $branch;
+    }
+
+    public function buildsearchchildren(&$array, $node) {
+        foreach ($node->children as $row => $child) {
+            foreach ($child as $row2 => $c) {
+                $array[$c->id] = $c;
+                if ($c->children) {
+                    $this->buildsearchchildren($array, $c);
+                }
+            }
+        }
+    }
+
+    public function buildsearchtree(int $root) {
+        global $DB;
+        $entries = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} ORDER BY type, parentid");
+        $tree = $this->buildsearch($entries, $root);
+        $option = [];
+        $nodes = $tree;
+
+        foreach ($nodes as $node) {
+            $option[$node->id] = $node;
+            if ($node->children) {
+                $this->buildsearchchildren($option, $node);
+            }
+        }
+        return $option;
+    }
+
 
 
     /**
      * Returns the parent-child tree as array or json string
      *
      * @param boolean $json
+     * @param int $root - root level from faq
      * @return mixed
      */
-    public function load_from_cache(bool $json = false) {
+    public function load_from_cache(bool $json = false, $root = null) {
         $cache = \cache::make('local_wb_faq', 'faqcache');
         $cachekey = 'faq_cache';
         $cachedrawdata = $cache->get($cachekey);
         if (!$cachedrawdata) {
             $this->update_cache();
             $cachedrawdata = $cache->get($cachekey);
+        }
+        if ($root) {
+            $cachedrawdata[$root]->toplevel = true;
         }
         if ($json) {
             return json_encode($cachedrawdata, true);
@@ -246,7 +291,18 @@ class settings_manager {
         $formdata->type  = $record->type;
         return $formdata;
     }
+    /**
+     * Undocumented function
+     *
+     * @param string $categoryname
+     * @return stdClass
+     */
+    public static function get_id_from_categoryname(string $categoryname) {
+        global $DB;
 
+        $id = $DB->get_record_sql("SELECT id FROM {local_wb_faq_entry} WHERE title={$categoryname} AND type = 0 ORDER BY parentid, type ASC");
+        return $id;
+    }
     /**
      *
      * This is to update or delete an entity if it does not exist
