@@ -314,6 +314,13 @@ foreach ($recordsvalues as $record) {
     }
 }
 */
+
+global $DB;
+$records = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} faq ORDER BY parentid, type ASC");
+$recordsvalues = array_values($records);
+$b['json'] = json_encode($recordsvalues, true);
+
+
 $test = new settings_manager();
 $d = $test->load_from_cache();
 
@@ -326,4 +333,5 @@ echo $OUTPUT->header();
 $mform = new local_wb_faq\form\categories($o);
 $mform->display();
 echo $OUTPUT->render_from_template('local_wb_faq/js', $data);
+echo $OUTPUT->render_from_template('local_wb_faq/search', $b);
 echo $OUTPUT->footer();
