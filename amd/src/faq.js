@@ -29,7 +29,7 @@ import Templates from 'core/templates';
 export const init = (data, root) => {
 
     // eslint-disable-next-line no-console
-    console.log('data', data);
+    console.log('root & data', root, data);
 
     render(root, data);
     addEvents(data, root);

@@ -60,7 +60,7 @@ class faq_list implements renderable, templatable {
         $data = [];
 
         $data['json'] = json_encode($allfaqs, true);
-        $data['root'] = 0;
+        $data['root'] = $categoryid;
 
         $this->data = $data;
     }

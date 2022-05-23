@@ -327,7 +327,7 @@ class settings_manager {
 
         global $DB;
 
-        if (!$name) {
+        if (empty($name)) {
             return 0;
         }
 

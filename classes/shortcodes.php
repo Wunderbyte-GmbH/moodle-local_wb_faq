@@ -39,9 +39,12 @@ class shortcodes {
 
         if (isset($args['cat'])) {
             $category = ($args['cat']);
+        } else {
+            $category = '';
         }
 
-        if (!$categoryid = settings_manager::return_category_id_by_name($category)) {
+        $categoryid = settings_manager::return_category_id_by_name($category);
+        if (!is_int($categoryid)) {
             return get_string('categorynotfound', 'local_wb_faq');
         }
 
