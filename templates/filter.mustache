@@ -1,0 +1,502 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_mooduell/viewpage
+    Template which defines a mooduell view page.
+    Classes required for JS:
+    * none
+    Data attributes required for JS:
+    * none
+    Context variables required for this template:
+    Example context (json):
+    {
+        "categories" : [
+            [
+               {
+                  "catid":"7",
+                  "contextid":"1",
+                  "catname":"MooDuell Pr\u00e4sentation",
+                  "courseid":"50"
+               }
+            ]
+        ]
+    }
+}}
+
+<div>
+    {{#.}}
+    {{#category}}
+    <div class="form-group" name="{{name}}">
+    {{name}}
+        {{#values}}
+        {{#.}}
+        <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="{{value}}" id="{{key}}" name="{{category}}" data-action="csshide" data-key="sports" data-targetvalue="{{value}}">
+                    <label class="form-check-label" for="{{key}}">
+                        {{key}}
+                    </label>
+        </div>
+        {{/.}}
+        {{/values}}
+        {{/category}}
+    {{/.}}
+    </div>
+</div>
+
+
+<ul class="wunderbyte-table-grid">
+    <div class="list-group-item wunderbyteTableJavascript Schwimmen Di"  data-sports="Schwimmen" data-dayofweek="Di">
+        <div class="w-100">
+            <img class="w-100" src="https://usi-development.aau.at/pluginfile.php/1386/mod_booking/bookingimages/7/default.jpeg">
+        </div>
+
+        <div class="">
+
+                  <span style="display:none">
+                  </span>
+                  <span class="key d-none">
+                   sports
+                  </span>
+
+                    <span style="display:none" class="h6 sports">
+
+                    </span>
+
+                  <span style="display:none">
+                  </span>
+
+
+                  <span style="display:none">
+                  </span>
+                  <span class="key d-none">
+                   invisibleoption
+                  </span>
+
+                    <span style="display:none" class="shortcodes_option_info_invisible invisibleoption">
+
+                    </span>
+
+                  <span style="display:none">
+                  </span>
+
+
+                  <span>
+                  </span>
+                  <span class="key d-none">
+                   text
+                  </span>
+
+                    <span class="h5 text">
+                      <div class="d-flex justify-content-between align-items-end">
+    <a href="https://usi-development.aau.at/mod/booking/optionview.php?optionid=1575&amp;cmid=349&amp;userid=2" target="_blank"><h3>00 - Ohne Termin</h3></a>
+        <a href="https://usi-development.aau.at/mod/booking/editoptions.php?id=349&amp;optionid=1575" target="_self">
+            <h4 class="text-primary"><i class="fa fa-gear"></i></h4>
+        </a>
+</div>
+                    </span>
+
+                  <span>
+                  </span>
+
+
+                  <span style="display:none">
+                  </span>
+                  <span class="key d-none">
+                   teacher
+                  </span>
+
+                    <span style="display:none" class=" teacher">
+
+                    </span>
+
+                  <span style="display:none">
+                  </span>
+
+        </div>
+        <div class="course-card-footer">
+          <div class="">
+            <ul class="infolist">
+              <li>
+
+                    <span style="display:none">
+                      <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    </span>
+                    <span class="key d-none">
+                    dayofweek
+                    </span>
+                    <span style="display:none" class=" dayofweek">
+
+                    </span>
+                    <span style="display:none">
+                    </span>
+
+              </li>
+              <li>
+
+                    <span>
+                      <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    </span>
+                    <span class="key d-none">
+                    location
+                    </span>
+                    <span class=" location">
+                      4GT
+                    </span>
+                    <span>
+                    </span>
+
+              </li>
+              <li>
+
+                    <span>
+                      <i class="fa fa-users" aria-hidden="true"></i>
+                    </span>
+                    <span class="key d-none">
+                    bookings
+                    </span>
+                    <span class=" bookings">
+                      <div class="col-ap-availableplaces">
+            Unbegrenzt
+        </div>
+                    </span>
+                    <span>
+                    </span>
+
+              </li>
+            </ul>
+          </div>
+          <div>
+
+                    <span>
+                    </span>
+                    <span class="key d-none">
+                    price
+                    </span>
+                    <span class=" price">
+                      <span class="pricecurrency">
+    99 EUR
+</span>
+<button class="btn wb_shopping_cart" id="btn-mod_booking-1575" data-id="id" data-userid="" data-objecttable="booking" data-component="mod_booking" data-initialized="true">
+  <i class="fa fa-cart-plus" aria-hidden="true"></i>
+  <span class="addtocartstring">In den Warenkorb</span>
+</button>
+
+    <p><i>MitarbeiterIn</i></p>
+                    </span>
+                    <span>
+                    </span>
+
+          </div>
+        </div>
+    </div>
+    <div class="list-group-item wunderbyteTableJavascript Basketball Di" data-sports="Basketball" data-dayofweek="Block">
+        <div class="w-100">
+            <img class="w-100" src="https://usi-development.aau.at/pluginfile.php/1386/mod_booking/bookingimages/7/basketball.jpg">
+        </div>
+
+        <div class="">
+
+                  <span>
+                  </span>
+                  <span class="key d-none">
+                   sports
+                  </span>
+
+                    <span class="h6 sports">
+                      Basketball
+                    </span>
+
+                  <span>
+                  </span>
+
+
+                  <span>
+                  </span>
+                  <span class="key d-none">
+                   invisibleoption
+                  </span>
+
+                    <span class="shortcodes_option_info_invisible invisibleoption">
+                      Unsichtbare Buchungsoption
+                    </span>
+
+                  <span>
+                  </span>
+
+
+                  <span>
+                  </span>
+                  <span class="key d-none">
+                   text
+                  </span>
+
+                    <span class="h5 text">
+                      <div class="d-flex justify-content-between align-items-end">
+    <a href="https://usi-development.aau.at/mod/booking/optionview.php?optionid=1510&amp;cmid=349&amp;userid=2" target="_blank"><h3>BB01 - BASKETBALL</h3></a>
+        <a href="https://usi-development.aau.at/mod/booking/editoptions.php?id=349&amp;optionid=1510" target="_self">
+            <h4 class="text-primary"><i class="fa fa-gear"></i></h4>
+        </a>
+</div>
+                    </span>
+
+                  <span>
+                  </span>
+
+
+                  <span>
+                  </span>
+                  <span class="key d-none">
+                   teacher
+                  </span>
+
+                    <span class=" teacher">
+                      <div>
+        <a href="/local/musi/teacher.php?teacherid=1004">
+            <i class="fa fa-user"></i> Maxima Lehrerin
+        </a>
+    </div>
+    <div>
+        <a href="/local/musi/teacher.php?teacherid=1005">
+            <i class="fa fa-user"></i> Billy Teachy
+        </a>
+    </div>
+                    </span>
+
+                  <span>
+                  </span>
+
+        </div>
+        <div class="course-card-footer">
+          <div class="">
+            <ul class="infolist">
+              <li>
+
+                    <span>
+                      <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    </span>
+                    <span class="key d-none">
+                    dayofweek
+                    </span>
+                    <span class=" dayofweek">
+                      Block
+                    </span>
+                    <span>
+                    </span>
+
+              </li>
+              <li>
+
+                    <span>
+                      <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    </span>
+                    <span class="key d-none">
+                    location
+                    </span>
+                    <span class=" location">
+                      H4
+                    </span>
+                    <span>
+                    </span>
+
+              </li>
+              <li>
+
+                    <span>
+                      <i class="fa fa-users" aria-hidden="true"></i>
+                    </span>
+                    <span class="key d-none">
+                    bookings
+                    </span>
+                    <span class=" bookings">
+                      <span class="col-ap-availableplaces">
+                <span class="text-success font-weight-bold">0</span>
+             / 24
+        </span>
+                    </span>
+                    <span>
+                    </span>
+
+              </li>
+            </ul>
+          </div>
+          <div>
+
+                    <span>
+                    </span>
+                    <span class="key d-none">
+                    price
+                    </span>
+                    <span class=" price">
+                      <span class="pricecurrency">
+    85 EUR
+</span>
+<button class="btn wb_shopping_cart" id="btn-mod_booking-1510" data-id="id" data-userid="" data-objecttable="booking" data-component="mod_booking" data-initialized="true">
+  <i class="fa fa-cart-plus" aria-hidden="true"></i>
+  <span class="addtocartstring">In den Warenkorb</span>
+</button>
+
+    <p><i>MitarbeiterIn</i></p>
+                    </span>
+                    <span>
+                    </span>
+
+          </div>
+        </div>
+    </div>
+
+
+
+    <div class="list-group-item wunderbyteTableJavascript Yoga Mo">
+        <div class="w-100">
+            <img class="w-100" src="https://usi-development.aau.at/pluginfile.php/1386/mod_booking/bookingimages/7/basketball.jpg">
+        </div>
+
+        <div class="">
+
+                  <span>
+                  </span>
+                  <span class="key d-none">
+                   sports
+                  </span>
+
+                    <span class="h6 sports">
+                      BASKETBALL
+                    </span>
+
+                  <span>
+                  </span>
+
+
+                  <span style="display:none">
+                  </span>
+                  <span class="key d-none">
+                   invisibleoption
+                  </span>
+
+                    <span style="display:none" class="shortcodes_option_info_invisible invisibleoption">
+
+                    </span>
+
+                  <span style="display:none">
+                  </span>
+
+
+                  <span>
+                  </span>
+                  <span class="key d-none">
+                   text
+                  </span>
+
+                    <span class="h5 text">
+                      <div class="d-flex justify-content-between align-items-end">
+    <a href="https://usi-development.aau.at/mod/booking/optionview.php?optionid=1512&amp;cmid=349&amp;userid=2" target="_blank"><h3>BB03 - BASKETBALL</h3></a>
+        <a href="https://usi-development.aau.at/mod/booking/editoptions.php?id=349&amp;optionid=1512" target="_self">
+            <h4 class="text-primary"><i class="fa fa-gear"></i></h4>
+        </a>
+</div>
+                    </span>
+
+                  <span>
+                  </span>
+
+
+                  <span>
+                  </span>
+                  <span class="key d-none">
+                   teacher
+                  </span>
+
+                    <span class=" teacher">
+                      <div>
+        <a href="/local/musi/teacher.php?teacherid=1005">
+            <i class="fa fa-user"></i> Billy Teachy
+        </a>
+    </div>
+                    </span>
+
+                  <span>
+                  </span>
+
+        </div>
+        <div class="course-card-footer">
+          <div class="">
+            <ul class="infolist">
+              <li>
+
+                    <span>
+                      <i class="fa fa-clock-o" aria-hidden="true"></i>
+                    </span>
+                    <span class="key d-none">
+                    dayofweek
+                    </span>
+                    <span class=" dayofweek">
+                      DO, 17:00 - 18:30
+                    </span>
+                    <span>
+                    </span>
+
+              </li>
+              <li>
+
+                    <span>
+                      <i class="fa fa-map-marker" aria-hidden="true"></i>
+                    </span>
+                    <span class="key d-none">
+                    location
+                    </span>
+                    <span class=" location">
+                      H5
+                    </span>
+                    <span>
+                    </span>
+
+              </li>
+              <li>
+
+                    <span>
+                      <i class="fa fa-users" aria-hidden="true"></i>
+                    </span>
+                    <span class="key d-none">
+                    bookings
+                    </span>
+                    <span class=" bookings">
+                      <span class="col-ap-availableplaces">
+                <span class="text-success font-weight-bold">2</span>
+             / 24
+        </span>
+                    </span>
+                    <span>
+                    </span>
+
+              </li>
+            </ul>
+          </div>
+          <div>
+
+                    <span>
+                    </span>
+                    <span class="key d-none">
+                    price
+                    </span>
+                    <span class=" price">
+                      <span class="price_mod_booking_1512">Gebucht</span>
+                    </span>
+                    <span>
+                    </span>
+
+          </div>
+        </div>
+    </div>
+
+</ul>
