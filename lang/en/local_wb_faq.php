@@ -76,3 +76,4 @@ $string['displayfaqs'] = "Display FAQs";
 $string['categorynotfound'] = "Category not found";
 
 $string['faq'] = "FAQ";
+$string['searchfaq'] = "... search faq";
