@@ -72,7 +72,9 @@ $string['wb_faq:canedit'] = 'Manage FAQ';
 // Shortcodes
 
 $string['displayfaqs'] = "Zeige FAQs";
-$string['categorynotfound'] = "Kategorie nicht gefunden";
+$string['categorynotfound'] = 'Kategorie "{$a}" nicht gefunden';
 
 $string['faq'] = "FAQ";
+$string['noresult'] = "Kein Ergebnis gefunden.";
+$string['stringtooshort'] = "Eingabe zu kurz...";
 $string['searchfaq'] = "... durchsuche FAQs";

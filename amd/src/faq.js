@@ -30,9 +30,6 @@ import Templates from 'core/templates';
  */
 export const init = (data, root) => {
 
-    // eslint-disable-next-line no-console
-    console.log('root & data', root, data);
-
     render(root, data, root);
     addEvents(data, root);
 };
@@ -45,18 +42,24 @@ export const init = (data, root) => {
 function addEvents(data, root) {
     let select = document.getElementById('local_wb_faq');
 
-    select.addEventListener('click', (e) => {
-        if (e.target.dataset.action == "goto") {
-            render(e.target.dataset.targetid, data, root);
-        }
-    });
+    if (select) {
+        select.addEventListener('click', (e) => {
+            if (e.target.dataset.action == "goto") {
+                render(e.target.dataset.targetid, data, root);
+            }
+        });
+    }
+
     let searchbox = document.getElementById('wb_faq_searchbox');
 
-    searchbox.addEventListener('click', (e) => {
-        if (e.target.dataset.action == "goto") {
-            render(e.target.dataset.targetid, data, root);
-        }
-    });
+    if (searchbox) {
+        searchbox.addEventListener('click', (e) => {
+            if (e.target.dataset.action == "goto") {
+                render(e.target.dataset.targetid, data, root);
+            }
+        });
+    }
+
     let category = document.querySelector('#id_categorypicker');
 
     if (category) {
@@ -66,8 +69,6 @@ function addEvents(data, root) {
                 faqid = root;
             }
 
-            // eslint-disable-next-line no-console
-            console.log(data);
             render(faqid, data, root);
         });
     }
@@ -80,9 +81,6 @@ function addEvents(data, root) {
  * @param {integer} root
  */
 function render(id, data, root) {
-
-    // eslint-disable-next-line no-console
-    console.log(id, data, root);
 
     // Load the specific category data
     let json = JSON.parse(data);
@@ -98,8 +96,6 @@ function render(id, data, root) {
     // Render
     Templates.renderForPromise('local_wb_faq/faq', templatedata).then(({html}) => {
 
-        // eslint-disable-next-line no-console
-        console.log(html);
         container.insertAdjacentHTML('afterbegin', html);
         return;
     }).catch(e => {

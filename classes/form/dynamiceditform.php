@@ -98,7 +98,6 @@ class dynamiceditform extends dynamic_form {
             $settingsmanager->create_faq($data);
         }
 
-
         return $this->get_data();
     }
 

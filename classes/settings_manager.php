@@ -382,7 +382,7 @@ class settings_manager {
 
                 $record = reset($records);
 
-                return $record->id;
+                return (int)$record->id;
             } else {
                 return null;
             }

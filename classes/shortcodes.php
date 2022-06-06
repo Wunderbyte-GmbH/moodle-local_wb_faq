@@ -43,17 +43,36 @@ class shortcodes {
             $category = '';
         }
 
-        $categoryid = settings_manager::return_category_id_by_name($category);
-        if (!is_int($categoryid)) {
-            return get_string('categorynotfound', 'local_wb_faq');
+        if (isset($args['nosearch'])) {
+            $nosearch = ($args['nosearch']);
+        } else {
+            $nosearch = false;
         }
 
-        $renderer = $PAGE->get_renderer('local_wb_faq');
-        $data = new display_search($categoryid);
-        $out = $renderer->render_display_search($data);
+        if (isset($args['nolist'])) {
+            $nolist = true;
+        } else {
+            $nolist = false;
+        }
 
-        $data = new faq_list($categoryid);
-        $out .= $renderer->render_list_faq($data);
+        $categoryid = settings_manager::return_category_id_by_name($category);
+        if (!is_int($categoryid)) {
+            return get_string('categorynotfound', 'local_wb_faq', $category);
+        }
+
+        $out = '';
+
+        $renderer = $PAGE->get_renderer('local_wb_faq');
+
+        if (!$nosearch) {
+            $data = new display_search($categoryid);
+            $out = $renderer->render_display_search($data);
+        }
+
+        if (!$nolist) {
+            $data = new faq_list($categoryid);
+            $out .= $renderer->render_list_faq($data);
+        }
 
         return $out;
     }

@@ -20,6 +20,7 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 import Templates from 'core/templates';
+import {get_string as getString} from 'core/str';
 
 var searcharray = [];
 
@@ -76,9 +77,40 @@ export const searchJSON = (listContainer, json) => {
             }
         }
         searcharray = arr;
-    } else {
-        container.innerHTML = "";
+
+        if (searcharray.length < 1) {
+            getString('noresult', 'local_wb_faq').then(value => {
+
+                // eslint-disable-next-line no-console
+                console.log(value);
+                container.innerHTML = value;
+                return;
+            }).catch(e => {
+                // eslint-disable-next-line no-console
+                console.log(e);
+            });
+        }
+
+    } else if (searchVal.length == 0) {
+
+        container.innerHTML = '';
         searcharray = [];
+
+    } else {
+
+        getString('stringtooshort', 'local_wb_faq').then(value => {
+
+            // eslint-disable-next-line no-console
+            console.log(value);
+            container.innerHTML = value;
+            return;
+        }).catch(e => {
+            // eslint-disable-next-line no-console
+            console.log(e);
+        });
+
+        searcharray = [];
+
     }
 };
 
@@ -92,6 +124,9 @@ export const init = (searchInputID, listContainer, elementToHide, elementToSearc
 
 export const render = (data, container) => {
     // Render
+    // eslint-disable-next-line no-console
+    console.log(data, container);
+
     Templates.renderForPromise('local_wb_faq/searchbox', data).then(({html}) => {
         container.innerHTML = "";
         container.insertAdjacentHTML('afterbegin', html);

@@ -29,6 +29,9 @@ var categories = [];
  * @param {string} singledatacontainer
  */
 export const init = (filtercontainer, singledatacontainer) => {
+
+  // eslint-disable-next-line no-console
+  console.log(filtercontainer, singledatacontainer);
   var allCheckboxes = document.querySelectorAll("input[type=checkbox]");
 
   document.querySelectorAll(".form-group").forEach(function (e) {
