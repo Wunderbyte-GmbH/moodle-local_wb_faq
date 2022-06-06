@@ -74,3 +74,5 @@ $string['wb_faq:canedit'] = 'Manage FAQ';
 
 $string['displayfaqs'] = "Display FAQs";
 $string['categorynotfound'] = "Category not found";
+
+$string['faq'] = "FAQ";

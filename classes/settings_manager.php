@@ -159,7 +159,7 @@ class settings_manager {
         $entries = $DB->get_records_sql("SELECT t1.*, t2.title AS parenttitle FROM {local_wb_faq_entry}
         t1 left join {local_wb_faq_entry} t2 on t1.parentid = t2.id ORDER BY type, parentid
         ");
-        //$entries = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} ORDER BY type, parentid");
+        // $entries = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} ORDER BY type, parentid");
         $tree = $this->buildsearch($entries, $root);
         $option = [];
         $nodes = $tree;
@@ -210,22 +210,60 @@ class settings_manager {
         $recordsvalues = array_values($records);
         $dataarr = [];
         foreach ($recordsvalues as $record) {
+            // If its a category...
             if ($record->type == 0) {
                 $dataarr[$record->id] = $record;
                 $dataarr[$record->parentid]->categories[] = $record;
                 // $dataarr[$record->parentid]->parenttitle = $dataarr[$dataarr[$record->parentid]->parentid]->title;
                 if ($record->parentid == 0) {
                     // TODO add string
-                    $dataarr[$record->parentid]->title = "FAQ";
+                    $dataarr[$record->parentid]->title = get_string('faq', 'local_wb_faq');
                     $dataarr[$record->parentid]->toplevel = true;
                     $dataarr[$record->parentid]->parentid = 0;
                 }
             }
+            // if its a question.
             if ($record->type == 1) {
                 $dataarr[$record->parentid]->entries[] = $record;
             }
         }
+
+        self::add_breadcrumb($dataarr[0], $dataarr);
+
         return $dataarr;
+    }
+
+
+    /**
+     * Add Breadcrumbs to flat & hierarchical tree.
+     *
+     * @param stdClass $node
+     * @param array $flattree
+     * @return void
+     */
+    private static function add_breadcrumb(&$node, &$flattree) {
+
+        if (!isset($node->breadcrumbs)) {
+            $node->breadcrumbs[] = [
+                'name' => $node->title,
+                'id' => $node->id ?? 0
+            ];
+        }
+
+        if (isset($node->categories)) {
+            foreach ($node->categories as $category) {
+                $category->breadcrumbs = $node->breadcrumbs ?? [];
+                $category->breadcrumbs[] = [
+                    'name' => $category->title,
+                    'id' => $category->id ?? 0
+                ];
+
+                self::add_breadcrumb($category, $flattree);
+            }
+        }
+        if (isset($node->id)) {
+            $flattree[$node->id]->breadcrumbs = $node->breadcrumbs;
+        }
     }
 
     public function category_select_tree(array $datatree = null): array {
