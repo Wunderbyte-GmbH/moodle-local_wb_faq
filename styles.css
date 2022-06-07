@@ -121,7 +121,7 @@ input:checked + .slider:before {
     min-height: 300px;
 }
 
-#local_wb_faq .btn {
+#local_wb_faq .wb-breadcrumb .btn {
     color: #fff;
 }
 
