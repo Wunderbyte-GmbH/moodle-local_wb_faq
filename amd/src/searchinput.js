@@ -24,9 +24,9 @@ import {get_string as getString} from 'core/str';
 
 var searcharray = [];
 
-export const searchInput = (listContainer, elementToHide, elementToSearch) => {
+export const searchInput = (inputClass, elementToHide, elementToSearch, uid) => {
     let input, filter, li, a, i, txtValue;
-    input = document.querySelector(listContainer);
+    input = document.querySelector(inputClass);
     filter = input.value.toUpperCase();
     li = document.querySelectorAll(elementToHide);
     for (i = 0; i < li.length; i++) {
@@ -41,12 +41,14 @@ export const searchInput = (listContainer, elementToHide, elementToSearch) => {
     }
 };
 
-export const searchJSON = (listContainer, json) => {
+export const searchJSON = (listContainer, inputClass, json) => {
     let arr = [];
     // Select Container
-    let container = document.getElementById('wb_faq_searchbox');
+    // eslint-disable-next-line no-console
+    console.log(listContainer, inputClass);
+    let container = document.querySelector(listContainer);
 
-    let searchVal = document.querySelector(listContainer).value.toUpperCase();
+    let searchVal = document.querySelector(inputClass).value.toUpperCase();
 
     // eslint-disable-next-line no-console
     console.log(searchVal);
@@ -115,9 +117,10 @@ export const searchJSON = (listContainer, json) => {
 };
 
 export const init = (searchInputID, listContainer, elementToHide, elementToSearch, json = null) => {
-
-    document.getElementById(searchInputID).addEventListener('keyup', function () {
-        searchJSON(listContainer, json);
+    // eslint-disable-next-line no-console
+    console.log("initSearch", searchInputID, listContainer);
+    document.querySelector(searchInputID).addEventListener('keyup', function () {
+        searchJSON(listContainer, searchInputID, json);
     });
 };
 
@@ -125,7 +128,7 @@ export const init = (searchInputID, listContainer, elementToHide, elementToSearc
 export const render = (data, container) => {
     // Render
     // eslint-disable-next-line no-console
-    console.log(data, container);
+    console.log(container);
 
     Templates.renderForPromise('local_wb_faq/searchbox', data).then(({html}) => {
         container.innerHTML = "";

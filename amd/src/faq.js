@@ -29,25 +29,26 @@ import {get_string as getString} from 'core/str';
  *
  * @param {*} data
  * @param {integer} root
+ * @param {string} uid
  */
-export const init = (data, root) => {
-
-    render(root, data);
-    addEvents(data, root);
+export const init = (data, root, uid) => {
+    console.log(uid);
+    render(root, data, uid);
+    addEvents(data, root, uid);
 };
 
 /**
  * Adds Evente to toggle switch
  * @param {*} data
  * @param {integer} root
+ * @param {string} uid
  */
-function addEvents(data, root) {
-    let select = document.getElementById('local_wb_faq');
-
+function addEvents(data, root, uid) {
+    let select = document.querySelector('.local_wb_faq-' + uid);
     if (select) {
         select.addEventListener('click', (e) => {
             if (e.target.dataset.action == "goto") {
-                render(e.target.dataset.targetid, data);
+                render(e.target.dataset.targetid, data, uid);
             }
         });
     }
@@ -57,8 +58,8 @@ function addEvents(data, root) {
     if (searchbox) {
         searchbox.addEventListener('click', (e) => {
             if (e.target.dataset.action == "goto") {
-                render(e.target.dataset.targetid, data);
-                document.querySelector('#local_wb_faq').scrollIntoView({block: "start", behavior: "smooth"});
+                render(e.target.dataset.targetid, data, uid);
+                document.querySelector('.local_wb_faq-' + uid).scrollIntoView({block: "start", behavior: "smooth"});
             }
         });
     }
@@ -81,8 +82,9 @@ function addEvents(data, root) {
  * Renders template from jsonobject for the categoryid
  * @param {integer} id
  * @param {*} data
+ * @param {string} uid
  */
-function render(id, data) {
+function render(id, data, uid) {
 
     // Load the specific category data
     let json = JSON.parse(data);
@@ -93,8 +95,9 @@ function render(id, data) {
     if (templatedata.parentid == '') {
         templatedata.parenttitle = getString('faq', 'local_wb_faq');
     }
+
     // Select Container
-    let container = document.getElementById('local_wb_faq');
+    let container = document.querySelector('.local_wb_faq-' + uid);
     // Empty Container
     container.innerHTML = "";
     // Render

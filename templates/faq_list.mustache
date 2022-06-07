@@ -34,7 +34,7 @@
     }
 }}
 
-<div id="local_wb_faq">
+<div id="local_wb_faq" class="local_wb_faq-{{uniqid}}">
 
 </div>
 
@@ -42,6 +42,6 @@
 {{#js}}
 console.log({{{json}}}, {{{root}}});
   require(['local_wb_faq/faq', 'local_wb_faq/searchinput'], function(faq,search) {
-    faq.init({{{json}}}, {{{root}}});
+    faq.init({{{json}}}, {{{root}}}, '{{{uniqid}}}');
   });
 {{/js}}

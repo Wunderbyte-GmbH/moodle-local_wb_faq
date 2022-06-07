@@ -72,7 +72,7 @@ class display_search implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         $data = $this->data;
-
+        $data['uid'] = uniqid();
         return $data;
     }
 }

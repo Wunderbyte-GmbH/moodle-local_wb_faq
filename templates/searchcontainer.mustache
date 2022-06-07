@@ -34,10 +34,10 @@
     }
 }}
 
- <div id="searchContainer">{{>local_wb_faq/filter}}</div>
+ <div id="searchContainer" class="wb_faq_searchbox-{{uniqid}}">{{>local_wb_faq/filter}}</div>
 
  {{#js}}
     require(['local_wb_faq/filter'], function(filter) {
-    filter.init({{{json}}});
+    filter.init({{{json}}}, {{uniqid}});
   });
 {{/js}}
