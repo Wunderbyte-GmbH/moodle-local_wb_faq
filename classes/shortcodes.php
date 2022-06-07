@@ -64,13 +64,15 @@ class shortcodes {
 
         $renderer = $PAGE->get_renderer('local_wb_faq');
 
+        $uid = uniqid();
+
         if (!$nosearch) {
-            $data = new display_search($categoryid);
+            $data = new display_search($categoryid, $uid);
             $out = $renderer->render_display_search($data);
         }
 
         if (!$nolist) {
-            $data = new faq_list($categoryid);
+            $data = new faq_list($categoryid, $uid);
             $out .= $renderer->render_list_faq($data);
         }
 

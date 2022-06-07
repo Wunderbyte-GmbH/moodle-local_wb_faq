@@ -25,6 +25,10 @@ import {get_string as getString} from 'core/str';
 var searcharray = [];
 
 export const searchInput = (inputClass, elementToHide, elementToSearch, uid) => {
+
+    // eslint-disable-next-line no-console
+    console.log('searchinput uid: ', uid);
+
     let input, filter, li, a, i, txtValue;
     input = document.querySelector(inputClass);
     filter = input.value.toUpperCase();

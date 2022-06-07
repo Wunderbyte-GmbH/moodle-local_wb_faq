@@ -48,11 +48,20 @@ class faq_list implements renderable, templatable {
     private $data = [];
 
     /**
+     * uid to identify search & list which belong together.
+     *
+     * @var null|string
+     */
+    private $uid = null;
+
+    /**
      * Constructor.
      * @param integer $categoryid
-     * @param boolean $displaysearch
+     * @param string $uid
      */
-    public function __construct($categoryid = 0) {
+    public function __construct($categoryid = 0, string $uid) {
+
+        $this->uid = $uid;
 
         $sm = new settings_manager();
         $allfaqs = $sm->load_from_cache(true, $categoryid);
@@ -73,6 +82,7 @@ class faq_list implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         $data = $this->data;
+        $data['uid'] = $this->uid;
 
         return $data;
     }

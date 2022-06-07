@@ -48,11 +48,20 @@ class display_search implements renderable, templatable {
     private $data = [];
 
     /**
+     * uid to identify search & list which belong together.
+     *
+     * @var null|string
+     */
+    private $uid = null;
+
+    /**
      * Constructor.
      * @param integer $categoryid
-     * @param boolean $displaysearch
+     * @param string $uid
      */
-    public function __construct($categoryid = 0) {
+    public function __construct($categoryid = 0, string $uid) {
+
+        $this->uid = $uid;
 
         $sm = new settings_manager();
 
@@ -72,7 +81,7 @@ class display_search implements renderable, templatable {
      */
     public function export_for_template(renderer_base $output) {
         $data = $this->data;
-        $data['uid'] = uniqid();
+        $data['uid'] = $this->uid;
         return $data;
     }
 }

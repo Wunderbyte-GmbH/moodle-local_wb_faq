@@ -34,14 +34,13 @@
     }
 }}
 
-<div id="local_wb_faq" class="local_wb_faq-{{uniqid}}">
+<div id="local_wb_faq" class="local_wb_faq-{{uid}}">
 
 </div>
 
 
 {{#js}}
-console.log({{{json}}}, {{{root}}});
   require(['local_wb_faq/faq', 'local_wb_faq/searchinput'], function(faq,search) {
-    faq.init({{{json}}}, {{{root}}}, '{{{uniqid}}}');
+    faq.init({{{json}}}, {{{root}}}, '{{{uid}}}');
   });
 {{/js}}

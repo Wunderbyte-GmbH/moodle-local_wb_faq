@@ -32,7 +32,8 @@ import {get_string as getString} from 'core/str';
  * @param {string} uid
  */
 export const init = (data, root, uid) => {
-    console.log(uid);
+    // eslint-disable-next-line no-console
+    console.log('faq.js ', uid);
     render(root, data, uid);
     addEvents(data, root, uid);
 };
@@ -53,7 +54,10 @@ function addEvents(data, root, uid) {
         });
     }
 
-    let searchbox = document.getElementById('wb_faq_searchbox');
+    let searchbox = document.querySelector('.wb_faq_searchbox-' + uid);
+
+    // eslint-disable-next-line no-console
+    console.log('searchbox', searchbox);
 
     if (searchbox) {
         searchbox.addEventListener('click', (e) => {
