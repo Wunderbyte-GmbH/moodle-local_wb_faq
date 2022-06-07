@@ -121,8 +121,12 @@ input:checked + .slider:before {
     min-height: 300px;
 }
 
+#local_wb_faq .btn {
+    color: #fff;
+}
+
 #fitem_id_categorypicker .col-form-label {
-    display: none !important;
+    display: none;
 }
 
 .wb_faq-badge.badge {
@@ -130,13 +134,18 @@ input:checked + .slider:before {
     left: unset;
 }
 
-#wb_faq_searchbox .card,.current-faq {
+#wb_faq_searchbox .card,
+.current-faq {
     animation: appear 1s;
 }
 
 @keyframes appear {
-    0%    { opacity: 0; }
-    100%  { opacity: 1; }
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 .accordion-body {

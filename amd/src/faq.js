@@ -32,7 +32,7 @@ import {get_string as getString} from 'core/str';
  */
 export const init = (data, root) => {
 
-    render(root, data, root);
+    render(root, data);
     addEvents(data, root);
 };
 
@@ -47,7 +47,7 @@ function addEvents(data, root) {
     if (select) {
         select.addEventListener('click', (e) => {
             if (e.target.dataset.action == "goto") {
-                render(e.target.dataset.targetid, data, root);
+                render(e.target.dataset.targetid, data);
             }
         });
     }
@@ -57,7 +57,7 @@ function addEvents(data, root) {
     if (searchbox) {
         searchbox.addEventListener('click', (e) => {
             if (e.target.dataset.action == "goto") {
-                render(e.target.dataset.targetid, data, root);
+                render(e.target.dataset.targetid, data);
                 document.querySelector('#local_wb_faq').scrollIntoView({block: "start", behavior: "smooth"});
             }
         });
@@ -72,7 +72,7 @@ function addEvents(data, root) {
                 faqid = root;
             }
 
-            render(faqid, data, root);
+            render(faqid, data);
         });
     }
 }
@@ -81,9 +81,8 @@ function addEvents(data, root) {
  * Renders template from jsonobject for the categoryid
  * @param {integer} id
  * @param {*} data
- * @param {integer} root
  */
-function render(id, data, root) {
+function render(id, data) {
 
     // Load the specific category data
     let json = JSON.parse(data);
