@@ -156,7 +156,8 @@ class settings_manager {
      */
     public function buildsearchtree(int $root) {
         global $DB;
-        $entries = $DB->get_records_sql("SELECT t1.*, t2.title AS parenttitle FROM {local_wb_faq_entry}
+        $faqstring = get_string('local_wb_faq', 'faq');
+        $entries = $DB->get_records_sql("SELECT t1.*, IFNULL(t2.title, '$faqstring') AS parenttitle FROM {local_wb_faq_entry}
         t1 left join {local_wb_faq_entry} t2 on t1.parentid = t2.id ORDER BY type, parentid
         ");
         // $entries = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} ORDER BY type, parentid");

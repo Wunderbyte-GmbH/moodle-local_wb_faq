@@ -41,7 +41,7 @@ $PAGE->set_heading($title);
 
 
 $test = new settings_manager();
-$id = $test->get_id_from_categoryname('"test"');
+$id = $test->return_category_id_by_name('"test"');
 $root = 0;
 $d = $test->load_from_cache(true, $root);
 
@@ -56,18 +56,6 @@ echo $OUTPUT->header();
 $renderer = $PAGE->get_renderer('local_wb_faq');
 $data = new display_search(0);
 echo $renderer->render_display_search($data);
-
-// $sm = new settings_manager(0);
-// $categorytree = $sm->buildselect(0);
-
-// $mform = new categories($categorytree);
-// $mform->display();
-
 $data = new faq_list(0);
 echo $renderer->render_list_faq($data);
-
-$mform = new local_wb_faq\form\categories($o);
-$mform->display();
-echo $OUTPUT->render_from_template('local_wb_faq/search', $search);
-echo $OUTPUT->render_from_template('local_wb_faq/js', $data);
 echo $OUTPUT->footer();

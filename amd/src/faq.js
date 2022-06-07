@@ -22,6 +22,8 @@
 
 
 import Templates from 'core/templates';
+import {get_string as getString} from 'core/str';
+
 /**
  * Gets called from mustache template.
  *
@@ -56,6 +58,7 @@ function addEvents(data, root) {
         searchbox.addEventListener('click', (e) => {
             if (e.target.dataset.action == "goto") {
                 render(e.target.dataset.targetid, data, root);
+                document.querySelector('#local_wb_faq').scrollIntoView({block: "start", behavior: "smooth"});
             }
         });
     }
@@ -85,10 +88,12 @@ function render(id, data, root) {
     // Load the specific category data
     let json = JSON.parse(data);
     let templatedata = json[id];
-    templatedata.parenttitle = json[templatedata.parentid].title;
-    templatedata.roottitle = json[root].title;
-    templatedata.rootid = root;
-
+    if (json[templatedata.parentid].title) {
+        templatedata.parenttitle = json[templatedata.parentid].title;
+    }
+    if (templatedata.parentid == '') {
+        templatedata.parenttitle = getString('faq', 'local_wb_faq');
+    }
     // Select Container
     let container = document.getElementById('local_wb_faq');
     // Empty Container

@@ -124,3 +124,21 @@ input:checked+.slider:before {
 #fitem_id_categorypicker .col-form-label {
     display: none !important;
 }
+
+.wb_faq-badge.badge {
+    right: 10px;
+    left: unset;
+}
+
+#wb_faq_searchbox .card,.current-faq {
+    animation: appear 1s;
+}
+
+@keyframes appear {
+    0%    { opacity: 0; }
+    100%  { opacity: 1; }
+}
+
+.accordion-body {
+    border-top: 2px solid #007b5e;
+}
