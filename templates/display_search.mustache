@@ -37,6 +37,14 @@
 <input class='my-2 w-auto form-control searchfaq-{{uid}}' type='text' id='searchfaq' placeholder='{{#str}} searchfaq, local_wb_faq {{/str}}'>
 <div id="wb_faq_searchbox" class="wb_faq_searchbox-{{uid}}"></div>
 
+<script>
+  if (typeof require == 'function') {
+    require(['local_wb_faq/searchinput'], function(search) {
+      search.init('#searchfaq.searchfaq-{{uid}}', '.wb_faq_searchbox-{{uid}}', '.wb_faq_searchbox-{{uid}} .accordion-item','.wb_faq_searchbox-{{uid}} .accordion-body', {{{json}}});
+    });
+  }
+</script>
+
 {{#js}}
   require(['local_wb_faq/searchinput'], function(search) {
     search.init('#searchfaq.searchfaq-{{uid}}', '.wb_faq_searchbox-{{uid}}', '.wb_faq_searchbox-{{uid}} .accordion-item','.wb_faq_searchbox-{{uid}} .accordion-body', {{{json}}});

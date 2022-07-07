@@ -35,12 +35,19 @@
 }}
 
 <div id="local_wb_faq" class="local_wb_faq-{{uid}}">
-
 </div>
 
+{{! Has to be included this way to make it work when lazy loaded via ajax }}
+<script>
+  if (typeof require == 'function') {
+      require(['local_wb_faq/faq', 'local_wb_faq/searchinput'], function(faq,search) {
+      faq.init({{{json}}}, {{{root}}}, '{{{uid}}}');
+    });
+  }
+</script>
 
 {{#js}}
-  require(['local_wb_faq/faq', 'local_wb_faq/searchinput'], function(faq,search) {
-    faq.init({{{json}}}, {{{root}}}, '{{{uid}}}');
-  });
+    require(['local_wb_faq/faq', 'local_wb_faq/searchinput'], function(faq,search) {
+      faq.init({{{json}}}, {{{root}}}, '{{{uid}}}');
+    });
 {{/js}}

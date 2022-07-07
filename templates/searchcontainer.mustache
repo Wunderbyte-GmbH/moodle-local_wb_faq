@@ -36,6 +36,12 @@
 
  <div id="searchContainer" class="wb_faq_searchbox-{{uid}}">{{>local_wb_faq/filter}}</div>
 
+<script>
+    require(['local_wb_faq/filter'], function(filter) {
+    filter.init({{{json}}}, {{uid}});
+  });
+</script>
+
  {{#js}}
     require(['local_wb_faq/filter'], function(filter) {
     filter.init({{{json}}}, {{uid}});

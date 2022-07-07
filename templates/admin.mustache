@@ -39,6 +39,17 @@
 </div>
 
 
+<script>
+ if (require) {
+   require(['local_wb_faq/admin'], function(faq) {
+    faq.init({{{json}}},{{{id}}});
+  });
+ } else {
+   console.log('require doesnt exist');
+ }
+
+</script>
+
 {{#js}}
   require(['local_wb_faq/admin'], function(faq) {
     faq.init({{{json}}},{{{id}}});
