@@ -26,7 +26,7 @@ import DynamicForm from 'core_form/dynamicform';
 
 /**
  * Gets called from mustache template.
- *
+ * @param {*} data
  */
 export const init = (data) => {
 
@@ -36,6 +36,7 @@ export const init = (data) => {
 
 /**
  * adds Evente to toggle switch
+ * @param {*} data
  */
 function addEvents(data) {
     let select = document.getElementById('local_wb_faq_admin');
@@ -62,6 +63,7 @@ function addEvents(data) {
 /**
  * Renders template from jsonobject for the categoryid
  * @param {*} id
+ * @param {*} data
  */
 function render(id, data) {
     // Load the specific category data
@@ -71,6 +73,7 @@ function render(id, data) {
     // Render
     Templates.renderForPromise('local_wb_faq/admincontent', json).then(({html}) => {
         container.insertAdjacentHTML('beforeend', html);
+        return;
     }).catch(e => {
         // eslint-disable-next-line no-console
         console.log(e);
@@ -88,15 +91,20 @@ function render(id, data) {
             'id' : id
         },
         done: function() {
+            return;
         },
     }]);
 };
 
 
-
+/**
+ * Render edit
+ * @param {*} id
+ * @param {*} type
+ */
 function renderedit(id, type) {
-    let json = {'id' : type + '-' + id};
-    let  container = document.querySelector('#local_wb_faq_admin .view-' + type + '-' + id);
+    let json = {'id': type + '-' + id};
+    let container = document.querySelector('#local_wb_faq_admin .view-' + type + '-' + id);
     let editrow = '#local_wb_faq_admin .edit-' + type + '-' + id;
     let td = '#local_wb_faq_admin .edit-' + type + '-' + id + ' td';
     let hidden = 'hidden';
@@ -110,13 +118,14 @@ function renderedit(id, type) {
     Templates.renderForPromise('local_wb_faq/quickedit', json).then(({html}) => {
         container.insertAdjacentHTML('afterend', html);
         container.classList.add(hidden);
-    }).then(() =>  {
-    let dynamicForm = new DynamicForm(document.querySelector(td), 'local_wb_faq\\form\\dynamiceditform');
-    dynamicForm.load({
-        'id' : id,
-        'type' : type
-        });
-    return dynamicForm;
+        return;
+    }).then(() => {
+        let dynamicForm = new DynamicForm(document.querySelector(td), 'local_wb_faq\\form\\dynamiceditform');
+        dynamicForm.load({
+            'id' : id,
+            'type': type
+            });
+        return dynamicForm;
     }).then((dynamicForm) => {
         dynamicForm.addEventListener(dynamicForm.events.FORM_SUBMITTED, (e) => {
             e.preventDefault();
@@ -129,6 +138,10 @@ function renderedit(id, type) {
             container.classList.remove(hidden);
             document.querySelector(editrow).remove();
         });
+        return;
+    }).catch(e => {
+        // eslint-disable-next-line no-console
+        console.log(e);
     });
 }
 
