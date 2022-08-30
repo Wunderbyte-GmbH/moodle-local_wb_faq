@@ -25,6 +25,7 @@
 
 namespace local_wb_faq\output;
 
+use context_system;
 use local_wb_faq\form\categories;
 use local_wb_faq\settings_manager;
 use renderable;
@@ -83,6 +84,12 @@ class faq_list implements renderable, templatable {
     public function export_for_template(renderer_base $output) {
         $data = $this->data;
         $data['uid'] = $this->uid;
+
+        $context = context_system::instance();
+
+        if (has_capability('local/wb_faq:canedit', $context)) {
+            $data['canedit'] = true;
+        }
 
         return $data;
     }

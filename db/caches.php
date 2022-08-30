@@ -29,7 +29,8 @@ $definitions = array(
         'mode' => cache_store::MODE_APPLICATION,
         'simplekeys' => true,
         'staticacceleration' => true,
-        'staticaccelerationsize' => 1
+        'staticaccelerationsize' => 1,
+        'invalidationevents' => ['setbackfaqlist']
     )
 );
 

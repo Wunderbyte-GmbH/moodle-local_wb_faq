@@ -29,11 +29,12 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->libdir . '/externallib.php');
 
+use local_wb_faq\settings_manager;
 use local_wb_faq\wb_faq;
 class local_wb_faq_external extends external_api {
 
     /**
-     * Webservice for shopping_cart class to add a new item to the cart.
+     * Delte an faq entry by id.
      *
      * @param int $id
      *
@@ -44,7 +45,17 @@ class local_wb_faq_external extends external_api {
         $params = external_api::validate_parameters(self::delete_entry_parameters(), [
             'id' => $id
         ]);
-        $array['status'] = $DB->delete_records('local_wb_faq_entry', array('id' => $params['id']));
+
+        $context = context_system::instance();
+
+        if (!has_capability('local/wb_faq:canedit', $context)) {
+
+            throw new moodle_exception('norighttoaccessthisfunction', 'local_wb_faq');
+
+        } else {
+            $array['status'] = settings_manager::delete_entry($params['id']);
+        }
+
         return $array;
     }
 

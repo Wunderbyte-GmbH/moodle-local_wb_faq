@@ -52,6 +52,12 @@ $string['new_entity'] = 'New Entity';
 $string['edit_entity'] = 'Edit Entity';
 $string['view'] = "View";
 $string['edit'] = "Edit";
+
+$string['editcategories'] = "Kategorien editieren";
+$string['editquestions'] = "Fragen editieren";
+$string['addquestion'] = "Frage hinzufügen";
+$string['addcategory'] = "Kategorie hinzufügen";
+
 $string['delete'] = "Delete";
 $string['wb_faq:copymodule'] = "wb_faq: copy module";
 $string['categories'] = "Standardcategories";
@@ -78,3 +84,13 @@ $string['faq'] = "FAQ";
 $string['noresult'] = "Kein Ergebnis gefunden.";
 $string['stringtooshort'] = "Eingabe zu kurz...";
 $string['searchfaq'] = "... durchsuche FAQs";
+
+// edit.js
+$string['confirmdeleteentry'] = "Bestätige das Löschen";
+$string['confirmdeleteentrytitle'] = "Bestätige das Löschen";
+$string['confirmdeleteentrybody'] = "Möchten Sie wirklich diesen Eintrag löschen?";
+$string['orphanentries'] = "Verweiste Einträge";
+
+// notification.js
+$string['saveerror'] = "Fehler beim Speichern";
+$string['savesuccess'] = "Erfolgreich gespeichert";

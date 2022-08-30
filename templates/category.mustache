@@ -42,4 +42,12 @@
 }}
 
 
-<div class="btn btn-primary btn-lg d-block my-2" data-action="goto" data-targetid="{{id}}">{{title}}</div>
+<div class="btn btn-primary btn-lg d-block my-2" data-action="goto" data-targetid="{{id}}">
+    {{title}}
+    {{#canedit}}
+        <span class="wb_faq_edit_entry_elements">
+            <a class="local_wb_faq_edit_category" data-id="{{id}}"><i class="fa fa-pencil mr-3"></i></a>
+            <a class="local_wb_faq_delete_category" data-id="{{id}}"><i class="fa fa-trash-o mr-3"></i></a>
+        </span>
+    {{/canedit}}
+</div>

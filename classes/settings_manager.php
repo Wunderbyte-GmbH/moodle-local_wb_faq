@@ -25,10 +25,10 @@
 
 namespace local_wb_faq;
 
+use cache_helper;
+use context_system;
 use local_wb_faq_external;
 use stdClass;
-
-defined('MOODLE_INTERNAL') || die;
 
 /**
  * Class settings_manager
@@ -42,7 +42,7 @@ class settings_manager {
     private $id;
 
     /**
-     * entity constructor.
+     * Constructor.
      *
      */
     public function __construct(int $id = null) {
@@ -70,6 +70,14 @@ class settings_manager {
         $cache->set($cachekey, $cachedrawdata);
     }
 
+    /**
+     * Builds the tree of the navigatin.
+     *
+     * @param stdClass $elements
+     * @param integer $parentid
+     * @param integer $depth
+     * @return array
+     */
     public function buildtree($elements, $parentid = 0, $depth = 0) {
         $branch = array();
         foreach ($elements as $element) {
@@ -174,8 +182,6 @@ class settings_manager {
         return array_values($option);
     }
 
-
-
     /**
      * Returns the parent-child tree as array or json string
      *
@@ -200,6 +206,7 @@ class settings_manager {
         }
         return $cachedrawdata;
     }
+
     /**
      * Loads the tree with parent children nodes
      *
@@ -207,33 +214,67 @@ class settings_manager {
      */
     public function load_tree() {
         global $DB;
+
+        $context = context_system::instance();
+
         $records = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} faq ORDER BY parentid, type ASC");
         $recordsvalues = array_values($records);
         $dataarr = [];
         foreach ($recordsvalues as $record) {
+
+            // We need the canedit key on every record.
+            // This add extra edit buttons on in the mustache template.
+            if (has_capability('local/wb_faq:canedit', $context)) {
+                $record->canedit = true;
+            }
+
             // If its a category...
             if ($record->type == 0) {
-                $dataarr[$record->id] = $record;
+
+                // If we have a category which is already in the data array, we need to keep all the information.
+
+                if (isset($dataarr[$record->id])) {
+                    foreach ($record as $key => $value) {
+                        $dataarr[$record->id]->{$key} = $value;
+                    }
+                } else {
+                    $dataarr[$record->id] = $record;
+                }
+
+                if (!isset($dataarr[$record->parentid])) {
+                    $dataarr[$record->parentid] = new stdClass();
+                }
                 $dataarr[$record->parentid]->categories[] = $record;
-                // $dataarr[$record->parentid]->parenttitle = $dataarr[$dataarr[$record->parentid]->parentid]->title;
+
                 if ($record->parentid == 0) {
-                    // TODO add string
+                    if (!$dataarr[$record->parentid]) {
+                        $dataarr[$record->parentid] = new stdClass();
+                    }
                     $dataarr[$record->parentid]->title = get_string('faq', 'local_wb_faq');
                     $dataarr[$record->parentid]->toplevel = true;
                     $dataarr[$record->parentid]->parentid = 0;
                 }
             }
-            // if its a question.
+            // If its a question.
             if ($record->type == 1) {
+
+                if (!isset($dataarr[$record->parentid])) {
+                    $dataarr[$record->parentid] = new stdClass();
+                }
+
                 $dataarr[$record->parentid]->entries[] = $record;
             }
         }
 
         self::add_breadcrumb($dataarr[0], $dataarr);
 
+        // TODO: Not yet finished.
+        // if (has_capability('local/wb_faq:canedit', $context)) {
+        // self::show_orphaned_entries($dataarr);
+        // }
+
         return $dataarr;
     }
-
 
     /**
      * Add Breadcrumbs to flat & hierarchical tree.
@@ -250,7 +291,7 @@ class settings_manager {
 
         if (!isset($node->breadcrumbs)) {
             $node->breadcrumbs[] = [
-                'name' => $node->title,
+                'name' => $node->title ?? get_string('faq', 'local_wb_faq'),
                 'id' => $node->id ?? 0
             ];
         }
@@ -271,6 +312,30 @@ class settings_manager {
         }
     }
 
+    /**
+     * This function shows orphaned questions as if the were still here.
+     * But the functionality is unfinished. It's not yet possible to get them back.
+     *
+     * @param [type] $dataarr
+     * @return void
+     */
+    private static function show_orphaned_entries(&$dataarr) {
+
+        $counter = 1;
+        foreach ($dataarr as $key => $category) {
+            if (!isset($category->title) && isset($category->entries)) {
+                // Found orphan questions.
+                $category->title = get_string('orphanentries', 'local_wb_faq') . " $counter";
+                $category->type = 0;
+                $category->sortorder = 0;
+                $category->parentid = 0;
+                $category->id = $key;
+                $dataarr[0]->categories[] = $category;
+                $counter++;
+            }
+        }
+    }
+
     public function category_select_tree(array $datatree = null): array {
         if (!$datatree) {
             $cache = \cache::make('local_wb_faq', 'faqcache');
@@ -278,7 +343,7 @@ class settings_manager {
             $cachedrawdata = $cache->get($cachekey);
         }
         $options = [];
-        // todo buildTree()
+        // Todo: buildTree().
         return $options;
 
     }
@@ -294,10 +359,7 @@ class settings_manager {
         $temp = $data->content['text'];
         unset($data->content);
         $data->content = $temp;
-        /* Fill entries for testing. */
-        /* for ($i = 0; $i <= 100; $i ++) {
-            $id = $DB->insert_record('local_wb_faq_entry', $data);
-        } */
+
         $id = $DB->insert_record('local_wb_faq_entry', $data);
         $this->update_cache();
         return $id;
@@ -317,7 +379,25 @@ class settings_manager {
         $data->content = $temp;
         $update = $DB->update_record('local_wb_faq_entry', $data);
 
+        $this->update_cache();
+
         return $update;
+    }
+
+    /**
+     * Delete faq entry.
+     *
+     * @param integer $id
+     * @return bool
+     */
+    public static function delete_entry(int $id) {
+        global $DB;
+
+        $result = $DB->delete_records('local_wb_faq_entry', array('id' => $id));
+
+        cache_helper::purge_by_event('setbackfaqlist');
+
+        return $result;
     }
 
     /**
@@ -353,17 +433,6 @@ class settings_manager {
         $formdata->sortorder  = $record->sortorder;
         $formdata->type  = $record->type;
         return $formdata;
-    }
-
-    /**
-     *
-     * This is to update or delete an entity if it does not exist
-     *
-     * @return mixed
-     */
-    public function delete() {
-        global $DB;
-        $DB->delete_records('local_wb_faq_entry', array('id' => $this->id));
     }
 
     /**

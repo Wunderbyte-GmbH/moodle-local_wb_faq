@@ -93,12 +93,24 @@ function render(id, data, uid) {
     // Load the specific category data
     let json = JSON.parse(data);
     let templatedata = json[id];
+
+    // eslint-disable-next-line no-console
+    console.log(templatedata);
+
+    if (!templatedata || !templatedata.hasOwnProperty('parentid')) {
+
+        return;
+    }
+
     if (json[templatedata.parentid].title) {
         templatedata.parenttitle = json[templatedata.parentid].title;
     }
     if (templatedata.parentid == '') {
         templatedata.parenttitle = getString('faq', 'local_wb_faq');
     }
+
+    // eslint-disable-next-line no-console
+    console.log(templatedata);
 
     // Select Container
     let container = document.querySelector('.local_wb_faq-' + uid);

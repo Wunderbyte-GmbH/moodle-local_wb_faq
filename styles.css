@@ -151,3 +151,7 @@ input:checked + .slider:before {
 .accordion-body {
     border-top: 2px solid #007b5e;
 }
+
+.wb_faq_edit_entry_elements {
+    float: right;
+}

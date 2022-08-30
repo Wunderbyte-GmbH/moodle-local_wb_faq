@@ -53,7 +53,7 @@ function addEvents(data) {
             }
             if (e.target.dataset.action == "delete") {
                 e.target.closest('tr').remove();
-                deleteentry(e.target.dataset.targetid);
+                deleteEntry(e.target.dataset.targetid);
             }
             e.target.removeAttribute('disabled');
         }
@@ -84,18 +84,20 @@ function render(id, data) {
  * Renders template from asd for the categoryid
  * @param {*} id
  */
- export const deleteentry = (id) => {
+ export function deleteEntry(id) {
     Ajax.call([{
         methodname: "local_wb_faq_delete_entry",
         args: {
-            'id' : id
+            'id': id
         },
-        done: function() {
+        done: function(result) {
+
+            // eslint-disable-next-line no-console
+            console.log('deleted', result, id);
             return;
         },
     }]);
-};
-
+}
 
 /**
  * Render edit
@@ -103,6 +105,10 @@ function render(id, data) {
  * @param {*} type
  */
 function renderedit(id, type) {
+
+    // eslint-disable-next-line no-console
+    console.log("renderedit", id, type);
+
     let json = {'id': type + '-' + id};
     let container = document.querySelector('#local_wb_faq_admin .view-' + type + '-' + id);
     let editrow = '#local_wb_faq_admin .edit-' + type + '-' + id;
@@ -120,9 +126,16 @@ function renderedit(id, type) {
         container.classList.add(hidden);
         return;
     }).then(() => {
-        let dynamicForm = new DynamicForm(document.querySelector(td), 'local_wb_faq\\form\\dynamiceditform');
+
+        let dynamicForm = null;
+
+        if (type == 1) {
+            dynamicForm = new DynamicForm(document.querySelector(td), 'local_wb_faq\\form\\editCategoriesForm');
+        } else {
+            dynamicForm = new DynamicForm(document.querySelector(td), 'local_wb_faq\\form\\editQuestionForm');
+        }
         dynamicForm.load({
-            'id' : id,
+            'id': id,
             'type': type
             });
         return dynamicForm;

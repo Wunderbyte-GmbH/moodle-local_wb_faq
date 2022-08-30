@@ -34,13 +34,19 @@
     }
 }}
 
-<div class="accordion-item">
+<div class="accordion-item" data-id="{{id}}">
   <div class="card">
     <div class="card-header p-0 border-0">
       <h5 class="accordion-header m-0" id="heading-{{id}}-{{uid}}">
         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse-{{id}}-{{uid}}" aria-expanded="false" aria-controls="collapse-{{id}}-{{uid}}">
           <i class="fa fa-angle-double-right mr-3"></i>
           {{title}}
+          {{#canedit}}
+            <span class="wb_faq_edit_entry_elements">
+              <a class="local_wb_faq_edit_question" data-id="{{id}}"><i class="fa fa-pencil mr-3"></i></a>
+              <a class="local_wb_faq_delete_question" data-id="{{id}}"><i class="fa fa-trash-o mr-3"></i></a>
+          </span>
+        {{/canedit}}
         </button>
       </h5>
     </div>

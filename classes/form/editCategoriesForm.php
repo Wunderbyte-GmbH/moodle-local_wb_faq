@@ -21,24 +21,21 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once("$CFG->libdir/formslib.php");
 
-use coding_exception;
 use context;
 use context_system;
 use core_form\dynamic_form;
-use html_writer;
-use moodle_exception;
 use moodle_url;
 use stdClass;
 use local_wb_faq\settings_manager;
 
 /**
- * Add edit form.
+ * Form to edit questions.
  *
  * @copyright Wunderbyte GmbH <info@wunderbyte.at>
  * @author Thomas Winkler
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class dynamiceditform extends dynamic_form {
+class editCategoriesForm extends dynamic_form {
 
     /**
      * Get context for dynamic submission.
@@ -53,9 +50,8 @@ class dynamiceditform extends dynamic_form {
      * @return void
      */
     protected function check_access_for_dynamic_submission(): void {
-        require_capability('moodle/site:config', context_system::instance());
+        require_capability('local/wb_faq:canedit', context_system::instance());
     }
-
 
     /**
      * Set data for dynamic submission.
@@ -106,7 +102,7 @@ class dynamiceditform extends dynamic_form {
      * @return void
      */
     public function definition(): void {
-        global $DB;
+        global $DB, $PAGE;
 
         $mform = $this->_form;
 
@@ -129,19 +125,15 @@ class dynamiceditform extends dynamic_form {
         }
         $mform->addElement('select', 'parentid', get_string('input:parentid', 'local_wb_faq'), $selectinput);
         $mform->addElement('html', '</div></div><div class="row"><div class="col-md-12">');
-        if ($this->_ajaxformdata['type'] != 0) {
-            $context = \context_system::instance();
-            $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' => $context);
-            $mform->addElement('editor', 'content', get_string('input:content', 'local_wb_faq'),
-                '', $editoroptions);
-            $mform->setType('content', PARAM_RAW);
-        }
+
         $mform->addElement('hidden', 'id');
 
         $mform->addElement('html', '</div></div></div>');
 
-        // Buttons.
-        $this->add_action_buttons();
+        // We only show the action button on the admin page, else we likely use the modal which does not need them.
+        if ('/local/wb_faq/admin.php' === $PAGE->url->get_path()) {
+            $this->add_action_buttons();
+        }
     }
 
     /**
@@ -152,37 +144,6 @@ class dynamiceditform extends dynamic_form {
      */
     public function validation($data, $files): array {
         $errors = [];
-
-        $data['semesteridentifier'] = array_map('trim', $data['semesteridentifier']);
-        $data['semestername'] = array_map('trim', $data['semestername']);
-
-        $semesteridentifiercounts = array_count_values($data['semesteridentifier']);
-        $semesternamecounts = array_count_values($data['semestername']);
-
-        foreach ($data['semesteridentifier'] as $idx => $semesteridentifier) {
-            if (empty($semesteridentifier)) {
-                $errors["semesteridentifier[$idx]"] = get_string('erroremptysemesteridentifier', 'booking');
-            }
-            if ($semesteridentifiercounts[$semesteridentifier] > 1) {
-                $errors["semesteridentifier[$idx]"] = get_string('errorduplicatesemesteridentifier', 'booking');
-            }
-        }
-
-        foreach ($data['semestername'] as $idx => $semestername) {
-            if (empty($semestername)) {
-                $errors["semestername[$idx]"] = get_string('erroremptysemestername', 'booking');
-            }
-            if ($semesternamecounts[$semestername] > 1) {
-                $errors["semestername[$idx]"] = get_string('errorduplicatesemestername', 'booking');
-            }
-        }
-
-        foreach ($data['semesterstart'] as $idx => $semesterstart) {
-            if ($semesterstart >= $data['semesterend'][$idx]) {
-                $errors["semesterstart[$idx]"] = get_string('errorsemesterstart', 'booking');
-                $errors["semesterend[$idx]"] = get_string('errorsemesterend', 'booking');
-            }
-        }
 
         return $errors;
     }
