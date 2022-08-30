@@ -244,6 +244,10 @@ class settings_manager {
      */
     private static function add_breadcrumb(&$node, &$flattree) {
 
+        if (!$node) {
+            return;
+        }
+
         if (!isset($node->breadcrumbs)) {
             $node->breadcrumbs[] = [
                 'name' => $node->title,
