@@ -60,13 +60,13 @@ class settings_manager {
 
     /**
      * Updates the cache
-     *
+     * @param boolean $allowedit
      * @return void
      */
-    private function update_cache() {
+    private function update_cache($allowedit = false) {
         $cache = \cache::make('local_wb_faq', 'faqcache');
         $cachekey = 'faq_cache';
-        $cachedrawdata = $this->load_tree();
+        $cachedrawdata = $this->load_tree($allowedit);
         $cache->set($cachekey, $cachedrawdata);
     }
 
@@ -184,18 +184,19 @@ class settings_manager {
 
     /**
      * Returns the parent-child tree as array or json string
-     *
      * @param boolean $json
      * @param int $root - root level from faq
      * @return mixed
+     * @param boolean $allowedit
+     * @return void
      */
-    public function load_from_cache(bool $json = false, $root = null) {
+    public function load_from_cache(bool $json = false, $root = null, $allowedit = false) {
 
         $cache = \cache::make('local_wb_faq', 'faqcache');
         $cachekey = 'faq_cache';
         $cachedrawdata = $cache->get($cachekey);
         if (!$cachedrawdata) {
-            $this->update_cache();
+            $this->update_cache($allowedit);
             $cachedrawdata = $cache->get($cachekey);
         }
         if ($root) {
@@ -209,10 +210,10 @@ class settings_manager {
 
     /**
      * Loads the tree with parent children nodes
-     *
+     * @param boolean $allowedit
      * @return array
      */
-    public function load_tree() {
+    public function load_tree($allowedit = false) {
         global $DB;
 
         $context = context_system::instance();
@@ -224,7 +225,7 @@ class settings_manager {
 
             // We need the canedit key on every record.
             // This add extra edit buttons on in the mustache template.
-            if (has_capability('local/wb_faq:canedit', $context)) {
+            if ($allowedit && has_capability('local/wb_faq:canedit', $context)) {
                 $record->canedit = true;
             }
 
@@ -350,18 +351,18 @@ class settings_manager {
     /**
      *
      * This is to create a new entity in the database
-     *
      * @param stdClass $data
-     *
+     * @param boolean $allowedit
+     * @return integer
      */
-    public function create_faq(stdClass $data): int {
+    public function create_faq(stdClass $data, $allowedit = false): int {
         global $DB;
         $temp = $data->content['text'];
         unset($data->content);
         $data->content = $temp;
 
         $id = $DB->insert_record('local_wb_faq_entry', $data);
-        $this->update_cache();
+        $this->update_cache($allowedit);
         return $id;
     }
 
@@ -370,16 +371,17 @@ class settings_manager {
      * This is to update the entity based on the data object
      *
      * @param stdClass $data
-     * @return int
+     * @param boolean $allowedit
+     * @return integer
      */
-    public function update_faq(stdClass $data): int {
+    public function update_faq(stdClass $data, $allowedit = false): int {
         global $DB;
         $temp = $data->content['text'];
         unset($data->content);
         $data->content = $temp;
         $update = $DB->update_record('local_wb_faq_entry', $data);
 
-        $this->update_cache();
+        $this->update_cache($allowedit);
 
         return $update;
     }

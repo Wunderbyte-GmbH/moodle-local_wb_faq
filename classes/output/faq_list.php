@@ -60,17 +60,18 @@ class faq_list implements renderable, templatable {
      * @param integer $categoryid
      * @param string $uid
      */
-    public function __construct($categoryid = 0, string $uid) {
+    public function __construct($categoryid = 0, string $uid, $allowedit = false) {
 
         $this->uid = $uid;
 
         $sm = new settings_manager();
-        $allfaqs = $sm->load_from_cache(true, $categoryid);
+        $allfaqs = $sm->load_from_cache(true, $categoryid, $allowedit);
 
         $data = [];
 
         $data['json'] = json_encode($allfaqs, true);
         $data['root'] = $categoryid;
+        $data['allowedit'] = $allowedit;
 
         $this->data = $data;
     }
@@ -87,7 +88,7 @@ class faq_list implements renderable, templatable {
 
         $context = context_system::instance();
 
-        if (has_capability('local/wb_faq:canedit', $context)) {
+        if ($data['allowedit'] && has_capability('local/wb_faq:canedit', $context)) {
             $data['canedit'] = true;
         }
 

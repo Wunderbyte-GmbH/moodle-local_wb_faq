@@ -55,6 +55,12 @@ class shortcodes {
             $nolist = false;
         }
 
+        if (isset($args['allowedit'])) {
+            $allowedit = true;
+        } else {
+            $allowedit = false;
+        }
+
         $categoryid = settings_manager::return_category_id_by_name($category);
         if (!is_int($categoryid)) {
             return get_string('categorynotfound', 'local_wb_faq', $category);
@@ -72,7 +78,7 @@ class shortcodes {
         }
 
         if (!$nolist) {
-            $data = new faq_list($categoryid, $uid);
+            $data = new faq_list($categoryid, $uid, $allowedit);
             $out .= $renderer->render_list_faq($data);
         }
 
