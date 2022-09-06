@@ -64,6 +64,12 @@ class faq_list implements renderable, templatable {
 
         $this->uid = $uid;
 
+        $context = context_system::instance();
+
+        if (!has_capability('local/wb_faq:canedit', $context)) {
+            $allowedit = false;
+        }
+
         $sm = new settings_manager();
         $allfaqs = $sm->load_from_cache(true, $categoryid, $allowedit);
 

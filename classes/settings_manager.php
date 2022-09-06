@@ -65,7 +65,7 @@ class settings_manager {
      */
     private function update_cache($allowedit = false) {
         $cache = \cache::make('local_wb_faq', 'faqcache');
-        $cachekey = 'faq_cache';
+        $cachekey = $allowedit ? 'faq_cache_edit' : 'faq_cache';
         $cachedrawdata = $this->load_tree($allowedit);
         $cache->set($cachekey, $cachedrawdata);
     }
@@ -193,7 +193,7 @@ class settings_manager {
     public function load_from_cache(bool $json = false, $root = null, $allowedit = false) {
 
         $cache = \cache::make('local_wb_faq', 'faqcache');
-        $cachekey = 'faq_cache';
+        $cachekey = $allowedit ? 'faq_cache_edit' : 'faq_cache';
         $cachedrawdata = $cache->get($cachekey);
         if (!$cachedrawdata) {
             $this->update_cache($allowedit);
@@ -470,7 +470,7 @@ class settings_manager {
 
     /**
      * Returns the parentid from the entryid
-     * 
+     *
      * @param int $entryid
      * @return null|int
      */
