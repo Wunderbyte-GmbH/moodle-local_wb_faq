@@ -15,10 +15,10 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Forum posts search area
+ * FAQ search
  *
- * @package    mod_forum
- * @copyright  2015 David Monllao {@link http://www.davidmonllao.com}
+ * @package    local_wb_faq
+ * @copyright  2022 Thomas Winkler
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -79,7 +79,6 @@ class faqentry extends \core_search\base {
         $doc->set('courseid', $courseid);
         $doc->set('owneruserid', \core_search\manager::NO_OWNER_ID);
         $doc->set('modified', $record->timemodified);
-
 
         // Check if this document should be considered new.
         if (isset($options['lastindexedtime']) && ($options['lastindexedtime'] < $record->timecreated)) {
