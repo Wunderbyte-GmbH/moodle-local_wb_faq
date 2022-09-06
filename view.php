@@ -29,33 +29,26 @@ use local_wb_faq\settings_manager;
 require_once('../../config.php');
 
 
-$delid = optional_param('del', 0, PARAM_INT);
+$entryid = optional_param('id', 0, PARAM_INT);
 $context = \context_system::instance();
 $PAGE->set_context($context);
 require_login();
-$PAGE->set_url(new moodle_url('/local/wb_faq/wb_faq.php', array()));
+$PAGE->set_url(new moodle_url('/local/wb_faq/view.php', array('id' => $entryid)));
 
 $title = "FAQ";
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
 
-$test = new settings_manager();
-$id = $test->return_category_id_by_name('"test"');
-$root = 0;
-$d = $test->load_from_cache(true, $root);
+$sm = new settings_manager();
 
-$o = $test->buildselect($root);
-
-$searchtree  = $test->buildsearchtree($root);
-$recordsvalues = array_values($searchtree);
-$search['json'] = json_encode($recordsvalues, true);
-
+$parentid = $sm->get_parentid_from_entryid($entryid);
 echo $OUTPUT->header();
 
+
 $renderer = $PAGE->get_renderer('local_wb_faq');
-$data = new display_search(0, $USER->id);
+$data = new display_search($parentid, $USER->id);
 echo $renderer->render_display_search($data);
-$data = new faq_list(0, $USER->id, true);
+$data = new faq_list($parentid, $USER->id, false);
 echo $renderer->render_list_faq($data);
 echo $OUTPUT->footer();

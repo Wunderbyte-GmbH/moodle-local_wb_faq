@@ -94,3 +94,6 @@ $string['orphanentries'] = "Verweiste Einträge";
 // notification.js
 $string['saveerror'] = "Fehler beim Speichern";
 $string['savesuccess'] = "Erfolgreich gespeichert";
+
+// Search API.
+$string['search:faqentry'] = 'FAQ - entry';

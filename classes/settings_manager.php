@@ -160,7 +160,7 @@ class settings_manager {
      * Undocumented function
      *
      * @param integer $root
-     * @return void
+     * @return array
      */
     public function buildsearchtree(int $root) {
         global $DB;
@@ -463,5 +463,30 @@ class settings_manager {
                 return null;
             }
         }
+    }
+
+    /**
+     * Returns the parentid from the entryid
+     * 
+     * @param int $entryid
+     * @return null|int
+     */
+    public static function get_parentid_from_entryid(int $entryid) {
+        global $DB;
+        if (!$DB->record_exists('local_wb_faq_entry', array('id' => $entryid))) return null;
+        return $DB->get_field('local_wb_faq_entry', 'parentid', array('id' => $entryid));
+    }
+
+    /**
+     * Returns the relatedcourseid from the entryid
+     * TODO: replace parentid with releatedcourstableid
+     * @param int $entryid
+     * @return null|int
+     */
+    public static function get_related_courseid_from_entryid(int $entryid) {
+        global $DB;
+        if (!$DB->record_exists('local_wb_faq_entry', array('id' => $entryid))) return null;
+        return 1;
+        //$DB->get_field('local_wb_faq_entry', 'relatedcourseid', array('id' => $entryid));
     }
 }

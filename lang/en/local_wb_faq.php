@@ -96,3 +96,5 @@ $string['orphanentries'] = "Orphan entries";
 $string['saveerror'] = "Error while saving";
 $string['savesuccess'] = "Successfully saved";
 
+// Search api.
+$string['search:faqentry'] = 'FAQ - Eintrag';
