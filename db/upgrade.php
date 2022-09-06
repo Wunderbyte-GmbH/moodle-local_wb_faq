@@ -54,6 +54,5 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2022090600, 'local', 'wb_faq');
     }
 
-
     return true;
 }
