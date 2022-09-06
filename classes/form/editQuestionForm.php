@@ -108,7 +108,7 @@ class editQuestionForm extends dynamic_form {
 
         $mform->addElement('html', '<div id="wb_faq_quickedit-form">');
         $mform->addElement('html', '<div class="container"><div class="row"><div class="col-md-6">');
-        $mform->addElement('text', 'title', get_string('input:title', 'local_wb_faq'));
+        $mform->addElement('text', 'title', get_string('input:question', 'local_wb_faq'));
 
         $faqtype[0] = 'category';
         $faqtype[1] = 'question';

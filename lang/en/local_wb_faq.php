@@ -66,7 +66,8 @@ $string['er_wb_faqname'] = "selected entitiy";
 $string['addcategory'] = "add category";
 
 
-$string['input:title'] = 'Title/Question';
+$string['input:title'] = 'Title';
+$string['input:question'] = 'Question';
 $string['input:content'] = 'Content';
 $string['input:sortorder'] = 'Sortorder';
 $string['input:type'] = 'Category';
@@ -98,3 +99,7 @@ $string['savesuccess'] = "Successfully saved";
 
 // Search api.
 $string['search:faqentry'] = 'FAQ - Eintrag';
+
+// editCategoriesForm
+$string['choosecourse'] = "Choose a course. This determines who can see this category and all the faqs inside";
+$string['nocourseselected'] = "No course selected";

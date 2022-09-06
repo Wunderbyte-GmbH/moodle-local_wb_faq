@@ -31,8 +31,6 @@ $context = \context_system::instance();
 $PAGE->set_context($context);
 require_login();
 
-
-
 $PAGE->set_url(new moodle_url('/local/wb_faq/admin.php', array()));
 
 $title = "FAQ";

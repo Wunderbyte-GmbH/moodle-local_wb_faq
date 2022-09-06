@@ -110,6 +110,22 @@ class editCategoriesForm extends dynamic_form {
         $mform->addElement('html', '<div class="container"><div class="row"><div class="col-md-6">');
         $mform->addElement('text', 'title', get_string('input:title', 'local_wb_faq'));
 
+        // Get a list of all courses
+        $sql = 'SELECT id, fullname From {course}';
+        $courses = $DB->get_records_sql($sql);
+
+        $coursesarray[0] = get_string('nocourseselected', 'local_wb_faq');
+
+        foreach ($courses as $item) {
+            $coursesarray[$item->id] = $item->fullname;
+        }
+
+        $options = array(
+            'noselectionstring' => get_string('allareas', 'search'),
+        );
+
+        $mform->addElement('autocomplete', 'courseid', get_string('choosecourse', 'local_wb_faq'), $coursesarray, $options);
+
         $faqtype[0] = 'category';
         $faqtype[1] = 'question';
         $mform->addElement('hidden', 'type', get_string('input:type', 'local_wb_faq'));

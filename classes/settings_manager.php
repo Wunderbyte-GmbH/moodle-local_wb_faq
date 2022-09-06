@@ -337,6 +337,12 @@ class settings_manager {
         }
     }
 
+    /**
+     * Undocumented function
+     *
+     * @param array|null $datatree
+     * @return array
+     */
     public function category_select_tree(array $datatree = null): array {
         if (!$datatree) {
             $cache = \cache::make('local_wb_faq', 'faqcache');
@@ -476,7 +482,9 @@ class settings_manager {
      */
     public static function get_parentid_from_entryid(int $entryid) {
         global $DB;
-        if (!$DB->record_exists('local_wb_faq_entry', array('id' => $entryid))) return null;
+        if (!$DB->record_exists('local_wb_faq_entry', array('id' => $entryid))) {
+            return null;
+        }
         return $DB->get_field('local_wb_faq_entry', 'parentid', array('id' => $entryid));
     }
 
@@ -488,8 +496,9 @@ class settings_manager {
      */
     public static function get_related_courseid_from_entryid(int $entryid) {
         global $DB;
-        if (!$DB->record_exists('local_wb_faq_entry', array('id' => $entryid))) return null;
+        if (!$DB->record_exists('local_wb_faq_entry', array('id' => $entryid))) {
+            return null;
+        }
         return 1;
-        //$DB->get_field('local_wb_faq_entry', 'relatedcourseid', array('id' => $entryid));
     }
 }

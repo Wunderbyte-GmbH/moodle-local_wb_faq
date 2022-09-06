@@ -74,7 +74,7 @@ $string['input:parentid'] = 'Übergeordnete Kategorie';
 $string['searchcategory'] = '... durchsuche Kategorien';
 $string['root'] = 'Oberste Ebene';
 
-$string['wb_faq:canedit'] = 'Manage FAQ';
+$string['wb_faq:canedit'] = 'Verwalte FAQ';
 
 // Shortcodes
 
@@ -98,3 +98,7 @@ $string['savesuccess'] = "Erfolgreich gespeichert";
 
 // Search API.
 $string['search:faqentry'] = 'FAQ - entry';
+
+// editCategoriesForm
+$string['choosecourse'] = "Einen Kurs auswählen. Das bestimmt, wer diese Kategorie und alle FAQs darin sehen kann.";
+$string['nocourseselected'] = "Kein Kurs ausgewählt";
