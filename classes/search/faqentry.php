@@ -28,13 +28,11 @@ use local_wb_faq\settings_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
-require_once($CFG->dirroot . '/mod/forum/lib.php');
-
 /**
- * Forum posts search area.
+ * FAQ search area.
  *
- * @package    mod_forum
- * @copyright  2015 David Monllao {@link http://www.davidmonllao.com}
+ * @package    local_wb_faq
+ * @copyright  2022 Wunderbyte GmbH
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class faqentry extends \core_search\base {
@@ -46,7 +44,7 @@ class faqentry extends \core_search\base {
 
 
     /**
-     * Returns recordset containing required data for indexing forum posts.
+     * Returns recordset containing required data for indexing FAQs.
      *
      * @param int $modifiedfrom timestamp
      * @param \context|null $context Optional context to restrict scope of returned results
@@ -54,15 +52,15 @@ class faqentry extends \core_search\base {
      */
     public function get_document_recordset($modifiedfrom = 0, \context $context = null) {
         global $DB;
-        $sql = "SELECT * FROM {local_wb_faq_entry} 
+        $sql = "SELECT * FROM {local_wb_faq_entry}
                  WHERE timemodified >= ? ORDER BY timemodified ASC";
         return $DB->get_recordset_sql($sql, [$modifiedfrom]);
     }
 
     /**
-     * Returns the document associated with this post id.
+     * Returns the document associated with this fAQ id.
      *
-     * @param stdClass $record Post info.
+     * @param stdClass $record FAQ info.
      * @param array    $options
      * @return \core_search\document
      */
@@ -113,14 +111,13 @@ class faqentry extends \core_search\base {
     }
 
     /**
-     * Link to the forum post discussion
+     * Link to the FAQ entry.
      *
      * @param \core_search\document $doc
      * @return \moodle_url
      */
     public function get_doc_url(\core_search\document $doc) {
-        // The post is already in static cache, we fetch it in self::search_access.
-        //$post = $this->get_post($doc->get('itemid'));
+
         return new \moodle_url('/local/wb_faq/view.php', array('id' => $doc->get('itemid')));
     }
 
