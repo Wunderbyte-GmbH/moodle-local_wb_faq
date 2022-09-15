@@ -27,6 +27,7 @@ namespace local_wb_faq;
 
 use cache_helper;
 use context_system;
+use core\session\exception;
 use local_wb_faq_external;
 use stdClass;
 
@@ -534,9 +535,25 @@ class settings_manager {
      */
     public static function get_related_courseid_from_entryid(int $entryid) {
         global $DB;
-        if (!$DB->record_exists('local_wb_faq_entry', array('id' => $entryid))) {
-            return null;
+
+        $record = $DB->get_record('local_wb_faq_entry', array('id' => $entryid));
+
+        // Check if the entry has a course id.
+        if (empty($record->courseid)) {
+
+            // If not, we look for a courseid in parent.
+            if (!empty($record->parentid)) {
+                $parentrecord = $DB->get_record('local_wb_faq_entry', ['id' => $record->parentid]);
+
+                if (isset($parentrecord->courseid)) {
+                    return $parentrecord->courseid;
+                } else {
+                    return 0;
+                }
+            }
+
+        } else {
+            return $record->courseid;
         }
-        return 1;
     }
 }
