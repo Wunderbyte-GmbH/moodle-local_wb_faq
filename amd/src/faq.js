@@ -61,9 +61,19 @@ function addEvents(data, root, uid) {
 
     if (searchbox) {
         searchbox.addEventListener('click', (e) => {
-            e.stopPropagation();
-            e.preventDefault();
-
+            let button = e.target;
+            // eslint-disable-next-line no-console
+            if (button.dataset.toggle == "faqcollapse") {
+                if (button.classList.contains('collapsed')) {
+                    button.classList.remove('collapsed');
+                    document.querySelector(button.dataset.target).classList.add('show');
+                    document.querySelector(button.dataset.target).classList.remove('hide');
+                } else {
+                    button.classList.add('collapsed');
+                    document.querySelector(button.dataset.target).classList.add('hide');
+                    document.querySelector(button.dataset.target).classList.remove('show');
+                }
+            }
             if (e.target.dataset.action == "goto") {
                 render(e.target.dataset.targetid, data, uid);
                 document.querySelector('.local_wb_faq-' + uid).scrollIntoView({block: "start", behavior: "smooth"});
