@@ -191,7 +191,8 @@ class settings_manager {
      * @return void
      */
     public function load_from_cache(bool $json = false, $root = null, $allowedit = false) {
-
+        global $USER;
+        $userid = $USER->id;
         $cache = \cache::make('local_wb_faq', 'faqcache');
         $cachekey = $allowedit ? 'faq_cache_edit' : 'faq_cache';
         $cachedrawdata = $cache->get($cachekey);
@@ -202,6 +203,28 @@ class settings_manager {
         if ($root) {
             $cachedrawdata[$root]->toplevel = true;
         }
+
+        // Check ACCESS.
+        foreach ($cachedrawdata as $id => $node) {
+            if (isset($node->courseid) && !self::has_access_to_faq_category($userid, $node->courseid)) {
+                unset($cachedrawdata[$node->id]);
+            }
+            else {
+                if (isset($node->categories)) {
+                    foreach ($node->categories as $key => $category) {
+                        $set = 0;
+                        if (isset($category->courseid) && !self::has_access_to_faq_category($userid, $category->courseid)) {
+                            unset($cachedrawdata[$id]->categories[$key]);
+                            $set = 1;
+                        }
+                        if ($set) {
+                            $cachedrawdata[$id]->categories = array_values($cachedrawdata[$id]->categories);
+                        }
+                    }
+                }
+            }
+        }
+
         if ($json) {
             return json_encode($cachedrawdata, true);
         }
@@ -277,6 +300,21 @@ class settings_manager {
         return $dataarr;
     }
 
+    /**
+     * Check user access in course
+     *
+     * @param int $userid
+     * @param int $courseid
+     *
+     * @return bool
+     */
+    private static function has_access_to_faq_category($userid, $courseid) {
+        // TODO real function.
+        if ($courseid == 2) {
+            return false;
+        }
+        return true;
+    }
     /**
      * Add Breadcrumbs to flat & hierarchical tree.
      *

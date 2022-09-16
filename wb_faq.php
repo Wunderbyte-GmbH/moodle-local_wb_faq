@@ -40,22 +40,13 @@ $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
 
-$test = new settings_manager();
-$id = $test->return_category_id_by_name('"test"');
-$root = 0;
-$d = $test->load_from_cache(true, $root);
-
-$o = $test->buildselect($root);
-
-$searchtree  = $test->buildsearchtree($root);
-$recordsvalues = array_values($searchtree);
-$search['json'] = json_encode($recordsvalues, true);
 
 echo $OUTPUT->header();
 
 $renderer = $PAGE->get_renderer('local_wb_faq');
+/*
 $data = new display_search(0, $USER->id);
-echo $renderer->render_display_search($data);
+echo $renderer->render_display_search($data); */
 $data = new faq_list(0, $USER->id, true);
 echo $renderer->render_list_faq($data);
 echo $OUTPUT->footer();

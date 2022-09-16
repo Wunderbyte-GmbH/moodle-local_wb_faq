@@ -52,7 +52,7 @@
             <div class="card">
                 <div class="card-header p-0 border-0">
                     <h5 class="accordion-header m-0" id="heading-{{id}}">
-                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="collapse" data-target="#collapse-{{id}}" aria-expanded="false" aria-controls="collapse-{{id}}">
+                    <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="faqcollapse" data-target="#collapse-{{id}}" aria-expanded="false" aria-controls="collapse-{{id}}">
                     <div class="d-flex justify-content-between">
                         <div>
                         <i class="fa fa-angle-double-right mr-3"></i>{{title}}
@@ -62,7 +62,7 @@
                     <div class="btn btn-secondary badge wb_faq-badge" data-action="goto" data-targetid="{{parentid}}">{{parenttitle}}</div>
                     </h5>
                 </div>
-                <div id="collapse-{{id}}" class="accordion-collapse collapse show" aria-labelledby="heading-{{id}}" data-parent="#wb-faq-accordion">
+                <div id="collapse-{{id}}" class="accordion-collapse collapse show" aria-labelledby="heading-{{id}}">
                     <div class="accordion-body px-3 pt-1">
                         {{{content}}}
                     </div>

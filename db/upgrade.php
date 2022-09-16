@@ -54,5 +54,20 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2022090600, 'local', 'wb_faq');
     }
 
+    if ($oldversion < 2022091700) {
+
+        // Define field courseid to be added to local_wb_faq_entry.
+        $table = new xmldb_table('local_wb_faq_entry');
+        $field = new xmldb_field('enabled', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'courseid');
+
+        // Conditionally launch add field courseid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Wb_faq savepoint reached.
+        upgrade_plugin_savepoint(true, 2022091700, 'local', 'wb_faq');
+    }
+
     return true;
 }

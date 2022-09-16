@@ -61,6 +61,9 @@ function addEvents(data, root, uid) {
 
     if (searchbox) {
         searchbox.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+
             if (e.target.dataset.action == "goto") {
                 render(e.target.dataset.targetid, data, uid);
                 document.querySelector('.local_wb_faq-' + uid).scrollIntoView({block: "start", behavior: "smooth"});
@@ -91,6 +94,7 @@ function addEvents(data, root, uid) {
 function render(id, data, uid) {
 
     // Load the specific category data
+    console.log(data, id);
     let json = JSON.parse(data);
     let templatedata = json[id];
 
@@ -108,6 +112,7 @@ function render(id, data, uid) {
     if (templatedata.parentid == '') {
         templatedata.parenttitle = getString('faq', 'local_wb_faq');
     }
+
 
     // eslint-disable-next-line no-console
     console.log(templatedata);
