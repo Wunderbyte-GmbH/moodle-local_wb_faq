@@ -77,20 +77,7 @@ const editModalListener = event => {
     // eslint-disable-next-line no-console
     console.log(button.classList, entryid);
 
-    if (button.dataset.toggle == "faqcollapse") {
-        // eslint-disable-next-line no-console
-        if (button.classList.contains('collapsed')) {
-            button.classList.remove('collapsed');
-            document.querySelector(button.dataset.target).classList.add('show');
-            document.querySelector(button.dataset.target).classList.remove('hide');
-        } else {
-            button.classList.add('collapsed');
-            document.querySelector(button.dataset.target).classList.add('hide');
-            document.querySelector(button.dataset.target).classList.remove('show');
-        }
-    }
-    // Decide which modal it is.
-    else if (button.classList.contains('local_wb_faq_edit_question')) {
+    if (button.classList.contains('local_wb_faq_edit_question')) {
         // eslint-disable-next-line no-console
         console.log('question');
         openEditQuestionsModal(event);

@@ -23,6 +23,7 @@
 
 import Templates from 'core/templates';
 import {get_string as getString} from 'core/str';
+var clicks = 0;
 
 /**
  * Gets called from mustache template.
@@ -32,6 +33,7 @@ import {get_string as getString} from 'core/str';
  * @param {string} uid
  */
 export const init = (data, root, uid) => {
+    clicks = 0;
     // eslint-disable-next-line no-console
     console.log('faq.js ', uid);
     render(root, data, uid);
@@ -48,6 +50,21 @@ function addEvents(data, root, uid) {
     let select = document.querySelector('.local_wb_faq-' + uid);
     if (select) {
         select.addEventListener('click', (e) => {
+            let button = e.target;
+            if (button.dataset.toggle == "faqcollapse") {
+                clicks++;
+                // eslint-disable-next-line no-console
+                console.log(clicks);
+                if (button.classList.contains('collapsed')) {
+                    button.classList.remove('collapsed');
+                    document.querySelector(button.dataset.target).classList.add('show');
+                    document.querySelector(button.dataset.target).classList.remove('hide');
+                } else {
+                    button.classList.add('collapsed');
+                    document.querySelector(button.dataset.target).classList.add('hide');
+                    document.querySelector(button.dataset.target).classList.remove('show');
+                }
+            }
             if (e.target.dataset.action == "goto") {
                 render(e.target.dataset.targetid, data, uid);
             }
@@ -64,6 +81,9 @@ function addEvents(data, root, uid) {
             let button = e.target;
             // eslint-disable-next-line no-console
             if (button.dataset.toggle == "faqcollapse") {
+                clicks++;
+                // eslint-disable-next-line no-console
+                console.log(clicks);
                 if (button.classList.contains('collapsed')) {
                     button.classList.remove('collapsed');
                     document.querySelector(button.dataset.target).classList.add('show');
