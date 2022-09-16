@@ -164,11 +164,17 @@ class settings_manager {
      * @return array
      */
     public function buildsearchtree(int $root) {
-        global $DB;
+        global $DB, $USER;
         $faqstring = get_string('faq', 'local_wb_faq');
         $entries = $DB->get_records_sql("SELECT t1.*, coalesce(t2.title, '$faqstring') AS parenttitle FROM {local_wb_faq_entry}
         t1 left join {local_wb_faq_entry} t2 on t1.parentid = t2.id ORDER BY type, parentid
         ");
+        $userid = $USER->id;
+        foreach ($entries as $key => $entry) {
+            if (isset($entry->courseid) && $entry->courseid > 0 && !self::has_access_to_faq_category($userid, $entry->courseid)) {
+                unset($entries[$key]);
+            }
+        }
         // $entries = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} ORDER BY type, parentid");
         $tree = $this->buildsearch($entries, $root);
         $option = [];
