@@ -40,6 +40,8 @@ use stdClass;
 
 class settings_manager {
 
+    public $courselist;
+
     private $id;
 
     /**
@@ -171,7 +173,7 @@ class settings_manager {
         ");
         $userid = $USER->id;
         foreach ($entries as $key => $entry) {
-            if (isset($entry->courseid) && $entry->courseid > 0 && !self::has_access_to_faq_category($userid, $entry->courseid)) {
+            if (isset($entry->courseid) && $entry->courseid > 0 && !$this->has_access_to_faq_category($userid, $entry->courseid)) {
                 unset($entries[$key]);
             }
         }
@@ -213,13 +215,13 @@ class settings_manager {
 
         // Check ACCESS.
         foreach ($cachedrawdata as $id => $node) {
-            if (isset($node->courseid) && !self::has_access_to_faq_category($userid, $node->courseid)) {
+            if (isset($node->courseid) && !$this->has_access_to_faq_category($userid, $node->courseid)) {
                 unset($cachedrawdata[$node->id]);
             } else {
                 if (isset($node->categories)) {
                     foreach ($node->categories as $key => $category) {
                         $set = 0;
-                        if (isset($category->courseid) && !self::has_access_to_faq_category($userid, $category->courseid)) {
+                        if (isset($category->courseid) && !$this->has_access_to_faq_category($userid, $category->courseid)) {
                             unset($cachedrawdata[$id]->categories[$key]);
                             $set = 1;
                         }
@@ -324,12 +326,24 @@ class settings_manager {
      *
      * @return bool
      */
-    private static function has_access_to_faq_category($userid, $courseid) {
-        // TODO real function.
-        if ($courseid == 2) {
+    private function has_access_to_faq_category($userid, $courseid) {
+        if (is_siteadmin()) {
+            return true;
+        }
+        if (!isset($this->courselist)) {
+            $this->set_courselist();
+        }
+        if (!isset($this->courselist[$courseid])) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Set courselist variable
+     */
+    public function set_courselist() {
+        $this->courselist = enrol_get_my_courses();
     }
     /**
      * Add Breadcrumbs to flat & hierarchical tree.
