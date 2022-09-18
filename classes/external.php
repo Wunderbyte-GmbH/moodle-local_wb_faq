@@ -81,4 +81,52 @@ class local_wb_faq_external extends external_api {
             )
         );
     }
+
+    /**
+     * Render invisisble an faq entry by id.
+     * @param int $id
+     *
+     * @return array
+     */
+    public static function toggle_entry_visibility(int $id): array {
+        global $DB;
+        $params = external_api::validate_parameters(self::delete_entry_parameters(), [
+            'id' => $id
+        ]);
+
+        $context = context_system::instance();
+
+        if (!has_capability('local/wb_faq:canedit', $context)) {
+
+            throw new moodle_exception('norighttoaccessthisfunction', 'local_wb_faq');
+
+        } else {
+            $array['status'] = settings_manager::toggle_entry_visibility($params['id']);
+        }
+
+        return $array;
+    }
+
+    /**
+     * Describes the paramters for toggle_entry_visibility.
+     * @return external_function_parameters
+     */
+    public static function toggle_entry_visibility_parameters() {
+        return new external_function_parameters(array(
+                'id'  => new external_value(PARAM_INT, 'id', VALUE_DEFAULT, ''),
+            )
+        );
+    }
+
+    /**
+     * Describes the return values for toggle_entry_visibility.
+     * @return external_single_structure
+     */
+    public static function toggle_entry_visibility_returns() {
+        return new external_single_structure(
+            array(
+                'status' => new external_value(PARAM_INT, 'Status: 0 if invisible, 1 if visible and 2 if entry not found'),
+            )
+        );
+    }
 }

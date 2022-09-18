@@ -100,6 +100,25 @@ function render(id, data) {
 }
 
 /**
+ * Renders template from asd for the categoryid
+ * @param {*} id
+ */
+ export function toggleVisibility(id) {
+    Ajax.call([{
+        methodname: "local_wb_faq_toggle_entry_visibility",
+        args: {
+            'id': id
+        },
+        done: function(result) {
+
+            // eslint-disable-next-line no-console
+            console.log('toggled', result, id);
+            return;
+        },
+    }]);
+}
+
+/**
  * Render edit
  * @param {*} id
  * @param {*} type

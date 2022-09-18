@@ -20,13 +20,12 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
 /**
- * Gets called from mustache template.
  *
+ * @param {*} tableSelector
  */
 export const init = (tableSelector) => {
-// do the work...
+
 document.querySelectorAll('#' + tableSelector + ' th').forEach(th => th.addEventListener('click', (() => {
     const table = th.closest('table');
     const tbody = table.querySelector('tbody');
@@ -40,6 +39,3 @@ document.querySelectorAll('#' + tableSelector + ' th').forEach(th => th.addEvent
     v1 !== '' && v2 !== '' && !isNaN(v1) && !isNaN(v2) ? v1 - v2 : v1.toString().localeCompare(v2)
     )(getCellValue(asc ? a : b, idx), getCellValue(asc ? b : a, idx));
 };
-
-
-

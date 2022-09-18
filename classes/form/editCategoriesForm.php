@@ -126,9 +126,7 @@ class editCategoriesForm extends dynamic_form {
 
         $mform->addElement('autocomplete', 'courseid', get_string('choosecourse', 'local_wb_faq'), $coursesarray, $options);
 
-        $faqtype[0] = 'category';
-        $faqtype[1] = 'question';
-        $mform->addElement('hidden', 'type', get_string('input:type', 'local_wb_faq'));
+        $mform->addElement('hidden', 'type', 0);
 
         $mform->addElement('html', '</div><div class="col-md-6">');
         $mform->addElement('text', 'sortorder', get_string('input:sortorder', 'local_wb_faq'));

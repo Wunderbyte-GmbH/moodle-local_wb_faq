@@ -27,7 +27,7 @@ import ModalEvents from 'core/modal_events';
 import {get_string as getString, get_strings as getStrings} from 'core/str';
 import {showSuccessNotification, showErrorNotification} from 'local_wb_faq/notifications';
 
-import {deleteEntry} from 'local_wb_faq/admin';
+import {deleteEntry, toggleVisibility} from 'local_wb_faq/admin';
 
 /**
  * Gets called from mustache template.
@@ -48,7 +48,6 @@ export const init = () => {
         } else {
 
             // Just to make sure during development that this is not called to often.
-
             // eslint-disable-next-line no-console
             console.log('unnecessary call of init');
         }
@@ -63,19 +62,10 @@ const editModalListener = event => {
     // eslint-disable-next-line no-console
     console.log('edit.js', event);
     let button = event.target;
-    let entryid = null;
 
-    // eslint-disable-next-line no-console
-    console.log('edit.js', button.tagName);
-
-    // eslint-disable-next-line no-console
-    console.log(button);
     if (button.tagName.toLowerCase() === 'i') {
         button = button.parentElement;
     }
-
-    // eslint-disable-next-line no-console
-    console.log(button.classList, entryid);
 
     if (button.classList.contains('local_wb_faq_edit_question')) {
         // eslint-disable-next-line no-console
@@ -86,6 +76,10 @@ const editModalListener = event => {
         // eslint-disable-next-line no-console
         console.log('delete question');
         confirmDeleteEntry(event);
+    } else if (button.classList.contains('local_wb_faq_toggle_entry_visibility')) {
+        // eslint-disable-next-line no-console
+        console.log('toggle visibility');
+        confirmToggleVisibility(event);
     } else if (button.classList.contains('local_wb_faq_edit_category')) {
         // eslint-disable-next-line no-console
         console.log('edit category');
@@ -277,6 +271,112 @@ const editModalListener = event => {
                         // Todo: We should react only on a success response from delete.
                         deleteEntry(entryid);
                         showSuccessNotification();
+                    } else {
+                        // eslint-disable-next-line no-console
+                        console.log('couldnt find right element');
+                    }
+                });
+
+                modal.show();
+                return modal;
+        }).catch(e => {
+            // eslint-disable-next-line no-console
+            console.log(e);
+
+            showErrorNotification();
+        });
+        return true;
+    }).catch(e => {
+        // eslint-disable-next-line no-console
+        console.log(e);
+
+        showErrorNotification();
+    });
+}
+
+/**
+ * @param {*} event
+ */
+ function confirmToggleVisibility(event) {
+
+    // eslint-disable-next-line no-console
+    console.log('confirmToggleVisibility', event.target);
+
+    let button = event.target;
+    let entryid = 0;
+
+    // We assume we delete a question.
+    if (button.tagName.toLowerCase() !== 'a') {
+        button = button.parentElement;
+    }
+
+    // eslint-disable-next-line no-console
+    console.log('ctv', event.target, button.tagName, button);
+
+    // No difference at the moment between deleting question or category, but there could be.
+    if (button.classList.contains('local_wb_faq_toggle_entry_visibility')) {
+        if (button.dataset.id) {
+            entryid = button.dataset.id;
+        }
+    } else if (button.classList.contains('local_wb_faq_toggle_category_visibility')) {
+        if (button.dataset.id) {
+            entryid = button.dataset.id;
+        }
+    } else {
+        // eslint-disable-next-line no-console
+        console.log('no entry to toggle');
+        return;
+    }
+
+    getStrings([
+        {key: 'confirmtogglevisibilitytitle', component: 'local_wb_faq'},
+        {key: 'confirmtogglevisibilitybody', component: 'local_wb_faq'},
+        {key: 'confirmtogglevisibility', component: 'local_wb_faq'}
+    ]
+    ).then(strings => {
+
+        ModalFactory.create({type: ModalFactory.types.SAVE_CANCEL}).then(modal => {
+
+            modal.setTitle(strings[0]);
+                modal.setBody(strings[1]);
+                modal.setSaveButtonText(strings[2]);
+                modal.getRoot().on(ModalEvents.save, function() {
+
+                    // Looking for the question.
+                    let entry = button.closest('div.accordion-item');
+                    let elementid = 0;
+
+                    // We need to be looking for the category, not a question.
+                    if (!entry) {
+                        entry = button.closest('[data-action="goto"]');
+                        elementid = entry.dataset.targetid;
+                    } else {
+                        elementid = entry.dataset.id;
+                    }
+
+                    // This is to verify that we've actually found the right dom element.
+                    if (elementid == entryid) {
+                        // Todo: We should react only on a success response from delete.
+                        toggleVisibility(entryid);
+
+                        let ielement = button.querySelector('i.toggle-visibility');
+
+                        // eslint-disable-next-line no-console
+                        console.log(ielement, button.classList);
+
+                        if (ielement) {
+                            if (ielement.classList.contains('fa-eye-slash')) {
+                                ielement.classList.replace('fa-eye-slash', 'fa-eye');
+                            } else {
+                                ielement.classList.replace('fa-eye', 'fa-eye-slash');
+                            }
+                            showSuccessNotification();
+                        } else {
+                            window.location.reload();
+                        }
+
+
+
                     } else {
                         // eslint-disable-next-line no-console
                         console.log('couldnt find right element');

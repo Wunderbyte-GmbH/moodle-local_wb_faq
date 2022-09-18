@@ -215,8 +215,7 @@ class settings_manager {
         foreach ($cachedrawdata as $id => $node) {
             if (isset($node->courseid) && !self::has_access_to_faq_category($userid, $node->courseid)) {
                 unset($cachedrawdata[$node->id]);
-            }
-            else {
+            } else {
                 if (isset($node->categories)) {
                     foreach ($node->categories as $key => $category) {
                         $set = 0;
@@ -252,6 +251,16 @@ class settings_manager {
         $recordsvalues = array_values($records);
         $dataarr = [];
         foreach ($recordsvalues as $record) {
+
+            if (has_capability('local/wb_faq:canedit', $context)) {
+                if ($record->enabled != 1) {
+                    unset($record->enabled);
+                }
+            } else {
+                if ($record->enabled != 1) {
+                    continue;
+                }
+            }
 
             // We need the canedit key on every record.
             // This add extra edit buttons on in the mustache template.
@@ -444,7 +453,7 @@ class settings_manager {
      * Delete faq entry.
      *
      * @param integer $id
-     * @return bool
+     * @return int
      */
     public static function delete_entry(int $id) {
         global $DB;
@@ -453,7 +462,34 @@ class settings_manager {
 
         cache_helper::purge_by_event('setbackfaqlist');
 
-        return $result;
+        return $result ? 1 : 0;
+    }
+
+    /**
+     * Render entry enabled.
+     * 0 is now invisible, 1 is now visibile and 2 means record couldn't be found.
+     *
+     * @param int $id
+     * @return int
+     */
+    public static function toggle_entry_visibility(int $id) {
+        global $DB;
+
+        // Fetch the record.
+        $record = $DB->get_record('local_wb_faq_entry', array('id' => $id));
+
+        if (!$record) {
+            return 2; // Record couldn't be found.
+        }
+
+        $record->enabled = $record->enabled == 1 ? 0 : 1;
+        $record->timemodified = time();
+
+        $DB->update_record('local_wb_faq_entry', $record);
+
+        cache_helper::purge_by_event('setbackfaqlist');
+
+        return $record->enabled;
     }
 
     /**

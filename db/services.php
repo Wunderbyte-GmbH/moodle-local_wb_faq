@@ -30,11 +30,21 @@ $functions = array(
                 'classname' => 'local_wb_faq_external',
                 'methodname' => 'delete_entry',
                 'classpath' => 'local/wb_faq/classes/external.php',
-                'description' => 'fetches all top-level wb_faq',
+                'description' => 'Deletes an entry by id.',
                 'type' => 'read',
                 'ajax' => true,
                 'services' => array(),
-                'capabilities' => ''
+                'capabilities' => 'local/wb_faq:canedit'
+        ),
+        'local_wb_faq_toggle_entry_visibility' => array(
+                'classname' => 'local_wb_faq_external',
+                'methodname' => 'toggle_entry_visibility',
+                'classpath' => 'local/wb_faq/classes/external.php',
+                'description' => 'Toggles visibility by entry id',
+                'type' => 'read',
+                'ajax' => true,
+                'services' => array(),
+                'capabilities' => 'local/wb_faq:canedit'
         )
 );
 

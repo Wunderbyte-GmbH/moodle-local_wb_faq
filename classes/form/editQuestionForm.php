@@ -106,13 +106,12 @@ class editQuestionForm extends dynamic_form {
 
         $mform = $this->_form;
 
+        $mform->addElement('hidden', 'type', 1);
+
         $mform->addElement('html', '<div id="wb_faq_quickedit-form">');
         $mform->addElement('html', '<div class="container"><div class="row"><div class="col-md-6">');
         $mform->addElement('text', 'title', get_string('input:question', 'local_wb_faq'));
-
-        $faqtype[0] = 'category';
-        $faqtype[1] = 'question';
-        $mform->addElement('hidden', 'type', get_string('input:type', 'local_wb_faq'));
+        $mform->addElement('advcheckbox', 'enabled', get_string('invisible', 'local_wb_faq'));
 
         $mform->addElement('html', '</div><div class="col-md-6">');
         $mform->addElement('text', 'sortorder', get_string('input:sortorder', 'local_wb_faq'));

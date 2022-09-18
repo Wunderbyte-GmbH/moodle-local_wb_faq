@@ -63,7 +63,6 @@ $string['wb_faq:copymodule'] = "wb_faq: copy module";
 $string['categories'] = "Standardcategories";
 $string['categories:description'] = "Set the Standardcategory from the list of the customfieldcategories visibile on ever edit page";
 $string['er_wb_faqname'] = "Ausgewählte Entität";
-$string['addcategory'] = "Kategorie hinzufügen";
 
 $string['input:title'] = 'Titel';
 $string['input:question'] = 'Frage';
@@ -92,6 +91,11 @@ $string['confirmdeleteentrytitle'] = "Bestätige das Löschen";
 $string['confirmdeleteentrybody'] = "Möchten Sie wirklich diesen Eintrag löschen?";
 $string['orphanentries'] = "Verweiste Einträge";
 
+$string['confirmtogglevisibilitytitle'] = "Wollen Sie wirklich die Sichtbarkeit ändern?";
+$string['confirmtogglevisibilitybody'] = "Wenn Sie die Sichtbarkeit ändern sind die Einträge
+    nur noch für Userinnen mit entsprechenden Bearbeitungsrechten sichtbar.";
+$string['confirmtogglevisibility'] = "Ändere die Sichtbarkeit";
+
 // notification.js
 $string['saveerror'] = "Fehler beim Speichern";
 $string['savesuccess'] = "Erfolgreich gespeichert";
@@ -102,3 +106,4 @@ $string['search:faqentry'] = 'FAQ - entry';
 // editCategoriesForm
 $string['choosecourse'] = "Einen Kurs auswählen. Das bestimmt, wer diese Kategorie und alle FAQs darin sehen kann.";
 $string['nocourseselected'] = "Kein Kurs ausgewählt";
+$string['invisible'] = "Sichtbar";
