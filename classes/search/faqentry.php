@@ -53,7 +53,9 @@ class faqentry extends \core_search\base {
     public function get_document_recordset($modifiedfrom = 0, \context $context = null) {
         global $DB;
         $sql = "SELECT * FROM {local_wb_faq_entry}
-                 WHERE timemodified >= ? ORDER BY timemodified ASC";
+                 WHERE timemodified >= ?
+                 AND enabled = 1
+                 ORDER BY timemodified ASC";
         return $DB->get_recordset_sql($sql, [$modifiedfrom]);
     }
 
@@ -73,13 +75,13 @@ class faqentry extends \core_search\base {
         $doc->set('content', content_to_text($record->content, FORMAT_HTML));
         $doc->set('contextid', $context->id);
         // Not associated with a course
-        $courseid = settings_manager::get_related_courseid_from_entryid($record->id);
+        $courseid = settings_manager::get_related_courseid_from_entryid($record->id) ?? 1;
         $doc->set('courseid', $courseid);
         $doc->set('owneruserid', \core_search\manager::NO_OWNER_ID);
         $doc->set('modified', $record->timemodified);
 
         // Check if this document should be considered new.
-        if (isset($options['lastindexedtime']) && ($options['lastindexedtime'] < $record->timecreated)) {
+        if (isset($options['lastindexedtime']) && ($options['lastindexedtime'] < $record->timemodified)) {
             // If the document was created after the last index time, it must be new.
             $doc->set_is_new(true);
         }
@@ -106,7 +108,18 @@ class faqentry extends \core_search\base {
      * @return bool
      */
     public function check_access($id) {
-        global $USER;
+        global $DB;
+
+        // If the record does not exist anymore.
+        if (!$myobject = $DB->get_record('local_wb_faq_entry', ['id' => $id, 'enabled' => 1])) {
+            return \core_search\manager::ACCESS_DELETED;
+        }
+
+        // Here we could check for the active courses of the user and deny access.
+        if ($myobject->enabled != 1) {
+            return \core_search\manager::ACCESS_DENIED;
+        }
+
         return \core_search\manager::ACCESS_GRANTED;
     }
 

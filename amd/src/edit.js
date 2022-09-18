@@ -80,6 +80,10 @@ const editModalListener = event => {
         // eslint-disable-next-line no-console
         console.log('toggle visibility');
         confirmToggleVisibility(event);
+    } else if (button.classList.contains('local_wb_faq_toggle_category_visibility')) {
+        // eslint-disable-next-line no-console
+        console.log('toggle visibility');
+        confirmToggleVisibility(event);
     } else if (button.classList.contains('local_wb_faq_edit_category')) {
         // eslint-disable-next-line no-console
         console.log('edit category');
@@ -123,7 +127,8 @@ const editModalListener = event => {
         // Add as many arguments as you need, they will be passed to the form:
         args: {
             'id': entryid,
-            'type': 1
+            'type': 1,
+            'nobuttons': true
         },
         // Pass any configuration settings to the modal dialogue, for example, the title:
         modalConfig: {title: getString('addquestion', 'local_wb_faq')},
@@ -178,7 +183,8 @@ const editModalListener = event => {
         // Add as many arguments as you need, they will be passed to the form:
         args: {
             'id': entryid,
-            'type': 0
+            'type': 0,
+            'nobuttons': true
         },
         // Pass any configuration settings to the modal dialogue, for example, the title:
         modalConfig: {title: getString('addcategory', 'local_wb_faq')},

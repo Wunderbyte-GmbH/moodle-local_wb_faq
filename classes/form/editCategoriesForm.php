@@ -109,8 +109,12 @@ class editCategoriesForm extends dynamic_form {
         $mform->addElement('html', '<div id="wb_faq_quickedit-form">');
         $mform->addElement('html', '<div class="container"><div class="row"><div class="col-md-6">');
         $mform->addElement('text', 'title', get_string('input:title', 'local_wb_faq'));
+        $mform->addRule('title', get_string('required'), 'required');
 
-        // Get a list of all courses
+        $mform->addElement('advcheckbox', 'enabled', get_string('invisible', 'local_wb_faq'));
+        $mform->setDefault('enabled', 1);
+
+        // Get a list of all courses.
         $sql = 'SELECT id, fullname From {course}';
         $courses = $DB->get_records_sql($sql);
 
@@ -125,6 +129,7 @@ class editCategoriesForm extends dynamic_form {
         );
 
         $mform->addElement('autocomplete', 'courseid', get_string('choosecourse', 'local_wb_faq'), $coursesarray, $options);
+        $mform->addRule('courseid', get_string('required'), 'required');
 
         $mform->addElement('hidden', 'type', 0);
 
@@ -145,7 +150,9 @@ class editCategoriesForm extends dynamic_form {
         $mform->addElement('html', '</div></div></div>');
 
         // We only show the action button on the admin page, else we likely use the modal which does not need them.
-        if ('/local/wb_faq/admin.php' === $PAGE->url->get_path()) {
+        $data = $this->_ajaxformdata;
+
+        if (!isset($data['nobuttons'])) {
             $this->add_action_buttons();
         }
     }

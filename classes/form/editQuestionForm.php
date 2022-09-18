@@ -112,6 +112,7 @@ class editQuestionForm extends dynamic_form {
         $mform->addElement('html', '<div class="container"><div class="row"><div class="col-md-6">');
         $mform->addElement('text', 'title', get_string('input:question', 'local_wb_faq'));
         $mform->addElement('advcheckbox', 'enabled', get_string('invisible', 'local_wb_faq'));
+        $mform->setDefault('enabled', 1);
 
         $mform->addElement('html', '</div><div class="col-md-6">');
         $mform->addElement('text', 'sortorder', get_string('input:sortorder', 'local_wb_faq'));
@@ -134,7 +135,9 @@ class editQuestionForm extends dynamic_form {
         $mform->addElement('html', '</div></div></div>');
 
         // We only show the action button on the admin page, else we likely use the modal which does not need them.
-        if ('/local/wb_faq/admin.php' === $PAGE->url->get_path()) {
+        $data = $this->_ajaxformdata;
+
+        if (!isset($data['nobuttons'])) {
             $this->add_action_buttons();
         }
     }

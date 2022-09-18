@@ -173,7 +173,7 @@ class settings_manager {
         ");
         $userid = $USER->id;
         foreach ($entries as $key => $entry) {
-            if (isset($entry->courseid) && $entry->courseid > 0 && !$this->has_access_to_faq_category($userid, $entry->courseid)) {
+            if (isset($entry->courseid) && $entry->courseid > 0 && !$this->has_access_to_faq_category($entry->courseid, $userid)) {
                 unset($entries[$key]);
             }
         }
@@ -215,13 +215,13 @@ class settings_manager {
 
         // Check ACCESS.
         foreach ($cachedrawdata as $id => $node) {
-            if (isset($node->courseid) && !$this->has_access_to_faq_category($userid, $node->courseid)) {
+            if (isset($node->courseid) && !$this->has_access_to_faq_category($node->courseid, $userid)) {
                 unset($cachedrawdata[$node->id]);
             } else {
                 if (isset($node->categories)) {
                     foreach ($node->categories as $key => $category) {
                         $set = 0;
-                        if (isset($category->courseid) && !$this->has_access_to_faq_category($userid, $category->courseid)) {
+                        if (isset($category->courseid) && !$this->has_access_to_faq_category($category->courseid, $userid)) {
                             unset($cachedrawdata[$id]->categories[$key]);
                             $set = 1;
                         }
@@ -321,22 +321,25 @@ class settings_manager {
     /**
      * Check user access in course
      *
-     * @param int $userid
      * @param int $courseid
+     * @param int|null $userid
      *
      * @return bool
      */
-    private function has_access_to_faq_category($userid, $courseid) {
-        if (is_siteadmin()) {
+    private function has_access_to_faq_category($courseid, $userid = null) {
+
+        $context = context_system::instance();
+
+        if (has_capability('local/wb_faq:canedit', $context)) {
             return true;
         }
         if (!isset($this->courselist)) {
             $this->set_courselist();
         }
-        if (!isset($this->courselist[$courseid])) {
-            return false;
+        if (isset($this->courselist[$courseid])) {
+            return true;
         }
-        return true;
+        return false;
     }
 
     /**
@@ -438,7 +441,9 @@ class settings_manager {
         $data->timemodified = time();
 
         $id = $DB->insert_record('local_wb_faq_entry', $data);
-        $this->update_cache($allowedit);
+
+        cache_helper::purge_by_event('setbackfaqlist');
+
         return $id;
     }
 
@@ -458,7 +463,7 @@ class settings_manager {
         $data->timemodified = time();
         $update = $DB->update_record('local_wb_faq_entry', $data);
 
-        $this->update_cache($allowedit);
+        cache_helper::purge_by_event('setbackfaqlist');
 
         return $update;
     }
@@ -594,22 +599,22 @@ class settings_manager {
 
         $record = $DB->get_record('local_wb_faq_entry', array('id' => $entryid));
 
-        // Check if the entry has a course id.
-        if (empty($record->courseid)) {
+        // Check if the entry is a question and has no courseid.
+        if (($record->type == 1) && empty($record->courseid)) {
 
             // If not, we look for a courseid in parent.
             if (!empty($record->parentid)) {
                 $parentrecord = $DB->get_record('local_wb_faq_entry', ['id' => $record->parentid]);
 
-                if (isset($parentrecord->courseid)) {
-                    return $parentrecord->courseid;
+                if (!empty($parentrecord->courseid)) {
+                    return (int)$parentrecord->courseid;
                 } else {
                     return 0;
                 }
             }
 
         } else {
-            return $record->courseid;
+            return (int)$record->courseid ?? 0;
         }
     }
 }

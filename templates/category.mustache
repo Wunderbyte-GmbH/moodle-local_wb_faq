@@ -46,6 +46,14 @@
     {{title}}
     {{#canedit}}
         <span class="wb_faq_edit_entry_elements">
+            {{#enabled}}
+              <a class="local_wb_faq_toggle_category_visibility" data-id="{{id}}"><i class="toggle-visibility fa fa-eye
+               mr-3"></i></a>
+               {{/enabled}}
+               {{^enabled}}
+              <a class="local_wb_faq_toggle_category_visibility" data-id="{{id}}"><i class="toggle-visibility fa fa-eye-slash
+               mr-3"></i></a>
+               {{/enabled}}
             <a class="local_wb_faq_edit_category" data-id="{{id}}"><i class="fa fa-pencil mr-3"></i></a>
             <a class="local_wb_faq_delete_category" data-id="{{id}}"><i class="fa fa-trash-o mr-3"></i></a>
         </span>
