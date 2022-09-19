@@ -65,6 +65,13 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
+        // Set all enabled true.
+        // As the field was present before and is null, we want to enable all previous record.
+        $sql = "UPDATE {local_wb_faq_entry}
+            SET enabled = 1";
+
+        $DB->execute($sql);
+
         // Wb_faq savepoint reached.
         upgrade_plugin_savepoint(true, 2022091700, 'local', 'wb_faq');
     }
