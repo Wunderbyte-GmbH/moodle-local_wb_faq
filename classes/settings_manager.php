@@ -169,7 +169,7 @@ class settings_manager {
         global $DB, $USER;
         $faqstring = get_string('faq', 'local_wb_faq');
         $entries = $DB->get_records_sql("SELECT t1.*, coalesce(t2.title, '$faqstring') AS parenttitle FROM {local_wb_faq_entry}
-        t1 left join {local_wb_faq_entry} t2 on t1.parentid = t2.id ORDER BY type, parentid
+        t1 left join {local_wb_faq_entry} t2 on t1.parentid = t2.id WHERE t1.enabled = 1 ORDER BY type, parentid
         ");
         $userid = $USER->id;
         foreach ($entries as $key => $entry) {

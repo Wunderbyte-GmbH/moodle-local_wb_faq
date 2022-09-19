@@ -155,3 +155,11 @@ input:checked + .slider:before {
 .wb_faq_edit_entry_elements {
     float: right;
 }
+
+.btn-primary .wb_faq_edit_entry_elements a{
+    color: white;
+}
+
+.btn-primary .wb_faq_edit_entry_elements a:hover{
+    color: rgba(255,255,255,0.8);
+}
