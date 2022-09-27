@@ -218,13 +218,17 @@ const editModalListener = event => {
 /**
  * @param {*} event
  */
- function confirmDeleteEntry(event) {
+ export function confirmDeleteEntry(event) {
+
+    // eslint-disable-next-line no-console
+    console.log('confirm delete', event);
 
     let button = event.target;
     let entryid = 0;
 
     // We assume we delete a question.
-    if (button.tagName.toLowerCase() !== 'a') {
+    if (!((button.tagName.toLowerCase() == 'a')
+        || (button.tagName.toLowerCase() == 'button'))) {
         button = button.parentElement;
     }
     // No difference at the moment between deleting question or category, but there could be.
@@ -236,9 +240,16 @@ const editModalListener = event => {
         if (button.dataset.id) {
             entryid = button.dataset.id;
         }
+    } else if (button.dataset
+            && button.dataset.action
+            && button.dataset.action == 'delete') {
+                // eslint-disable-next-line no-console
+                console.log('here we delete');
+
+                entryid = button.dataset.targetid;
     } else {
         // eslint-disable-next-line no-console
-        console.log('no delete entry to delete');
+        console.log('no delete entry to delete', button);
         return;
     }
 
@@ -266,7 +277,14 @@ const editModalListener = event => {
                     // We need to be looking for the category, not a question.
                     if (!entry) {
                         entry = button.closest('[data-action="goto"]');
-                        elementid = entry.dataset.targetid;
+
+                        if (!entry) {
+                            // If we still don't find the entry, we are in admin mode.
+                            entry = event.target.closest('tr');
+                            elementid = button.dataset.targetid;
+                        } else {
+                            elementid = entry.dataset.targetid;
+                        }
                     } else {
                         elementid = entry.dataset.id;
                     }
@@ -279,7 +297,7 @@ const editModalListener = event => {
                         showSuccessNotification();
                     } else {
                         // eslint-disable-next-line no-console
-                        console.log('couldnt find right element');
+                        console.log('couldnt find right element', elementid, entryid);
                     }
                 });
 
@@ -303,7 +321,7 @@ const editModalListener = event => {
 /**
  * @param {*} event
  */
- function confirmToggleVisibility(event) {
+ export function confirmToggleVisibility(event) {
 
     // eslint-disable-next-line no-console
     console.log('confirmToggleVisibility', event.target);

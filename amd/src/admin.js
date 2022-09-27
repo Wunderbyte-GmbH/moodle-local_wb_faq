@@ -23,6 +23,7 @@
 import Ajax from 'core/ajax';
 import Templates from 'core/templates';
 import DynamicForm from 'core_form/dynamicform';
+import {confirmDeleteEntry} from 'local_wb_faq/edit';
 
 /**
  * Gets called from mustache template.
@@ -52,8 +53,14 @@ function addEvents(data) {
                 renderedit(e.target.dataset.targetid, e.target.dataset.type, data);
             }
             if (e.target.dataset.action == "delete") {
-                e.target.closest('tr').remove();
-                deleteEntry(e.target.dataset.targetid);
+
+                // eslint-disable-next-line no-console
+                console.log('we want to delete', e.target.dataset.targetid);
+
+                confirmDeleteEntry(e);
+
+                // e.target.closest('tr').remove();
+                // deleteEntry(e.target.dataset.targetid);
             }
             e.target.removeAttribute('disabled');
         }
@@ -149,9 +156,9 @@ function renderedit(id, type) {
         let dynamicForm = null;
 
         if (type == 1) {
-            dynamicForm = new DynamicForm(document.querySelector(td), 'local_wb_faq\\form\\editCategoriesForm');
-        } else {
             dynamicForm = new DynamicForm(document.querySelector(td), 'local_wb_faq\\form\\editQuestionForm');
+        } else {
+            dynamicForm = new DynamicForm(document.querySelector(td), 'local_wb_faq\\form\\editCategoriesForm');
         }
         dynamicForm.load({
             'id': id,

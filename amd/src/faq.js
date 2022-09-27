@@ -82,8 +82,7 @@ function addEvents(data, root, uid) {
             // eslint-disable-next-line no-console
             if (button.dataset.toggle == "faqcollapse") {
                 clicks++;
-                // eslint-disable-next-line no-console
-                console.log(clicks);
+
                 if (button.classList.contains('collapsed')) {
                     button.classList.remove('collapsed');
                     document.querySelector(button.dataset.target).classList.add('show');
@@ -123,8 +122,6 @@ function addEvents(data, root, uid) {
  */
 function render(id, data, uid) {
 
-    // Load the specific category data
-    console.log(data, id);
     let json = JSON.parse(data);
     let templatedata = json[id];
 
