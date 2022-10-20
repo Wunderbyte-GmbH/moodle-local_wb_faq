@@ -27,8 +27,6 @@ namespace local_wb_faq\output;
 use plugin_renderer_base;
 use templatable;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Renderer class.
  * @package mod_mooduell

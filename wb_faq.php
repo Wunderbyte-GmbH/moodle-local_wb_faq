@@ -21,13 +21,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_wb_faq\form\categories;
 use local_wb_faq\output\display_search;
 use local_wb_faq\output\faq_list;
-use local_wb_faq\wb_faq;
 
 require_once('../../config.php');
-
 
 $delid = optional_param('del', 0, PARAM_INT);
 $context = \context_system::instance();
@@ -38,8 +35,6 @@ $PAGE->set_url(new moodle_url('/local/wb_faq/wb_faq.php', array()));
 $title = "FAQ";
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
-
-
 
 echo $OUTPUT->header();
 

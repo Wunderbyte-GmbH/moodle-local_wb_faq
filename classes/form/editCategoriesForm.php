@@ -103,7 +103,6 @@ class editCategoriesForm extends dynamic_form {
      */
     public function definition(): void {
         global $DB;
-        
         $mform = $this->_form;
 
         $mform->addElement('html', '<div id="wb_faq_quickedit-form">');

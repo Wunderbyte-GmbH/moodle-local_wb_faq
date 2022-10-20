@@ -52,7 +52,6 @@ function addEvents(data, root, uid) {
     if (select) {
         select.addEventListener('click', (e) => {
             let button = e.target;
-            console.log(e.target);
             if (button.dataset.toggle == "faqcollapse") {
                 clicks++;
                 // eslint-disable-next-line no-console
@@ -127,9 +126,6 @@ function render(id, data, uid) {
     let json = JSON.parse(data);
     let templatedata = json[id];
     templatedata.root = id;
-
-    // eslint-disable-next-line no-console
-    console.log(templatedata);
 
     if (!templatedata || !templatedata.hasOwnProperty('parentid')) {
         return;

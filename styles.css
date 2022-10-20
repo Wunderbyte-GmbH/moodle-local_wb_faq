@@ -1,165 +1,169 @@
 #page-local-wb_faq-index #page-header {
-    display: none;
+  display: none;
 }
 
 #page-local-wb_faq-index #page-content {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
 #page-local-wb_faq-index .addresslist,
 .contactlist,
 #page-local-wb_faq-index .card-body .fa {
-    font-style: italic;
-    color: #333;
+  font-style: italic;
+  color: #333;
 }
 
 .card-header h3 {
-    letter-spacing: 3px;
+  letter-spacing: 3px;
 }
 
 .headerpill {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 22px;
-    color: white;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 22px;
+  color: white;
 }
 
 .switch {
-    position: absolute;
-    display: inline-block;
-    width: 60px;
-    height: 20px;
-    right: 5px;
-    top: 5px;
+  position: absolute;
+  display: inline-block;
+  width: 60px;
+  height: 20px;
+  right: 5px;
+  top: 5px;
 }
-
 
 .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-
 .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #ccc;
-    -webkit-transition: .4s;
-    transition: .4s;
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
-    position: absolute;
-    content: "";
-    height: 12px;
-    width: 12px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    -webkit-transition: .4s;
-    transition: .4s;
+  position: absolute;
+  content: "";
+  height: 12px;
+  width: 12px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 input:checked + .slider {
-    background-color: green;
+  background-color: green;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 1px #2196f3;
 }
 
 input:checked + .slider:before {
-    -webkit-transform: translateX(39px);
-    -ms-transform: translateX(39px);
-    transform: translateX(39px);
+  -webkit-transform: translateX(39px);
+  -ms-transform: translateX(39px);
+  transform: translateX(39px);
 }
 
 /* Rounded sliders */
 .slider.round {
-    border-radius: 34px;
+  border-radius: 34px;
 }
 
 .slider.round:before {
-    border-radius: 50%;
+  border-radius: 50%;
 }
 
 #wb_faqrelation-form ul [aria-expanded="false"]:before {
-    content: "\f054";
-    font-family: FontAwesome;
-    position: absolute;
-    left: 5px;
+  content: "\f054";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 5px;
 }
 
 #wb_faqrelation-form ul li span:not(.btn) {
-    padding-left: 20px;
+  padding-left: 20px;
 }
 
 #wb_faqrelation-form .btn {
-    line-height: 1.3;
-    padding: 0 10px;
+  line-height: 1.3;
+  padding: 0 10px;
 }
 
 #wb_faqrelation-form ul [aria-expanded="true"]:before {
-    content: "\f078";
-    font-family: FontAwesome;
-    position: absolute;
-    left: 5px;
-
+  content: "\f078";
+  font-family: FontAwesome;
+  position: absolute;
+  left: 5px;
 }
 
 #wb_faqrelation-form ul li {
-    border-top: 1px solid rgba(0, 0, 0, 0.125);
+  border-top: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 #local_wb_faq {
-    min-height: 300px;
+  min-height: 300px;
 }
 
 #local_wb_faq .wb-breadcrumb .btn {
-    color: #fff;
+  color: #fff;
 }
 
 #fitem_id_categorypicker .col-form-label {
-    display: none;
+  display: none;
 }
 
 .wb_faq-badge.badge {
-    right: 10px;
-    left: unset;
+  right: 10px;
+  left: unset;
 }
 
 #wb_faq_searchbox .card,
 .current-faq {
-    animation: appear 1s;
+  animation: appear 1s;
 }
 
 @keyframes appear {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .accordion-body {
-    border-top: 2px solid #007b5e;
+  border-top: 2px solid #007b5e;
 }
 
 .wb_faq_edit_entry_elements {
-    float: right;
+  float: right;
 }
 
-.btn-primary .wb_faq_edit_entry_elements a{
-    color: white;
+.btn-primary .wb_faq_edit_entry_elements a {
+  color: white;
 }
 
-.btn-primary .wb_faq_edit_entry_elements a:hover{
-    color: rgba(255,255,255,0.8);
+.btn-primary .wb_faq_edit_entry_elements a:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.local_wb_faq_container li.accordion-item .card {
+  padding: 1px;
+}
+.local_wb_faq_container li.accordion-item::marker {
+  display: none;
 }

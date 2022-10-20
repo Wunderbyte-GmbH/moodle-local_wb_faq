@@ -32,8 +32,6 @@ use renderable;
 use renderer_base;
 use templatable;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * display faq list
  * @package local_wb_faq
