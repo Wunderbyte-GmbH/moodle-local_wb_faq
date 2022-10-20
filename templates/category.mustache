@@ -42,7 +42,12 @@
 }}
 
 
-<div class="btn btn-primary btn-lg d-block my-2" data-action="goto" data-targetid="{{id}}">
+<li class="btn btn-primary btn-lg d-block my-2" data-action="goto" data-targetid="{{id}}" data-id="{{id}}" data-sortorder="{{sortorder}}">
+    {{#canedit}}
+    <span tabindex="0" role="button" aria-haspopup="true" data-drag-type="move" title="{{title}}">
+        <i class="fa fa-arrows"></i>
+    </span>
+    {{/canedit}}
     {{title}}
     {{#canedit}}
         <span class="wb_faq_edit_entry_elements">
@@ -58,4 +63,4 @@
             <a class="local_wb_faq_delete_category" data-id="{{id}}"><i class="fa fa-trash-o mr-3"></i></a>
         </span>
     {{/canedit}}
-</div>
+</li>

@@ -45,6 +45,14 @@ $functions = array(
                 'ajax' => true,
                 'services' => array(),
                 'capabilities' => 'local/wb_faq:canedit'
+        ),
+        'local_wb_faq_set_wbfaq_order' => array(
+                'classname' => 'local_wb_faq\external\set_wbfaq_order',
+                'classpath' => '',
+                'description' => 'reorders Element in a FAQ branch.',
+                'type' => 'write',
+                'capabilities' => 'local/wb_faq:canedit',
+                'ajax' => true,
         )
 );
 

@@ -24,7 +24,7 @@
 use local_wb_faq\form\categories;
 use local_wb_faq\output\display_search;
 use local_wb_faq\output\faq_list;
-use local_wb_faq\settings_manager;
+use local_wb_faq\wb_faq;
 
 require_once('../../config.php');
 
@@ -40,7 +40,7 @@ $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
 
-$sm = new settings_manager();
+$sm = new wb_faq();
 
 $parentid = $sm->get_parentid_from_entryid($entryid);
 echo $OUTPUT->header();

@@ -26,7 +26,6 @@ import ModalFactory from 'core/modal_factory';
 import ModalEvents from 'core/modal_events';
 import {get_string as getString, get_strings as getStrings} from 'core/str';
 import {showSuccessNotification, showErrorNotification} from 'local_wb_faq/notifications';
-
 import {deleteEntry, toggleVisibility} from 'local_wb_faq/admin';
 
 /**
@@ -34,9 +33,6 @@ import {deleteEntry, toggleVisibility} from 'local_wb_faq/admin';
  *
  */
 export const init = () => {
-
-    // eslint-disable-next-line no-console
-    console.log('faq init called');
 
     // Find all container.
     const containers = document.querySelectorAll('.local_wb_faq_container');
@@ -97,9 +93,6 @@ const editModalListener = event => {
         // eslint-disable-next-line no-console
         console.log('category');
         openEditCategoriesModal(event);
-    } else {
-        // eslint-disable-next-line no-console
-        console.log('no token found');
     }
 };
 
@@ -111,6 +104,7 @@ const editModalListener = event => {
 
     let button = event.target;
     let entryid = 0;
+    let parentid = 0;
 
     if (button.tagName.toLowerCase() !== 'a') {
         button = button.parentElement;
@@ -118,6 +112,10 @@ const editModalListener = event => {
 
     if (button.dataset.id) {
         entryid = button.dataset.id;
+    }
+
+    if (button.dataset.faqroot) {
+        parentid = button.dataset.faqroot;
     }
 
     const modalForm = new ModalForm({
@@ -128,7 +126,8 @@ const editModalListener = event => {
         args: {
             'id': entryid,
             'type': 1,
-            'nobuttons': true
+            'nobuttons': true,
+            'parentid': parentid
         },
         // Pass any configuration settings to the modal dialogue, for example, the title:
         modalConfig: {title: getString('addquestion', 'local_wb_faq')},
@@ -138,11 +137,7 @@ const editModalListener = event => {
 
     // Listen to events if you want to execute something on form submit.
     // Event detail will contain everything the process() function returned:
-    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, (e) => {
-        const response = e.detail;
-        // eslint-disable-next-line no-console
-        console.log('Response of the modal: ', response);
-
+    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, () => {
         showSuccessNotification();
         window.location.reload();
     });
@@ -167,6 +162,7 @@ const editModalListener = event => {
 
     let button = event.target;
     let entryid = 0;
+    let parentid = 0;
 
     if (button.tagName.toLowerCase() !== 'a') {
         button = button.parentElement;
@@ -174,6 +170,10 @@ const editModalListener = event => {
 
     if (button.dataset.id) {
         entryid = button.dataset.id;
+    }
+
+    if (button.dataset.faqroot) {
+        parentid = button.dataset.faqroot;
     }
 
     const modalForm = new ModalForm({
@@ -184,7 +184,8 @@ const editModalListener = event => {
         args: {
             'id': entryid,
             'type': 0,
-            'nobuttons': true
+            'nobuttons': true,
+            'parentid': parentid
         },
         // Pass any configuration settings to the modal dialogue, for example, the title:
         modalConfig: {title: getString('addcategory', 'local_wb_faq')},
@@ -271,7 +272,7 @@ const editModalListener = event => {
                 modal.getRoot().on(ModalEvents.save, function() {
 
                     // Looking for the question.
-                    let entry = button.closest('div.accordion-item');
+                    let entry = button.closest('li.accordion-item');
                     let elementid = 0;
 
                     // We need to be looking for the category, not a question.
@@ -367,7 +368,7 @@ const editModalListener = event => {
                 modal.getRoot().on(ModalEvents.save, function() {
 
                     // Looking for the question.
-                    let entry = button.closest('div.accordion-item');
+                    let entry = button.closest('li.accordion-item');
                     let elementid = 0;
 
                     // We need to be looking for the category, not a question.

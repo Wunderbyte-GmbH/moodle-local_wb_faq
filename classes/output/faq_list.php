@@ -27,7 +27,7 @@ namespace local_wb_faq\output;
 
 use context_system;
 use local_wb_faq\form\categories;
-use local_wb_faq\settings_manager;
+use local_wb_faq\wb_faq;
 use renderable;
 use renderer_base;
 use templatable;
@@ -70,7 +70,7 @@ class faq_list implements renderable, templatable {
             $allowedit = false;
         }
 
-        $sm = new settings_manager();
+        $sm = new wb_faq();
         $allfaqs = $sm->load_from_cache(true, $categoryid, $allowedit);
 
         $data = [];

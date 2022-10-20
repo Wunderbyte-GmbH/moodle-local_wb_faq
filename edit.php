@@ -46,10 +46,10 @@ $PAGE->requires->jquery();
 
 $PAGE->set_pagelayout('standard');
 
-$settingsmanager = new \local_wb_faq\settings_manager();
+$settingsmanager = new \local_wb_faq\wb_faq();
 
 if ($entityid) {
-    $data = \local_wb_faq\settings_manager::get_settings_forform($entityid);
+    $data = \local_wb_faq\wb_faq::get_settings_forform($entityid);
     $mform = new edit_form($data);
     $handler = local_wb_faq\customfield\wb_faq_handler::create();
     $handler->instance_form_before_set_data($data);

@@ -34,7 +34,12 @@
     }
 }}
 
-<div class="accordion-item" data-id="{{id}}">
+<li class="accordion-item" data-id="{{id}}" data-sortorder="{{sortorder}}">
+  {{#canedit}}
+  <span tabindex="0" role="button" aria-haspopup="true" data-drag-type="move" title="{{title}}">
+    <i class="fa fa-arrows"></i>
+  </span>
+  {{/canedit}}
   <div class="card">
     <div class="card-header p-0 border-0">
       <h5 class="accordion-header m-0" id="heading-{{id}}-{{uid}}">
@@ -64,7 +69,7 @@
       </div>
     </div>
   </div>
-</div>
+</li>
 
 
 

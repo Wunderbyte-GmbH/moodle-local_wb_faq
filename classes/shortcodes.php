@@ -61,7 +61,7 @@ class shortcodes {
             $allowedit = false;
         }
 
-        $categoryid = settings_manager::return_category_id_by_name($category);
+        $categoryid = wb_faq::return_category_id_by_name($category);
         if (!is_int($categoryid)) {
             return get_string('categorynotfound', 'local_wb_faq', $category);
         }

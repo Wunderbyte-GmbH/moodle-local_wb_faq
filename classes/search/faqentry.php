@@ -24,7 +24,7 @@
 
 namespace local_wb_faq\search;
 
-use local_wb_faq\settings_manager;
+use local_wb_faq\wb_faq;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -75,7 +75,7 @@ class faqentry extends \core_search\base {
         $doc->set('content', content_to_text($record->content, FORMAT_HTML));
         $doc->set('contextid', $context->id);
         // Not associated with a course
-        $courseid = settings_manager::get_related_courseid_from_entryid($record->id) ?? 1;
+        $courseid = wb_faq::get_related_courseid_from_entryid($record->id) ?? 1;
         $doc->set('courseid', $courseid);
         $doc->set('owneruserid', \core_search\manager::NO_OWNER_ID);
         $doc->set('modified', $record->timemodified);

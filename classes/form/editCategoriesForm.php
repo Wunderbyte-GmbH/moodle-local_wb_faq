@@ -26,7 +26,7 @@ use context_system;
 use core_form\dynamic_form;
 use moodle_url;
 use stdClass;
-use local_wb_faq\settings_manager;
+use local_wb_faq\wb_faq;
 
 /**
  * Form to edit questions.
@@ -87,7 +87,7 @@ class editCategoriesForm extends dynamic_form {
         // This is the correct place to save and update semesters.
         $data = $this->get_data();
 
-        $settingsmanager = new settings_manager();
+        $settingsmanager = new wb_faq();
         if ($data->id) {
             $settingsmanager->update_faq($data);
         } else {
@@ -102,8 +102,8 @@ class editCategoriesForm extends dynamic_form {
      * @return void
      */
     public function definition(): void {
-        global $DB, $PAGE;
-
+        global $DB;
+        
         $mform = $this->_form;
 
         $mform->addElement('html', '<div id="wb_faq_quickedit-form">');
@@ -134,7 +134,6 @@ class editCategoriesForm extends dynamic_form {
         $mform->addElement('hidden', 'type', 0);
 
         $mform->addElement('html', '</div><div class="col-md-6">');
-        $mform->addElement('text', 'sortorder', get_string('input:sortorder', 'local_wb_faq'));
         $sql = 'SELECT id, title From {local_wb_faq_entry} WHERE type = 0';
         $parents = $DB->get_records_sql($sql);
         $selectinput = [];

@@ -29,7 +29,6 @@ defined('MOODLE_INTERNAL') || die();
 global $CFG;
 require_once($CFG->libdir . '/externallib.php');
 
-use local_wb_faq\settings_manager;
 use local_wb_faq\wb_faq;
 class local_wb_faq_external extends external_api {
 
@@ -53,7 +52,7 @@ class local_wb_faq_external extends external_api {
             throw new moodle_exception('norighttoaccessthisfunction', 'local_wb_faq');
 
         } else {
-            $array['status'] = settings_manager::delete_entry($params['id']);
+            $array['status'] = wb_faq::delete_entry($params['id']);
         }
 
         return $array;
@@ -101,7 +100,7 @@ class local_wb_faq_external extends external_api {
             throw new moodle_exception('norighttoaccessthisfunction', 'local_wb_faq');
 
         } else {
-            $array['status'] = settings_manager::toggle_entry_visibility($params['id']);
+            $array['status'] = wb_faq::toggle_entry_visibility($params['id']);
         }
 
         return $array;
