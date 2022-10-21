@@ -27,6 +27,7 @@ import ModalEvents from 'core/modal_events';
 import {get_string as getString, get_strings as getStrings} from 'core/str';
 import {showSuccessNotification, showErrorNotification} from 'local_wb_faq/notifications';
 import {deleteEntry, toggleVisibility} from 'local_wb_faq/admin';
+import {reloadData} from 'local_wb_faq/faq';
 
 /**
  * Gets called from mustache template.
@@ -105,6 +106,7 @@ const editModalListener = event => {
     let button = event.target;
     let entryid = 0;
     let parentid = 0;
+    let uid = 0;
 
     if (button.tagName.toLowerCase() !== 'a') {
         button = button.parentElement;
@@ -116,6 +118,10 @@ const editModalListener = event => {
 
     if (button.dataset.faqroot) {
         parentid = button.dataset.faqroot;
+    }
+
+    if (button.dataset.uid) {
+        uid = button.dataset.uid;
     }
 
     const modalForm = new ModalForm({
@@ -139,7 +145,11 @@ const editModalListener = event => {
     // Event detail will contain everything the process() function returned:
     modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, () => {
         showSuccessNotification();
-        window.location.reload();
+        if (uid) {
+            reloadData(uid, parentid);
+        } else {
+            window.location.reload();
+        }
     });
 
     // Show the form.
@@ -163,6 +173,7 @@ const editModalListener = event => {
     let button = event.target;
     let entryid = 0;
     let parentid = 0;
+    let uid = 0;
 
     if (button.tagName.toLowerCase() !== 'a') {
         button = button.parentElement;
@@ -174,6 +185,10 @@ const editModalListener = event => {
 
     if (button.dataset.faqroot) {
         parentid = button.dataset.faqroot;
+    }
+
+    if (button.dataset.uid) {
+        uid = button.dataset.uid;
     }
 
     const modalForm = new ModalForm({
@@ -201,7 +216,11 @@ const editModalListener = event => {
         console.log('Response of the modal: ', response);
 
         showSuccessNotification();
-        window.location.reload();
+        if (uid) {
+
+        } else {
+            window.location.reload();
+        }
     });
 
     // Show the form.

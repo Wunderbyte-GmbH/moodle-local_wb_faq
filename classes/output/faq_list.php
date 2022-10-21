@@ -68,8 +68,8 @@ class faq_list implements renderable, templatable {
             $allowedit = false;
         }
 
-        $sm = new wb_faq();
-        $allfaqs = $sm->load_from_cache(true, $categoryid, $allowedit);
+        $faq = new wb_faq();
+        $allfaqs = $faq->load_from_cache(true, $categoryid, $allowedit);
 
         $data = [];
 

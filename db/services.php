@@ -53,6 +53,14 @@ $functions = array(
                 'type' => 'write',
                 'capabilities' => 'local/wb_faq:canedit',
                 'ajax' => true,
+        ),
+        'local_wb_faq_get_faq_data' => array(
+                'classname' => 'local_wb_faq\external\get_faq_data',
+                'classpath' => '',
+                'description' => 'reload data.',
+                'type' => 'write',
+                'capabilities' => 'local/wb_faq:canedit',
+                'ajax' => true,
         )
 );
 

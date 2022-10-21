@@ -448,9 +448,9 @@ class wb_faq {
         $userid = $USER->id;
         $event = \local_wb_faq\event\faq_entry_added::create(
             array(
-                'objectid' => $id,
-                'context' => $context,
-                'relateduserid'	=> $userid));
+             'objectid' => $id,
+             'context' => $context,
+             'relateduserid'	=> $userid));
         $event->trigger();
 
         cache_helper::purge_by_event('setbackfaqlist');

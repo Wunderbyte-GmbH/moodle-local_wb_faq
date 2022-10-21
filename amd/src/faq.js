@@ -1,4 +1,3 @@
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -20,9 +19,9 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
-import Templates from 'core/templates';
-import {get_string as getString} from 'core/str';
+import Templates from "core/templates";
+import {get_string as getString} from "core/str";
+import Ajax from "core/ajax";
 
 var clicks = 0;
 
@@ -34,11 +33,11 @@ var clicks = 0;
  * @param {string} uid
  */
 export const init = (data, root, uid) => {
-    clicks = 0;
-    // eslint-disable-next-line no-console
-    console.log('faq.js ', uid);
-    render(root, data, uid);
-    addEvents(data, root, uid);
+  clicks = 0;
+  // eslint-disable-next-line no-console
+  console.log("faq.js ", uid);
+  render(root, data, uid);
+  addEvents(data, root, uid);
 };
 
 /**
@@ -48,71 +47,87 @@ export const init = (data, root, uid) => {
  * @param {string} uid
  */
 function addEvents(data, root, uid) {
-    let select = document.querySelector('.local_wb_faq_container-' + uid);
-    if (select) {
-        select.addEventListener('click', (e) => {
-            let button = e.target;
-            if (button.dataset.toggle == "faqcollapse") {
-                clicks++;
-                // eslint-disable-next-line no-console
-                console.log(clicks);
-                if (button.classList.contains('collapsed')) {
-                    button.classList.remove('collapsed');
-                    document.querySelector(button.dataset.target).classList.add('show');
-                    document.querySelector(button.dataset.target).classList.remove('hide');
-                } else {
-                    button.classList.add('collapsed');
-                    document.querySelector(button.dataset.target).classList.add('hide');
-                    document.querySelector(button.dataset.target).classList.remove('show');
-                }
-            }
-            if (e.target.dataset.action == "goto") {
-                render(e.target.dataset.targetid, data, uid);
-            }
-        });
-    }
+  let select = document.querySelector(".local_wb_faq_container-" + uid);
+  if (select.listener) {
+    select.removeEventListener("click", select.listener);
+  }
+  if (select) {
+    select.addEventListener(
+      "click",
+      (select.listener = (e) => {
+        let button = e.target;
+        if (button.dataset.toggle == "faqcollapse") {
+          clicks++;
+          // eslint-disable-next-line no-console
+          console.log(clicks);
+          if (button.classList.contains("collapsed")) {
+            button.classList.remove("collapsed");
+            document.querySelector(button.dataset.target).classList.add("show");
+            document
+              .querySelector(button.dataset.target)
+              .classList.remove("hide");
+          } else {
+            button.classList.add("collapsed");
+            document.querySelector(button.dataset.target).classList.add("hide");
+            document
+              .querySelector(button.dataset.target)
+              .classList.remove("show");
+          }
+        }
+        if (e.target.dataset.action == "goto") {
+          render(e.target.dataset.targetid, data, uid);
+        }
+      })
+    );
+  }
 
-    let searchbox = document.querySelector('.wb_faq_searchbox-' + uid);
+  let searchbox = document.querySelector(".wb_faq_searchbox-" + uid);
 
-    // eslint-disable-next-line no-console
-    console.log('searchbox', searchbox);
+  // eslint-disable-next-line no-console
+  console.log("searchbox", searchbox);
 
-    if (searchbox) {
-        searchbox.addEventListener('click', (e) => {
-            let button = e.target;
-            // eslint-disable-next-line no-console
-            if (button.dataset.toggle == "faqcollapse") {
-                clicks++;
+  if (searchbox) {
+    searchbox.addEventListener("click", (e) => {
+      let button = e.target;
+      // eslint-disable-next-line no-console
+      if (button.dataset.toggle == "faqcollapse") {
+        clicks++;
 
-                if (button.classList.contains('collapsed')) {
-                    button.classList.remove('collapsed');
-                    document.querySelector(button.dataset.target).classList.add('show');
-                    document.querySelector(button.dataset.target).classList.remove('hide');
-                } else {
-                    button.classList.add('collapsed');
-                    document.querySelector(button.dataset.target).classList.add('hide');
-                    document.querySelector(button.dataset.target).classList.remove('show');
-                }
-            }
-            if (e.target.dataset.action == "goto") {
-                render(e.target.dataset.targetid, data, uid);
-                document.querySelector('.local_wb_faq-' + uid).scrollIntoView({block: "start", behavior: "smooth"});
-            }
-        });
-    }
+        if (button.classList.contains("collapsed")) {
+          button.classList.remove("collapsed");
+          document.querySelector(button.dataset.target).classList.add("show");
+          document
+            .querySelector(button.dataset.target)
+            .classList.remove("hide");
+        } else {
+          button.classList.add("collapsed");
+          document.querySelector(button.dataset.target).classList.add("hide");
+          document
+            .querySelector(button.dataset.target)
+            .classList.remove("show");
+        }
+      }
+      if (e.target.dataset.action == "goto") {
+        render(e.target.dataset.targetid, data, uid);
+        document
+          .querySelector(".local_wb_faq-" + uid)
+          .scrollIntoView({ block: "start", behavior: "smooth" });
+      }
+    });
+  }
 
-    let category = document.querySelector('#id_categorypicker');
+  let category = document.querySelector("#id_categorypicker");
 
-    if (category) {
-        category.addEventListener('change', () => {
-            let faqid = category.value;
-            if (category.value == '') {
-                faqid = root;
-            }
+  if (category) {
+    category.addEventListener("change", () => {
+      let faqid = category.value;
+      if (category.value == "") {
+        faqid = root;
+      }
 
-            render(faqid, data);
-        });
-    }
+      render(faqid, data);
+    });
+  }
 }
 
 /**
@@ -122,33 +137,61 @@ function addEvents(data, root, uid) {
  * @param {string} uid
  */
 function render(id, data, uid) {
+  let json = JSON.parse(data);
+  let templatedata = json[id];
+  templatedata.root = id;
+  templatedata.uid = uid;
 
-    let json = JSON.parse(data);
-    let templatedata = json[id];
-    templatedata.root = id;
+  if (!templatedata || !templatedata.hasOwnProperty("parentid")) {
+    return;
+  }
 
-    if (!templatedata || !templatedata.hasOwnProperty('parentid')) {
-        return;
-    }
+  if (json[templatedata.parentid].title) {
+    templatedata.parenttitle = json[templatedata.parentid].title;
+  }
+  if (templatedata.parentid == "") {
+    templatedata.parenttitle = getString("faq", "local_wb_faq");
+  }
 
-    if (json[templatedata.parentid].title) {
-        templatedata.parenttitle = json[templatedata.parentid].title;
-    }
-    if (templatedata.parentid == '') {
-        templatedata.parenttitle = getString('faq', 'local_wb_faq');
-    }
-
-    // Select Container
-    let container = document.querySelector('.local_wb_faq-' + uid);
-    // Empty Container
-    container.innerHTML = "";
-    // Render
-    Templates.renderForPromise('local_wb_faq/faq', templatedata).then(({html, js}) => {
-        html = '<div class="local_wb_faq-' + uid + '">' + html + '</div>';
-        Templates.replaceNode('.local_wb_faq-' + uid, html, js);
-        return;
-    }).catch(e => {
-        // eslint-disable-next-line no-console
-        console.log(e);
+  // Select Container
+  let container = document.querySelector(".local_wb_faq-" + uid);
+  // Empty Container
+  container.innerHTML = "";
+  // Render
+  Templates.renderForPromise("local_wb_faq/faq", templatedata)
+    .then(({ html, js }) => {
+      html = '<div class="local_wb_faq-' + uid + '">' + html + "</div>";
+      Templates.replaceNode(".local_wb_faq-" + uid, html, js);
+      return;
+    })
+    .catch((e) => {
+      // eslint-disable-next-line no-console
+      console.log(e);
     });
 }
+
+/**
+ * Calls WS Function to get new data after new entries are added
+ * @param {string} uid
+ * @param {integer} parentid
+ */
+export const reloadData = (uid, parentid) => {
+  loadData(uid, parentid);
+};
+
+const loadData = (uid, parentid) =>
+  Ajax.call([
+    {
+      methodname: "local_wb_faq_get_faq_data",
+      args: {},
+      done: function (data) {
+        let newdata = JSON.parse(data.json);
+        addEvents(newdata, parentid, uid);
+        render(parentid, newdata, uid);
+      },
+      fail: function (ex) {
+        // eslint-disable-next-line no-console
+        console.log(ex);
+      },
+    },
+  ]);

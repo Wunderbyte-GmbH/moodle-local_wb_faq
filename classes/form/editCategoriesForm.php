@@ -70,7 +70,7 @@ class editCategoriesForm extends dynamic_form {
             $data->content['text'] = $content;
             $data->content['format'] = 1;
         } else {
-            // No semesters found in DB.
+            $data->parentid = $this->_ajaxformdata['parentid'];
             $data->type = $this->_ajaxformdata['type'];
         }
 
