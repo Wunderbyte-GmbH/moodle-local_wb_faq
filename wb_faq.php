@@ -44,8 +44,5 @@ $data = new display_search(0, $USER->id);
 echo $renderer->render_display_search($data);
 $data = new faq_list(0, $USER->id, true);
 $return = $data->export_for_template($renderer);
-
-// $return = ['json' => $data->data['json'],'root' => 0,'allowedit' => true];
-
 echo $renderer->render_list_faq($data);
 echo $OUTPUT->footer();

@@ -146,9 +146,11 @@ function render(id, data, uid) {
     return;
   }
 
+  /*
   if (json[templatedata.parentid].title) {
     templatedata.parenttitle = json[templatedata.parentid].title;
-  }
+  } */
+
   if (templatedata.parentid == "") {
     templatedata.parenttitle = getString("faq", "local_wb_faq");
   }

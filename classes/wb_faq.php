@@ -27,8 +27,6 @@ namespace local_wb_faq;
 
 use cache_helper;
 use context_system;
-use core\session\exception;
-use local_wb_faq_external;
 use stdClass;
 
 /**
@@ -177,7 +175,6 @@ class wb_faq {
                 unset($entries[$key]);
             }
         }
-        // $entries = $DB->get_records_sql("SELECT * FROM {local_wb_faq_entry} ORDER BY type, parentid");
         $tree = $this->buildsearch($entries, $root);
         $option = [];
         $nodes = $tree;
@@ -200,6 +197,7 @@ class wb_faq {
      * @return void
      */
     public function load_from_cache(bool $json = false, $root = null, $allowedit = false) {
+        /* TODO only load relevant data */
         global $USER;
         $userid = $USER->id;
         $cache = \cache::make('local_wb_faq', 'faqcache');
@@ -209,8 +207,18 @@ class wb_faq {
             $this->update_cache($allowedit);
             $cachedrawdata = $cache->get($cachekey);
         }
+
+        /* Not yet perfect way to disable the nodes above content */
         if ($root) {
             $cachedrawdata[$root]->toplevel = true;
+            $parentid = $root;
+            do {
+                $parentid = $cachedrawdata[$parentid]->parentid;
+                $parentids[] = $parentid;
+            } while (!empty($parentid));
+        }
+        foreach ($parentids as $parentid) {
+            unset($cachedrawdata[$parentid]);
         }
 
         // Check ACCESS.
@@ -450,7 +458,7 @@ class wb_faq {
             array(
              'objectid' => $id,
              'context' => $context,
-             'relateduserid'	=> $userid));
+             'relateduserid' => $userid));
         $event->trigger();
 
         cache_helper::purge_by_event('setbackfaqlist');
@@ -482,7 +490,7 @@ class wb_faq {
                 array(
                     'objectid' => $data->id,
                     'context' => $context,
-                    'relateduserid'	=> $userid));
+                    'relateduserid'    => $userid));
             $event->trigger();
         }
 
@@ -508,7 +516,7 @@ class wb_faq {
                 array(
                     'objectid' => $id,
                     'context' => $context,
-                    'relateduserid'	=> $userid));
+                    'relateduserid'    => $userid));
             $event->trigger();
         }
         return $result ? 1 : 0;
