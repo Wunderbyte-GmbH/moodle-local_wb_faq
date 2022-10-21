@@ -217,7 +217,7 @@ const editModalListener = event => {
 
         showSuccessNotification();
         if (uid) {
-
+            reloadData(uid, parentid);
         } else {
             window.location.reload();
         }
