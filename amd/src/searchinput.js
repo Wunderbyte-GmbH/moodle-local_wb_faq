@@ -123,9 +123,14 @@ export const searchJSON = (listContainer, inputClass, json) => {
 export const init = (searchInputID, listContainer, elementToHide, elementToSearch, json = null) => {
     // eslint-disable-next-line no-console
     console.log("initSearch", searchInputID, listContainer);
-    document.querySelector(searchInputID).addEventListener('keyup', function () {
-        searchJSON(listContainer, searchInputID, json);
-    });
+
+    const searchInputElement = document.querySelector(searchInputID);
+
+    if (searchInputElement) {
+        searchInputElement.addEventListener('keyup', function () {
+            searchJSON(listContainer, searchInputID, json);
+        });
+    }
 };
 
 

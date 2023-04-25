@@ -25,6 +25,8 @@ import Ajax from "core/ajax";
 
 var clicks = 0;
 
+const faqs = {};
+
 /**
  * Gets called from mustache template.
  *
@@ -34,8 +36,16 @@ var clicks = 0;
  */
 export const init = (data, root, uid) => {
   clicks = 0;
+
+  // Make sure we never run the same init js twice.
+  if (faqs[uid]) {
+    return;
+  }
+
+  faqs[uid] = true;
+
   // eslint-disable-next-line no-console
-  console.log("faq.js ", uid);
+  console.log("faq.js ", uid, root);
   render(root, data, uid);
   addEvents(data, root, uid);
 };
@@ -48,6 +58,11 @@ export const init = (data, root, uid) => {
  */
 function addEvents(data, root, uid) {
   let select = document.querySelector(".local_wb_faq_container-" + uid);
+
+  if (!select) {
+    return;
+  }
+
   if (select.listener) {
     select.removeEventListener("click", select.listener);
   }
@@ -157,6 +172,11 @@ function render(id, data, uid) {
 
   // Select Container
   let container = document.querySelector(".local_wb_faq-" + uid);
+
+  if (!container) {
+    return;
+  }
+
   // Empty Container
   container.innerHTML = "";
   // Render
