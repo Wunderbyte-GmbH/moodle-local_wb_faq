@@ -133,7 +133,7 @@ class editCategoriesForm extends dynamic_form {
         $mform->addElement('hidden', 'type', 0);
 
         $mform->addElement('html', '</div><div class="col-md-6">');
-        $sql = 'SELECT id, title From {local_wb_faq_entry} WHERE type = 0';
+        $sql = "SELECT id, title From {local_wb_faq_entry} WHERE type = '0'";
         $parents = $DB->get_records_sql($sql);
         $selectinput = [];
         $selectinput[0] = 'top Level';
@@ -146,6 +146,9 @@ class editCategoriesForm extends dynamic_form {
         $mform->addElement('hidden', 'id');
 
         $mform->addElement('html', '</div></div></div>');
+
+
+        wb_faq::add_form_elements($mform);
 
         // We only show the action button on the admin page, else we likely use the modal which does not need them.
         $data = $this->_ajaxformdata;

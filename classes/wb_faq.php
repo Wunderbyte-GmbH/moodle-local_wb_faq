@@ -203,6 +203,8 @@ class wb_faq {
         $cache = \cache::make('local_wb_faq', 'faqcache');
         $cachekey = $allowedit ? 'faq_cache_edit' : 'faq_cache';
         $cachedrawdata = $cache->get($cachekey);
+
+        $parentids = [];
         if (!$cachedrawdata) {
             $this->update_cache($allowedit);
             $cachedrawdata = $cache->get($cachekey);
@@ -676,5 +678,32 @@ class wb_faq {
         cache_helper::purge_by_event('setbackfaqlist');
 
         return 'none';
+    }
+
+    /**
+     * Add some form elements.
+     *
+     * @param [type] $mform
+     * @return void
+     */
+    public static function add_form_elements(&$mform) {
+
+        $modulesselction = [];
+        $config = get_config('local_wb_faq');
+        $modulesarray = explode(PHP_EOL, $config->modules);
+
+        foreach($modulesarray as $item) {
+            $key = trim($item);
+            $modulesselction[$key] = $key;
+        }
+        $mform->addElement('select', 'module', get_string('modules', 'local_wb_faq'), $modulesselction);
+
+        $groupselection = [];
+        $grouparray = explode(PHP_EOL, $config->groups);
+        foreach($grouparray as $item) {
+            $key = trim($item);
+            $groupselection[$key] = $key;
+        }
+        $mform->addElement('select', 'supplement', get_string('groups', 'local_wb_faq'), $groupselection);
     }
 }

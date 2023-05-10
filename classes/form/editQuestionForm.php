@@ -115,7 +115,7 @@ class editQuestionForm extends dynamic_form {
         $mform->setDefault('enabled', 1);
 
         $mform->addElement('html', '</div><div class="col-md-6">');
-        $sql = 'SELECT id, title From {local_wb_faq_entry} WHERE type = 0';
+        $sql = "SELECT id, title From {local_wb_faq_entry} WHERE type = '0'";
         $parents = $DB->get_records_sql($sql);
         $selectinput = [];
         $selectinput[0] = 'top Level';

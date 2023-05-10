@@ -70,6 +70,9 @@ function addEvents(data, root, uid) {
     select.addEventListener(
       "click",
       (select.listener = (e) => {
+
+        setValuesToSelect(e);
+
         let button = e.target;
         if (button.dataset.toggle == "faqcollapse") {
           clicks++;
@@ -217,3 +220,26 @@ const loadData = (uid, parentid) =>
       },
     },
   ]);
+
+/**
+ *
+ * @param {Event} e
+ */
+function setValuesToSelect(e) {
+  // eslint-disable-next-line no-console
+  console.log(e.target.dataset.supplement, e.target.dataset.module);
+
+  const moduleElement = document.querySelector('#local_edusupport_create_form #id_module');
+  const supplementElement = document.querySelector('#local_edusupport_create_form #id_supplement');
+
+  if (moduleElement) {
+    // eslint-disable-next-line no-console
+    console.log(e.target.dataset.module);
+    moduleElement.value = e.target.dataset.module;
+  }
+  if (supplementElement) {
+    // eslint-disable-next-line no-console
+    console.log(e.target.dataset.supplement);
+    supplementElement.value = e.target.dataset.supplement;
+  }
+}

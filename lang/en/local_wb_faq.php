@@ -107,3 +107,5 @@ $string['search:faqentry'] = 'FAQ - Eintrag';
 $string['choosecourse'] = "Choose a course. This determines who can see this category and all the faqs inside";
 $string['nocourseselected'] = "No course selected";
 $string['invisible'] = "Visible";
+$string['groups'] = 'Groups';
+$string['modules'] = 'Modules';

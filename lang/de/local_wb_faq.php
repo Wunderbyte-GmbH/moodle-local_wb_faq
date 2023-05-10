@@ -107,3 +107,5 @@ $string['search:faqentry'] = 'FAQ - entry';
 $string['choosecourse'] = "Einen Kurs auswählen. Das bestimmt, wer diese Kategorie und alle FAQs darin sehen kann.";
 $string['nocourseselected'] = "Kein Kurs ausgewählt";
 $string['invisible'] = "Sichtbar";
+$string['groups'] = 'Gruppen';
+$string['modules'] = 'Module';
