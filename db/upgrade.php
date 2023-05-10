@@ -76,5 +76,28 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2022091700, 'local', 'wb_faq');
     }
 
+    if ($oldversion < 2023050800) {
+
+        // Define field module to be added to local_wb_faq_entry.
+        $table = new xmldb_table('local_wb_faq_entry');
+        $field = new xmldb_field('module', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'parentid');
+
+        // Conditionally launch add field module.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('supplement', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'module');
+
+        // Conditionally launch add field group.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Wb_faq savepoint reached.
+        upgrade_plugin_savepoint(true, 2023050800, 'local', 'wb_faq');
+    }
+
+
     return true;
 }
