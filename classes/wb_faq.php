@@ -286,12 +286,11 @@ class wb_faq {
                 // If we have a category which is already in the data array, we need to keep all the information.
 
                 if (isset($dataarr[$record->id])) {
-                    foreach ($record as $key => $value) {
-                        $dataarr[$record->id]->{$key} = $value;
+                    foreach ($dataarr[$record->id] as $key => $value) {
+                        $record->{$key} = $value;
                     }
-                } else {
-                    $dataarr[$record->id] = $record;
                 }
+                $dataarr[$record->id] = $record;
 
                 if (!isset($dataarr[$record->parentid])) {
                     $dataarr[$record->parentid] = new stdClass();
