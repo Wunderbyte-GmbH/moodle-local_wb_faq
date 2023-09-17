@@ -40,7 +40,23 @@ class wb_faq {
 
     public $courselist;
 
+    /**
+     *
+     * @var mixed
+     */
     private $id;
+
+    /**
+     *
+     * @var mixed
+     */
+    private $data;
+
+    /**
+     *
+     * @var mixed
+     */
+    private $title;
 
     /**
      * Constructor.

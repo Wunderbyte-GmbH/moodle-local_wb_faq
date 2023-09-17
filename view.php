@@ -49,6 +49,6 @@ echo $OUTPUT->header();
 $renderer = $PAGE->get_renderer('local_wb_faq');
 $data = new display_search($USER->id, $parentid);
 echo $renderer->render_display_search($data);
-$data = new faq_list($parentid, $USER->id, false);
+$data = new faq_list($USER->id, $parentid, false);
 echo $renderer->render_list_faq($data);
 echo $OUTPUT->footer();

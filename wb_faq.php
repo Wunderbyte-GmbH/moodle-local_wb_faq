@@ -42,7 +42,7 @@ $renderer = $PAGE->get_renderer('local_wb_faq');
 
 $data = new display_search($USER->id, 0);
 echo $renderer->render_display_search($data);
-$data = new faq_list(0, $USER->id, true);
+$data = new faq_list($USER->id, 0, true);
 $return = $data->export_for_template($renderer);
 echo $renderer->render_list_faq($data);
 echo $OUTPUT->footer();

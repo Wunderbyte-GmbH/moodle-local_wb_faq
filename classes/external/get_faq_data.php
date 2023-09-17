@@ -58,7 +58,7 @@ class get_faq_data extends external_api {
         global $USER, $PAGE;
         $context = \context_system::instance();
         require_capability('local/wb_faq:canedit', $context);
-        $data = new faq_list(0, $USER->id, true);
+        $data = new faq_list($USER->id, 0, true);
         $PAGE->set_context($context);
         $renderer = $PAGE->get_renderer('local_wb_faq');
         return $data->export_for_template($renderer);

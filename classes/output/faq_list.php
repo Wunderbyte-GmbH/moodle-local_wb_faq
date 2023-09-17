@@ -55,10 +55,11 @@ class faq_list implements renderable, templatable {
 
     /**
      * Constructor.
-     * @param integer $categoryid
      * @param string $uid
+     * @param integer $categoryid
+     * @param bool $allowedit
      */
-    public function __construct($categoryid = 0, string $uid, $allowedit = false) {
+    public function __construct(string $uid, $categoryid = 0, $allowedit = false) {
 
         $this->uid = $uid;
 

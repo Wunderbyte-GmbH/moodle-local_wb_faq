@@ -78,7 +78,7 @@ class shortcodes {
         }
 
         if (!$nolist) {
-            $data = new faq_list($categoryid, $uid, $allowedit);
+            $data = new faq_list($uid, $categoryid, $allowedit);
             $out .= $renderer->render_list_faq($data);
         }
 
