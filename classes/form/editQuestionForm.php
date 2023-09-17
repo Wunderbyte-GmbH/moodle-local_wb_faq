@@ -62,13 +62,34 @@ class editQuestionForm extends dynamic_form {
 
         $data = new stdClass;
 
+        $context = self::get_context_for_dynamic_submission();
+
         if ($this->_ajaxformdata['id'] && $this->_ajaxformdata['id'] > 0) {
             $data = new stdClass;
             $data = $DB->get_record('local_wb_faq_entry', array('id' => $this->_ajaxformdata['id']));
-            $content = $data->content;
-            unset($data->content);
-            $data->content['text'] = $content;
-            $data->content['format'] = 1;
+
+            $data = file_prepare_standard_editor(
+                // The existing data.
+                $data,
+
+                // The field name in the database.
+                'content',
+
+                // The options.
+                $this->get_textfield_options(),
+
+                // The combination of contextid, component, filearea, and itemid.
+                $context,
+                'local_wb_faq',
+                'faq_entry',
+                $data->id
+            );
+
+
+            // $content = $data->content;
+            // unset($data->content);
+            // $data->content['text'] = $content;
+            // $data->content['format'] = 1;
         } else {
             $data->parentid = $this->_ajaxformdata['parentid'];
             $data->type = $this->_ajaxformdata['type'];
@@ -84,8 +105,24 @@ class editQuestionForm extends dynamic_form {
     public function process_dynamic_submission(): stdClass {
         global $DB;
 
+
         // This is the correct place to save and update semesters.
         $data = $this->get_data();
+
+        $data = file_postupdate_standard_editor(
+            // The submitted data.
+            $data,
+
+            // The field name in the database.
+            'content',
+
+            // The options.
+            $this->get_textfield_options(),
+
+            'local_wb_faq',
+            'faq_entry',
+            $data->id
+        );
 
         $settingsmanager = new wb_faq();
         if ($data->id) {
@@ -126,7 +163,7 @@ class editQuestionForm extends dynamic_form {
         $mform->addElement('html', '</div></div><div class="row"><div class="col-md-12">');
         $context = \context_system::instance();
         $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' => $context);
-        $mform->addElement('editor', 'content', get_string('input:content', 'local_wb_faq'),
+        $mform->addElement('editor', 'content_editor', get_string('input:content', 'local_wb_faq'),
             '', $editoroptions);
         $mform->setType('content', PARAM_RAW);
         $mform->addElement('hidden', 'id');
@@ -159,5 +196,20 @@ class editQuestionForm extends dynamic_form {
      */
     protected function get_page_url_for_dynamic_submission(): moodle_url {
         return new moodle_url('/local/wb_faq/admin.php');
+    }
+
+    /**
+     * As we need it twice, we create a function.
+     * @return array
+     */
+    private function get_textfield_options() {
+
+        $context = $this->get_context_for_dynamic_submission();
+
+        return [
+            'trusttext' => true,
+            'subdirs' => true,
+            'context' => $context,
+        ];
     }
 }

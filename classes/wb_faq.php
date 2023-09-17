@@ -446,9 +446,7 @@ class wb_faq {
      */
     public function create_faq(stdClass $data, $allowedit = false): int {
         global $DB, $USER;
-        $temp = $data->content['text'];
-        unset($data->content);
-        $data->content = $temp;
+
         $data->timecreated = time();
         $data->timemodified = time();
 
@@ -477,9 +475,7 @@ class wb_faq {
      */
     public function update_faq(stdClass $data, $allowedit = false): int {
         global $DB, $USER;
-        $temp = $data->content['text'];
-        unset($data->content);
-        $data->content = $temp;
+
         $data->timemodified = time();
         $update = $DB->update_record('local_wb_faq_entry', $data);
 
