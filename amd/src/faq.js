@@ -185,8 +185,8 @@ function render(id, data, uid) {
   // Render
   Templates.renderForPromise("local_wb_faq/faq", templatedata)
     .then(({ html, js }) => {
-      html = '<div class="local_wb_faq-' + uid + '">' + html + "</div>";
-      Templates.replaceNode(".local_wb_faq-" + uid, html, js);
+
+      Templates.replaceNodeContents(".local_wb_faq-" + uid, html, js);
       return;
     })
     .catch((e) => {
