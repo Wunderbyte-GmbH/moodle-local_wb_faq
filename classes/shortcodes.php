@@ -73,7 +73,7 @@ class shortcodes {
         $uid = uniqid();
 
         if (!$nosearch) {
-            $data = new display_search($categoryid, $uid);
+            $data = new display_search($uid, $categoryid);
             $out = $renderer->render_display_search($data);
         }
 

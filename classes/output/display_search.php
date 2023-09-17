@@ -56,10 +56,10 @@ class display_search implements renderable, templatable {
 
     /**
      * Constructor.
-     * @param integer $categoryid
      * @param string $uid
+     * @param integer $categoryid
      */
-    public function __construct($categoryid = 0, string $uid) {
+    public function __construct(string $uid, $categoryid = 0) {
 
         $this->uid = $uid;
 
