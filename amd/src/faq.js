@@ -204,13 +204,18 @@ export const reloadData = (uid, parentid) => {
   loadData(uid, parentid);
 };
 
-const loadData = (uid, parentid) =>
+export const loadData = (uid, parentid) =>
   Ajax.call([
     {
       methodname: "local_wb_faq_get_faq_data",
       args: {},
       done: function (data) {
         let newdata = JSON.parse(data.json);
+
+        if (!uid) {
+          return newdata;
+        }
+
         addEvents(newdata, parentid, uid);
         render(parentid, newdata, uid);
       },

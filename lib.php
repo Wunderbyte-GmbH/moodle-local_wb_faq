@@ -48,6 +48,24 @@ function local_wb_faq_extend_navigation($navigation) {
 } */
 
 /**
+ * Renders the popup Link.
+ *
+ * @param renderer_base $renderer
+ * @return string The HTML
+ */
+function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
+    global $CFG;
+
+    // Early bail out conditions.
+    if (!isloggedin() || isguestuser()) {
+        return '';
+    }
+
+    $output = $renderer->render_from_template('local_wb_faq/navbar/popoverbutton', []);
+    return $output;
+}
+
+/**
  *
  * Get saved files for the page
  *
