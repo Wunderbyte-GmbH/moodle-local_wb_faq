@@ -75,7 +75,7 @@ $string['root'] = 'Top Level';
 
 $string['wb_faq:canedit'] = 'Manage FAQ';
 
-// Shortcodes
+// Shortcodes.
 
 $string['displayfaqs'] = "Display FAQs";
 $string['categorynotfound'] = 'Category "{$a}" not found';
@@ -85,7 +85,7 @@ $string['noresult'] = "Couln't find anything...";
 $string['stringtooshort'] = "Input too short...";
 $string['searchfaq'] = "... search faq";
 
-// edit.js
+// Edit.
 $string['confirmdeleteentry'] = "Confirm delete entry";
 $string['confirmdeleteentrytitle'] = "Confirm delete entry";
 $string['confirmdeleteentrybody'] = "Do you really want to delte this entry?";
@@ -96,16 +96,20 @@ $string['confirmtogglevisibilitybody'] = "When you change the visibility, only u
     edit-capabilities can still see these entries.";
 $string['confirmtogglevisibility'] = "Change visibility";
 
-// notification.js
+// Notification.
 $string['saveerror'] = "Error while saving";
 $string['savesuccess'] = "Successfully saved";
 
 // Search api.
 $string['search:faqentry'] = 'FAQ - Eintrag';
 
-// editCategoriesForm
+// Edit CategoriesForm.
 $string['choosecourse'] = "Choose a course. This determines who can see this category and all the faqs inside";
 $string['nocourseselected'] = "No course selected";
 $string['invisible'] = "Visible";
-$string['groups'] = 'Groups';
-$string['modules'] = 'Modules';
+$string['groupsnmodules'] = 'Groups and modules';
+
+// Supportmessage.
+$string['searchfaqs'] = "FAQs";
+$string['writemessage'] = "Message";
+$string['thankyou'] = "Thank You";

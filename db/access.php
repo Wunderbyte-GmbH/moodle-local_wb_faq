@@ -26,6 +26,14 @@
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
+    'local/wb_faq:cansendsupportmessage' => [
+        'riskbitmask' => RISK_DATALOSS,
+        'captype' => 'write',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'user' => CAP_ALLOW,
+        ],
+    ],
     'local/wb_faq:canedit' => [
         'riskbitmask' => RISK_DATALOSS,
         'captype' => 'write',

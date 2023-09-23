@@ -21,6 +21,7 @@
  */
 import Templates from 'core/templates';
 import {get_string as getString} from 'core/str';
+import {increaseCounter} from "local_wb_faq/faqnavbar";
 
 var searcharray = [];
 
@@ -99,6 +100,9 @@ export const searchJSON = (listContainer, inputClass, json) => {
                 // eslint-disable-next-line no-console
                 console.log(e);
             });
+        } else {
+            // If we had a valid input, we can continue to the input form.
+            increaseCounter(true);
         }
 
     } else if (searchVal.length == 0) {

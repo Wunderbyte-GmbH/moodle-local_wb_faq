@@ -20,12 +20,19 @@
  */
 
 import Templates from "core/templates";
+
+import {increaseCounter} from "local_wb_faq/faqnavbar";
 import {get_string as getString} from "core/str";
 import Ajax from "core/ajax";
 
 var clicks = 0;
 
 const faqs = {};
+
+const SELECTORS = {
+  SUPPORTMESSAGE_MODULE: "id_module",
+  SUPPORTMESSAGE_SUPPLEMENT: "id_supplement",
+};
 
 /**
  * Gets called from mustache template.
@@ -155,7 +162,12 @@ function addEvents(data, root, uid) {
  * @param {string} uid
  */
 function render(id, data, uid) {
-  let json = JSON.parse(data);
+
+  let json = data;
+  if (typeof data === 'string') {
+    json = JSON.parse(data);
+  }
+
   let templatedata = json[id];
   templatedata.root = id;
   templatedata.uid = uid;
@@ -163,11 +175,6 @@ function render(id, data, uid) {
   if (!templatedata || !templatedata.hasOwnProperty("parentid")) {
     return;
   }
-
-  /*
-  if (json[templatedata.parentid].title) {
-    templatedata.parenttitle = json[templatedata.parentid].title;
-  } */
 
   if (templatedata.parentid == "") {
     templatedata.parenttitle = getString("faq", "local_wb_faq");
@@ -232,11 +239,14 @@ export const loadData = (uid, parentid) =>
  * @param {Event} e
  */
 function setValuesToSelect(e) {
+
+  // With every click, we increase the counter.
+  increaseCounter();
   // eslint-disable-next-line no-console
   console.log(e.target.dataset.supplement, e.target.dataset.module);
 
-  const moduleElement = document.querySelector('#local_edusupport_create_form #id_module');
-  const supplementElement = document.querySelector('#local_edusupport_create_form #id_supplement');
+  const moduleElement = document.querySelector(SELECTORS.SUPPORTMESSAGE_MODULE);
+  const supplementElement = document.querySelector(SELECTORS.SUPPORTMESSAGE_SUPPLEMENT);
 
   if (moduleElement) {
     // eslint-disable-next-line no-console

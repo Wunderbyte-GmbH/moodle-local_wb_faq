@@ -20,13 +20,24 @@
  */
 
 //
-// import {get_string as getString} from "core/str";
-
+import {get_strings as getstrings} from "core/str";
+import Config from "core/config";
 import Ajax from "core/ajax";
 import Templates from "core/templates";
 import MyModal from 'local_wb_faq/custommodal';
 import ModalFactory from 'core/modal_factory';
-import ModalEvents from 'core/modal_events';
+// import ModalEvents from 'core/modal_events';
+
+var modal = null;
+var counterlimit = 3; // Can be overridden.
+var counter = 0;
+
+var SELECTORS = {
+  TABS: 'faq-page-navbar-tab a.nav-link',
+  FAQTAB: '#faq-nav-pillsone-tab',
+  MESSAGETAB: '#faq-nav-pillstwo-tab',
+  THANKYOUTAB: '#faq-nav-pillsthree-tab',
+};
 
 /**
  * Gets called from mustache template.
@@ -36,15 +47,47 @@ export function init() {
 
   // eslint-disable-next-line no-console
   console.log('init navbar called');
+  // eslint-disable-next-line no-console
+  console.log(Config);
 
   addEvents();
 }
 
 /**
+ * Function to increase counter. Also enables message tab, if counter is high enough.
+ */
+/**
+ *
+ * @param {boolean} max
+ */
+export function increaseCounter(max = false) {
+
+  // If max is true, we enable message.
+  if (max) {
+    counter = counterlimit;
+  }
+
+  counter++;
+
+  // eslint-disable-next-line no-console
+  console.log('counter', counter);
+
+  if (counter >= counterlimit) {
+    const tabs = document.querySelectorAll(SELECTORS.MESSAGETAB);
+
+    tabs.forEach(tab => {
+      tab.classList.remove('disabled');
+    });
+  }
+}
+
+/**
  * Adds Evente to menu button
  */
-function addEvents() {
+async function addEvents() {
   let button = document.querySelector("[data-id='wb-faq-navbar-open-modal']");
+
+
 
   if (!button) {
 
@@ -59,7 +102,6 @@ function addEvents() {
   }
 
   button.initialized = true;
-  var modal = null;
 
   // eslint-disable-next-line no-console
   console.log('found button', button);
@@ -69,69 +111,108 @@ function addEvents() {
     // eslint-disable-next-line no-console
     console.log('found e', e);
 
-    let data = {
-      tabs: [
-        {
-            "name": "x",
-            "active": true,
-            "success": true
-        },
-        {
-          "name": "y",
-          "active": false,
-          "success": false
-        }
-      ],
-      body: {
-        text: 'my js text',
-      }
-    };
-
     Ajax.call([
       {
         methodname: "local_wb_faq_get_faq_data",
         args: {},
-        done: async function (faqdata) {
+        done: async function(faqdata) {
 
-          data.json = JSON.parse(faqdata.json);
-          data.root = faqdata.root;
-          data.uid = faqdata.uid;
-          data.canedit = false;
-          data.allowedit = false;
+          const data = await returnDataForModal(faqdata);
 
           if (!modal) {
-            modal = await ModalFactory.create({
-              type: MyModal.TYPE,
-              large: true,
-              body: Templates.render('local_wb_faq/navbar/body', data),
-              footer: '',
-            }).then(modal => {
-              modal.setRemoveOnClose(false);
-
-              return modal;
-            }).catch(e => {
-              // eslint-disable-next-line no-console
-              console.error(e);
-            });
+            createModal(data, modal);
+          } else {
+            modal.show();
           }
 
-          modal.show();
-
-          modal.getRoot().on(ModalEvents.hidden, (e) => {
-            // eslint-disable-next-line no-console
-            console.log('modal dismissed', e);
-          });
-
-          modal.getRoot().on(ModalEvents.destroyed, (e) => {
-            // eslint-disable-next-line no-console
-            console.log('modal destroyed', e);
-          });
         },
-        fail: function (ex) {
+        fail: function(ex) {
           // eslint-disable-next-line no-console
           console.log(ex);
         },
       },
     ]);
   });
+}
+
+/**
+ * Function to create modal from data.
+ * @param {*} data
+ */
+async function createModal(data) {
+
+  modal = await ModalFactory.create({
+    type: MyModal.TYPE,
+    large: true,
+    body: Templates.render('local_wb_faq/navbar/body', data),
+    footer: '',
+  }).then(modal => {
+    modal.setRemoveOnClose(false);
+
+    return modal;
+  }).catch(e => {
+    // eslint-disable-next-line no-console
+    console.error(e);
+  });
+
+  modal.show();
+}
+
+/**
+ * Function do create the data structure for the modal.
+ * @param {*} faqdata
+ * @returns {object}
+ */
+async function returnDataForModal(faqdata) {
+
+  const loadstrings = [
+    {
+      key: 'searchfaqs',
+      component: 'local_wb_faq',
+    },
+    {
+      key: 'writemessage',
+      component: 'local_wb_faq',
+    },
+    {
+      key: 'thankyou',
+      component: 'local_wb_faq',
+    },
+  ];
+
+  const strings = await getstrings(loadstrings);
+
+  let data = {
+    tabs: [
+      {
+          "name": strings[0],
+          "id": 'one',
+          "active": true,
+          "success": true
+      },
+      {
+        "name": strings[1],
+        "id": 'two',
+        "active": false,
+        "success": false
+      },
+      {
+        "name": strings[2],
+        "id": 'three',
+        "active": false,
+        "success": false
+      }
+    ],
+    body: {
+      text: 'my js text',
+    }
+  };
+
+  data.json = JSON.parse(faqdata.json);
+  data.root = faqdata.root;
+  data.uid = faqdata.uid;
+  data.canedit = false;
+  data.allowedit = false;
+
+  return data;
 }

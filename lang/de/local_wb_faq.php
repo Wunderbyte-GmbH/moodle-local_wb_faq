@@ -75,8 +75,7 @@ $string['root'] = 'Oberste Ebene';
 
 $string['wb_faq:canedit'] = 'Verwalte FAQ';
 
-// Shortcodes
-
+// Shortcodes.
 $string['displayfaqs'] = "Zeige FAQs";
 $string['categorynotfound'] = 'Kategorie "{$a}" nicht gefunden';
 
@@ -85,7 +84,7 @@ $string['noresult'] = "Kein Ergebnis gefunden.";
 $string['stringtooshort'] = "Eingabe zu kurz...";
 $string['searchfaq'] = "... durchsuche FAQs";
 
-// edit.js
+// Edit.
 $string['confirmdeleteentry'] = "Bestätige das Löschen";
 $string['confirmdeleteentrytitle'] = "Bestätige das Löschen";
 $string['confirmdeleteentrybody'] = "Möchten Sie wirklich diesen Eintrag löschen?";
@@ -96,16 +95,20 @@ $string['confirmtogglevisibilitybody'] = "Wenn Sie die Sichtbarkeit ändern sind
     nur noch für Userinnen mit entsprechenden Bearbeitungsrechten sichtbar.";
 $string['confirmtogglevisibility'] = "Ändere die Sichtbarkeit";
 
-// notification.js
+// Notification.
 $string['saveerror'] = "Fehler beim Speichern";
 $string['savesuccess'] = "Erfolgreich gespeichert";
 
 // Search API.
 $string['search:faqentry'] = 'FAQ - entry';
 
-// editCategoriesForm
+// Edit CategoriesForm.
 $string['choosecourse'] = "Einen Kurs auswählen. Das bestimmt, wer diese Kategorie und alle FAQs darin sehen kann.";
 $string['nocourseselected'] = "Kein Kurs ausgewählt";
 $string['invisible'] = "Sichtbar";
-$string['groups'] = 'Gruppen';
-$string['modules'] = 'Module';
+$string['groupsnmodules'] = 'Gruppen und Module';
+
+// Supportmessage.
+$string['searchfaqs'] = "FAQs";
+$string['writemessage'] = "Nachricht";
+$string['thankyou'] = "Danke";

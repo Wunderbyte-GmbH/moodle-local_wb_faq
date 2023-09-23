@@ -33,13 +33,8 @@ if ($hassiteconfig) {
     $settings = new admin_settingpage($componentname . '_settings', '');
 
     $settings->add(
-        new admin_setting_configtextarea('local_wb_faq/groups',
-            get_string('groups', 'local_wb_faq'),
-            '', '', PARAM_TEXT, 60, 10));
-
-    $settings->add(
-        new admin_setting_configtextarea('local_wb_faq/modules',
-            get_string('modules', 'local_wb_faq'),
+        new admin_setting_configtextarea('local_wb_faq/groupsnmodules',
+            get_string('groupsnmoudles', 'local_wb_faq'),
             '', '', PARAM_TEXT, 60, 10));
 
     $ADMIN->add('localplugins', new admin_category($componentname, get_string('pluginname', $componentname)));

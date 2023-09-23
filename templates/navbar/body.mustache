@@ -40,14 +40,21 @@
 <div class="faq-page-navbar-body-container col-md-12">
         {{> local_wb_faq/navbar/header }}
         {{#body}}
-            <div class="tab-content" id="pills-tabContent">
-                <div class="tab-pane fade" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                    <div class="faq-page-navbar-body col-md-12"> Mein Text: {{text}}</div>
-                </div>
-                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">...</div>
-                <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+          <div class="tab-content" id="faq-nav-pillstabContent">
+            <div class="tab-pane fade show active" id="faq-nav-pillsone" role="tabpanel" aria-labelledby="faq-nav-pillsone-tab">
+                {{> local_wb_faq/display_search_modal }}
+                {{> local_wb_faq/faq_list_modal }}
             </div>
+            <div class="tab-pane fade" id="faq-nav-pillstwo" role="tabpanel" aria-labelledby="faq-nav-pillstwo-tab">
+                <div data-id="supportmessage-form"></div>
+            </div>
+            <div class="tab-pane fade" id="faq-nav-pillsthree" role="tabpanel" aria-labelledby="faq-nav-pillsthree-tab">three</div>
+          </div>
         {{/body}}
-        {{> local_wb_faq/display_search_modal }}
-        {{> local_wb_faq/faq_list_modal }}
 </div>
+
+{{#js}}
+require(['local_wb_faq/supportmessage_form'], function(init) {
+    init.init();
+  });
+{{/js}}

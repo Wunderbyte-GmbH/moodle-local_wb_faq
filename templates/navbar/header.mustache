@@ -31,10 +31,13 @@
         ]
     }
 }}
-<div class="faq-page-navbar-header col-md-12">
-    <ul id="faq-page-navbar-tabs">
-        {{#tabs}}
-            <li class="{{#active}}active{{/active}} faq-page-navbar-tab">{{{name}}}</li>
-        {{/tabs}}
-    </ul>
-</div>
+
+<ul class="nav nav-pills mb-3" id="faq-nav-pillstab" role="tablist">
+    {{#tabs}}
+        <li class="nav-item faq-page-navbar-tab">
+            <a class="nav-link {{#active}}active{{/active}} {{^active}}disabled{{/active}}" id="faq-nav-pills{{{id}}}-tab" data-toggle="pill" href="#faq-nav-pills{{{id}}}" role="tab" aria-controls="faq-nav-pills{{{id}}}" aria-selected="true">
+                {{name}}
+            </a>
+        </li>
+    {{/tabs}}
+</ul>
