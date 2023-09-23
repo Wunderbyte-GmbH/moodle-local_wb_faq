@@ -45,7 +45,7 @@ export const init = (data, root, uid) => {
   faqs[uid] = true;
 
   // eslint-disable-next-line no-console
-  console.log("faq.js ", uid, root);
+  console.log("faq.js ", uid, root, data);
   render(root, data, uid);
   addEvents(data, root, uid);
 };
@@ -209,7 +209,7 @@ export const loadData = (uid, parentid) =>
     {
       methodname: "local_wb_faq_get_faq_data",
       args: {},
-      done: function (data) {
+      done: function(data) {
         let newdata = JSON.parse(data.json);
 
         if (!uid) {
@@ -218,8 +218,9 @@ export const loadData = (uid, parentid) =>
 
         addEvents(newdata, parentid, uid);
         render(parentid, newdata, uid);
+        return '';
       },
-      fail: function (ex) {
+      fail: function(ex) {
         // eslint-disable-next-line no-console
         console.log(ex);
       },

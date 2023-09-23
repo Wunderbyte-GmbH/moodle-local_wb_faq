@@ -168,16 +168,16 @@ input:checked + .slider:before {
   display: none;
 }
 
-.prepage-navbar-page {
+.faq-page-navbar-page {
   margin-top: 30px;
   margin-bottom: 30px;
 }
 
-#prepage-navbar-tabs {
+#faq-page-navbar-tabs {
   counter-reset: section;
 }
 
-#prepage-navbar-tabs li {
+#faq-page-navbar-tabs li {
   color: lightgray;
   list-style-type: none;
   font-size: 15px;
@@ -187,12 +187,12 @@ input:checked + .slider:before {
   font-weight: bold;
 }
 
-#prepage-navbar-tabs li.active {
+#faq-page-navbar-tabs li.active {
   color: #357a32; /* Bootstrap success color.*/
 }
 
 /* Icon prepage progress tabs before any progress */
-#prepage-navbar-tabs li:before {
+#faq-page-navbar-tabs li:before {
   width: 34px;
   display: inline-table;
   font-size: 20px;
@@ -209,7 +209,7 @@ input:checked + .slider:before {
 }
 
 /* Prepage progress tabs connectors */
-#prepage-navbar-tabs li:after {
+#faq-page-navbar-tabs li:after {
   content: 'asdf';
   width: 100%;
   height: 2px;
@@ -221,8 +221,8 @@ input:checked + .slider:before {
 }
 
 /* Color number of the step and the connector before it */
-#prepage-navbar-tabs li.active:before,
-#prepage-navbar-tabs li.active:after {
+#faq-page-navbar-tabs li.active:before,
+#faq-page-navbar-tabs li.active:after {
   background: #357a32; /* Bootstrap success color.*/
   margin: 7px 7px;
   text-align: center;

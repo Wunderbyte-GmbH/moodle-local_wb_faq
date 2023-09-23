@@ -59,6 +59,7 @@ function addEvents() {
   }
 
   button.initialized = true;
+  var modal = null;
 
   // eslint-disable-next-line no-console
   console.log('found button', button);
@@ -92,32 +93,33 @@ function addEvents() {
         args: {},
         done: async function (faqdata) {
 
-          data.json = faqdata.json;
+          data.json = JSON.parse(faqdata.json);
           data.root = faqdata.root;
           data.uid = faqdata.uid;
           data.canedit = false;
           data.allowedit = false;
 
-          const modal = await ModalFactory.create({
-            type: MyModal.TYPE,
-            large: true,
-            body: Templates.render('local_wb_faq/navbar/body', data),
-          }).then(modal => {
-            modal.setRemoveOnClose(true);
-            return modal;
-          }).catch(e => {
-            // eslint-disable-next-line no-console
-            console.error(e);
-          });
+          if (!modal) {
+            modal = await ModalFactory.create({
+              type: MyModal.TYPE,
+              large: true,
+              body: Templates.render('local_wb_faq/navbar/body', data),
+              footer: '',
+            }).then(modal => {
+              modal.setRemoveOnClose(false);
+
+              return modal;
+            }).catch(e => {
+              // eslint-disable-next-line no-console
+              console.error(e);
+            });
+          }
 
           modal.show();
-
-
 
           modal.getRoot().on(ModalEvents.hidden, (e) => {
             // eslint-disable-next-line no-console
             console.log('modal dismissed', e);
-            modal.close();
           });
 
           modal.getRoot().on(ModalEvents.destroyed, (e) => {

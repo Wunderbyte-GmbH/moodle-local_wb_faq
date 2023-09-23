@@ -49,10 +49,14 @@ export const searchJSON = (listContainer, inputClass, json) => {
     let arr = [];
     // Select Container
     // eslint-disable-next-line no-console
-    console.log(listContainer, inputClass);
+    console.log(listContainer, inputClass, Object.values(json));
     let container = document.querySelector(listContainer);
-
     let searchVal = document.querySelector(inputClass).value.toUpperCase();
+
+    // Make sure we have parsed json.
+    if (typeof json === 'string') {
+        json = JSON.parse(json);
+    }
 
     // eslint-disable-next-line no-console
     console.log(searchVal);
