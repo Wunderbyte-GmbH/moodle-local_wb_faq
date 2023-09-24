@@ -99,6 +99,21 @@ class supportmessage extends dynamic_form {
         $mform->addElement('textarea', 'message', get_string('message', 'local_wb_faq'));
         $mform->setType('message', PARAM_TEXT);
 
+        $mform->addElement('textarea', 'message', get_string('message', 'local_wb_faq'));
+        $mform->setType('message', PARAM_TEXT);
+
+        $mform->addElement(
+            'filemanager',
+            'attachments',
+            get_string('attachment', 'moodle'),
+            null,
+            [
+                'maxbytes' => 10485760,
+                'areamaxbytes' => 10485760,
+                'maxfiles' => 2,
+            ]
+        );
+
         $this->add_action_buttons(false, 'send message');
 
     }

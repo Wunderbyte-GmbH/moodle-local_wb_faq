@@ -26,7 +26,7 @@ import Ajax from "core/ajax";
 import Templates from "core/templates";
 import MyModal from 'local_wb_faq/custommodal';
 import ModalFactory from 'core/modal_factory';
-// import ModalEvents from 'core/modal_events';
+// Import ModalEvents from 'core/modal_events'.
 
 var modal = null;
 var counterlimit = 3; // Can be overridden.
@@ -86,8 +86,6 @@ export function increaseCounter(max = false) {
  */
 async function addEvents() {
   let button = document.querySelector("[data-id='wb-faq-navbar-open-modal']");
-
-
 
   if (!button) {
 

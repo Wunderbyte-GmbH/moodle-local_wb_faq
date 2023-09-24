@@ -703,7 +703,7 @@ class wb_faq {
         $config = get_config('local_wb_faq');
         $modulesarray = explode(PHP_EOL, $config->modules);
 
-        foreach($modulesarray as $item) {
+        foreach ($modulesarray as $item) {
             $key = trim($item);
             $modulesselction[$key] = $key;
         }
@@ -711,7 +711,7 @@ class wb_faq {
 
         $groupselection = [];
         $grouparray = explode(PHP_EOL, $config->groups);
-        foreach($grouparray as $item) {
+        foreach ($grouparray as $item) {
             $key = trim($item);
             $groupselection[$key] = $key;
         }

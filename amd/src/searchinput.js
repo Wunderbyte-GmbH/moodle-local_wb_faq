@@ -138,7 +138,7 @@ export const init = (searchInputID, listContainer, elementToHide, elementToSearc
     const searchInputElement = document.querySelector(searchInputID);
 
     if (searchInputElement) {
-        searchInputElement.addEventListener('keyup', function () {
+        searchInputElement.addEventListener('keyup', function() {
             searchJSON(listContainer, searchInputID, json);
         });
     }

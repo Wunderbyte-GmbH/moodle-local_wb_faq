@@ -136,7 +136,7 @@ function addEvents(data, root, uid) {
         render(e.target.dataset.targetid, data, uid);
         document
           .querySelector(".local_wb_faq-" + uid)
-          .scrollIntoView({ block: "start", behavior: "smooth" });
+          .scrollIntoView({block: "start", behavior: "smooth"});
       }
     });
   }
@@ -196,7 +196,7 @@ function render(id, data, uid) {
   container.innerHTML = "";
   // Render
   Templates.renderForPromise("local_wb_faq/faq", templatedata)
-    .then(({ html, js }) => {
+    .then(({html, js}) => {
 
       Templates.replaceNodeContents(".local_wb_faq-" + uid, html, js);
       return;
