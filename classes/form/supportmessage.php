@@ -57,14 +57,17 @@ class supportmessage extends dynamic_form {
             'high' => get_string('high', 'local_wb_faq'),
         ];
 
-        $mform->addElement('select', 'priority', get_string('priority', 'your_plugin_name'), $priorities);
+        $mform->addElement('select', 'priority', get_string('priority', 'local_wb_faq'), $priorities);
 
         // Get an array from the settings.
-        $groupsnmodules = explode(PHP_EOL, get_config('groupsnmodules', 'local_faq'));
-        $groups = [];
-        $modules = [];
+        $groupsnmodules = explode(PHP_EOL, get_config('local_wb_faq', 'groupsnmodules'));
+        $groups = [0 => get_string('pleasechoose', 'local_wb_faq')];
+        $modules = [0 => get_string('pleasechoose', 'local_wb_faq')];
 
         foreach ($groupsnmodules as $line) {
+            if (empty($line)) {
+                continue;
+            }
             list($shortgroup, $namegroup, $shortmodule, $namemodule) = explode(',', $line);
             $groups[$shortgroup] = $namegroup;
 
@@ -73,22 +76,27 @@ class supportmessage extends dynamic_form {
                 $modules[$shortmodule] = $namemodule;
             }
         }
-        $mform->addElement('select', 'groups', get_string('groups', 'local_wb_faq'), $groups);
 
-        $mform->addElement('select', 'nested_topic', get_string('modules', 'local_wb_faq'), $modules);
-        $mform->disabledIf('nested_topic', 'topic', 'neq', '');
+        // We only add the groups key if groups are actually defined.
+        if (count($groups) > 1) {
+            $mform->addElement('select', 'groups', get_string('groups', 'local_wb_faq'), $groups);
+
+            if (!empty($group)) {
+                $mform->addElement('select', 'modules', get_string('modules', 'local_wb_faq'), $modules);
+            }
+        }
 
         // Button to attach JavaScript to to reload the form.
-        $mform->registerNoSubmitButton('submitcattestoption');
+        $mform->registerNoSubmitButton('submitmodulechoice');
         $mform->addElement('submit', 'submitmodulechoice', 'submitmodulechoice',
             ['class' => 'd-none', 'data-action' => 'submitmodulechoice']);
 
         // Add title field.
-        $mform->addElement('text', 'title', get_string('title', 'your_plugin_name'));
+        $mform->addElement('text', 'title', get_string('title', 'local_wb_faq'));
         $mform->setType('title', PARAM_TEXT);
 
         // Add message textarea.
-        $mform->addElement('textarea', 'message', get_string('message', 'your_plugin_name'));
+        $mform->addElement('textarea', 'message', get_string('message', 'local_wb_faq'));
         $mform->setType('message', PARAM_TEXT);
 
         $this->add_action_buttons(false, 'send message');
@@ -139,6 +147,10 @@ class supportmessage extends dynamic_form {
         global $USER;
         $data = new stdClass();
 
+        if ($group = $this->_ajaxformdata['groups'] ?? null) {
+            $data->groups = $group;
+        }
+
         $this->set_data($data);
     }
 
@@ -181,6 +193,22 @@ class supportmessage extends dynamic_form {
     public function validation($data, $files) {
 
         $errors = array();
+
+        if (isset($data["groups"]) && empty($data["groups"])) {
+            $errors['groups'] = get_string('entergroup', 'local_wb_faq');
+        }
+
+        if (isset($data["modules"]) && empty($data["modules"])) {
+            $errors['modules'] = get_string('entermodule', 'local_wb_faq');
+        }
+
+        if (empty($data["title"])) {
+            $errors['title'] = get_string('entertitle', 'local_wb_faq');
+        }
+
+        if (strlen($data["message"]) < 20) {
+            $errors['message'] = get_string('entermessage', 'local_wb_faq');
+        }
 
         return $errors;
     }

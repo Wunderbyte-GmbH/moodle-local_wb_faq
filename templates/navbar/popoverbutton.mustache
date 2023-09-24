@@ -31,12 +31,12 @@
 
     Example context (json):
     {
-
+        "thankyou": "Thank you!",
     }
 
 }}
 
-<button type="button" class="btn btn-primary" data-id="wb-faq-navbar-open-modal">Support</button>
+<button type="button" class="btn btn-primary" data-id="wb-faq-navbar-open-modal" data-supportthankyou="{{thankyou}}">Support</button>
 
 {{#js}}
     require(['local_wb_faq/faqnavbar'], function(init) {

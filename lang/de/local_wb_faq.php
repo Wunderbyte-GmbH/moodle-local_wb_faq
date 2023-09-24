@@ -107,8 +107,27 @@ $string['choosecourse'] = "Einen Kurs auswählen. Das bestimmt, wer diese Katego
 $string['nocourseselected'] = "Kein Kurs ausgewählt";
 $string['invisible'] = "Sichtbar";
 $string['groupsnmodules'] = 'Gruppen und Module';
+$string['minmessagelength'] = 'Minimale Länge einer Support Nachricht';
+$string['thankyouforsupportmessage'] = "Geben Sie hier den Text ein, um Ihren NutzerInnen für Supportanfragen zu danken.";
+
+$string['priority'] = "Priorität";
+$string['groups'] = "Gruppen";
+$string['modules'] = "Module";
+$string['title'] = "Titel";
+$string['message'] = "Nachricht";
+$string['low'] = "niedrig";
+$string['medium'] = "mittel";
+$string['high'] = "hoch";
+$string['pleasechoose'] = "Bitte wählen Sie";
+$string['thankyoutext'] = "Danke für ihre Nachricht! Unser Support wird sich mit Ihnen in Verbindung setzen!";
 
 // Supportmessage.
 $string['searchfaqs'] = "FAQs";
 $string['writemessage'] = "Nachricht";
 $string['thankyou'] = "Danke";
+
+// Error messages.
+$string['entertitle'] = "Bitte geben Sie einen Titel an";
+$string['entermessage'] = "Ihre Nachricht ist zu kurz";
+$string['entergroup'] = "Bite wählen Sie eine Gruppe";
+$string['entermodule'] = "Bite wählen Sie ein Modul";

@@ -23,8 +23,8 @@ import DynamicForm from 'core_form/dynamicform';
 
 const SELECTORS = {
     SUPPORTMESSAGEFORM: "[data-id='supportmessage-form']",
+    THANKYOUTAB: '#faq-nav-pillsthree-tab',
 };
-
 
 /**
  * Initialize the form with event listener that update url params.
@@ -65,7 +65,11 @@ export function listenToSelect(element) {
         dynamicForm.addEventListener(dynamicForm.events.FORM_SUBMITTED, (e) => {
 
             // eslint-disable-next-line no-console
-            console.log("submitted", e.details);
+            console.log("submitted", e);
+
+            const tab = document.querySelector(SELECTORS.THANKYOUTAB);
+            tab.classList.remove('disabled');
+            tab.click();
         });
 
         dynamicForm.addEventListener('change', (e) => {
@@ -74,6 +78,6 @@ export function listenToSelect(element) {
             e.preventDefault();
 
             let button = document.querySelector('[name="submitmodulechoice"]');
-            dynamicForm.processNoSubmitButton(button);
+            button.click();
         });
 }

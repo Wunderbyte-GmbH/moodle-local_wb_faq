@@ -108,8 +108,27 @@ $string['choosecourse'] = "Choose a course. This determines who can see this cat
 $string['nocourseselected'] = "No course selected";
 $string['invisible'] = "Visible";
 $string['groupsnmodules'] = 'Groups and modules';
+$string['minmessagelength'] = 'Min support message length';
+$string['thankyouforsupportmessage'] = "You can enter the text to thank your users for sending support messages.";
+
+$string['priority'] = "Priority";
+$string['groups'] = "Groups";
+$string['modules'] = "Modules";
+$string['title'] = "Title";
+$string['message'] = "Message";
+$string['low'] = "low";
+$string['medium'] = "medium";
+$string['high'] = "high";
+$string['pleasechoose'] = "Please choose";
+$string['thankyoutext'] = "Thank you for your message! Our support will get in touch with you!";
 
 // Supportmessage.
 $string['searchfaqs'] = "FAQs";
 $string['writemessage'] = "Message";
 $string['thankyou'] = "Thank You";
+
+// Error messages.
+$string['entertitle'] = "Please enter a title";
+$string['entermessage'] = "Your message is too short";
+$string['entergroup'] = "Please choose a group";
+$string['entermodule'] = "Please choose a module";

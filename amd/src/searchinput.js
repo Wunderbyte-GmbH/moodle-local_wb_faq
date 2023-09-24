@@ -100,8 +100,11 @@ export const searchJSON = (listContainer, inputClass, json) => {
                 // eslint-disable-next-line no-console
                 console.log(e);
             });
+            // If we didn't find anything, we just increase the counter.
+            // User might need to search a few times.
+            increaseCounter();
         } else {
-            // If we had a valid input, we can continue to the input form.
+            // If we had a valid input, we allow to continue to the input form.
             increaseCounter(true);
         }
 

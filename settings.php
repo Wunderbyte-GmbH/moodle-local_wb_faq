@@ -34,8 +34,18 @@ if ($hassiteconfig) {
 
     $settings->add(
         new admin_setting_configtextarea('local_wb_faq/groupsnmodules',
-            get_string('groupsnmoudles', 'local_wb_faq'),
+            get_string('groupsnmodules', 'local_wb_faq'),
             '', '', PARAM_TEXT, 60, 10));
+
+    $settings->add(
+        new admin_setting_configtextarea('local_wb_faq/thankyouforsupportmessage',
+            get_string('thankyouforsupportmessage', 'local_wb_faq'),
+            '', '', PARAM_TEXT, 60, 10));
+
+    $settings->add(
+        new admin_setting_configtext('local_wb_faq/minmessagelength',
+            get_string('minmessagelength', 'local_wb_faq'),
+            '', 15, PARAM_INT));
 
     $ADMIN->add('localplugins', new admin_category($componentname, get_string('pluginname', $componentname)));
     $ADMIN->add($componentname, $settings);

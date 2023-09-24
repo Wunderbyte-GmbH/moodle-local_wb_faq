@@ -117,6 +117,9 @@ async function addEvents() {
         args: {},
         done: async function(faqdata) {
 
+          if (button.dataset.supportthankyou.length > 0) {
+            faqdata.thankyou = button.dataset.supportthankyou;
+          }
           const data = await returnDataForModal(faqdata);
 
           if (!modal) {
@@ -204,7 +207,7 @@ async function returnDataForModal(faqdata) {
       }
     ],
     body: {
-      text: 'my js text',
+      thankyou: faqdata.thankyou ?? false
     }
   };
 

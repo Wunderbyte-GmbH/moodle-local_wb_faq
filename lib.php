@@ -61,7 +61,11 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
         return '';
     }
 
-    $output = $renderer->render_from_template('local_wb_faq/navbar/popoverbutton', []);
+    $data = [
+        'thankyou' => get_config('local_wb_faq', 'thankyouforsupportmessage'),
+    ];
+
+    $output = $renderer->render_from_template('local_wb_faq/navbar/popoverbutton', $data);
     return $output;
 }
 

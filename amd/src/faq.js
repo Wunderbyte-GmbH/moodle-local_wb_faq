@@ -168,7 +168,12 @@ function render(id, data, uid) {
     json = JSON.parse(data);
   }
 
-  let templatedata = json[id];
+  let templatedata = json[id] ?? null;
+
+  if (!templatedata) {
+    return;
+  }
+
   templatedata.root = id;
   templatedata.uid = uid;
 
