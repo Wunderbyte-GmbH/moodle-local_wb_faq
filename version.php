@@ -18,7 +18,7 @@
  * Plugin version and other meta-data are defined here.
  *
  * @package     local_wb_faq
- * @copyright   2022 Wunderbyte GmbH <info@wunderbyte.at>
+ * @copyright   2023 Wunderbyte GmbH <info@wunderbyte.at>
  * @author      Thomas Winkler
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
@@ -26,8 +26,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_wb_faq';
-$plugin->release = '0.1.9';
-$plugin->version = 2023050804;
+$plugin->release = '0.2.0';
+$plugin->version = 2023092900;
 $plugin->requires = 2020061500;
 $plugin->supported = [39, 41];
 $plugin->maturity = MATURITY_ALPHA;

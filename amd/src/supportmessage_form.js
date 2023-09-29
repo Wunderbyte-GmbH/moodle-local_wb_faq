@@ -74,10 +74,14 @@ export function listenToSelect(element) {
 
         dynamicForm.addEventListener('change', (e) => {
             // eslint-disable-next-line no-console
-            console.log("change", e);
-            e.preventDefault();
+            console.log("change", e, e.target.name);
 
-            let button = document.querySelector('[name="submitmodulechoice"]');
-            button.click();
+            if (e.target.name == 'groups') {
+
+                e.preventDefault();
+
+                let button = document.querySelector('[name="submitmodulechoice"]');
+                button.click();
+            }
         });
 }

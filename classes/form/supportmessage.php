@@ -24,8 +24,7 @@ require_once("$CFG->libdir/formslib.php");
 use context;
 use context_system;
 use core_form\dynamic_form;
-use local_wb_faq\shopping_cart;
-use moodle_exception;
+use local_wb_faq\issues;
 use moodle_url;
 use stdClass;
 
@@ -48,13 +47,14 @@ class supportmessage extends dynamic_form {
 
         $mform = $this->_form;
 
-        $group = $this->_ajaxformdata['groups'] ?? '';
+        $group = $this->_ajaxformdata['group'] ?? '';
 
         // Add priority select field.
         $priorities = [
-            'low' => get_string('low', 'local_wb_faq'),
-            'medium' => get_string('medium', 'local_wb_faq'),
-            'high' => get_string('high', 'local_wb_faq'),
+            0 => get_string('normal', 'local_wb_faq'),
+            3 => get_string('low', 'local_wb_faq'),
+            1 => get_string('medium', 'local_wb_faq'),
+            2 => get_string('high', 'local_wb_faq'),
         ];
 
         $mform->addElement('select', 'priority', get_string('priority', 'local_wb_faq'), $priorities);
@@ -69,20 +69,22 @@ class supportmessage extends dynamic_form {
                 continue;
             }
             list($shortgroup, $namegroup, $shortmodule, $namemodule) = explode(',', $line);
+            $shortgroup = trim($shortgroup);
             $groups[$shortgroup] = $namegroup;
 
             // We only add the modules for the selected group.
             if ($group == $shortgroup) {
+                $shortmodule = trim($shortmodule);
                 $modules[$shortmodule] = $namemodule;
             }
         }
 
         // We only add the groups key if groups are actually defined.
         if (count($groups) > 1) {
-            $mform->addElement('select', 'groups', get_string('groups', 'local_wb_faq'), $groups);
+            $mform->addElement('select', 'group', get_string('groups', 'local_wb_faq'), $groups);
 
             if (!empty($group)) {
-                $mform->addElement('select', 'modules', get_string('modules', 'local_wb_faq'), $modules);
+                $mform->addElement('select', 'module', get_string('modules', 'local_wb_faq'), $modules);
             }
         }
 
@@ -99,13 +101,10 @@ class supportmessage extends dynamic_form {
         $mform->addElement('textarea', 'message', get_string('message', 'local_wb_faq'));
         $mform->setType('message', PARAM_TEXT);
 
-        $mform->addElement('textarea', 'message', get_string('message', 'local_wb_faq'));
-        $mform->setType('message', PARAM_TEXT);
-
         $mform->addElement(
             'filemanager',
             'attachments',
-            get_string('attachment', 'moodle'),
+            get_string('attachment', 'local_wb_faq'),
             null,
             [
                 'maxbytes' => 10485760,
@@ -142,7 +141,10 @@ class supportmessage extends dynamic_form {
 
         $data = $this->get_data();
 
-        // Todo: do smth.
+        // This line saves the issue in local db...
+        // Saves attached files...
+        // And sends the issue via rest, if configured.
+        $issueid = issues::save_issue($data);
 
         return $data;
     }
@@ -162,7 +164,7 @@ class supportmessage extends dynamic_form {
         global $USER;
         $data = new stdClass();
 
-        if ($group = $this->_ajaxformdata['groups'] ?? null) {
+        if ($group = $this->_ajaxformdata['group'] ?? null) {
             $data->groups = $group;
         }
 
@@ -201,7 +203,7 @@ class supportmessage extends dynamic_form {
     /**
      * Validate form.
      *
-     * @param stdClass $data
+     * @param array $data
      * @param array $files
      * @return array
      */
@@ -209,12 +211,12 @@ class supportmessage extends dynamic_form {
 
         $errors = array();
 
-        if (isset($data["groups"]) && empty($data["groups"])) {
-            $errors['groups'] = get_string('entergroup', 'local_wb_faq');
+        if (isset($data["group"]) && empty($data["group"])) {
+            $errors['group'] = get_string('entergroup', 'local_wb_faq');
         }
 
-        if (isset($data["modules"]) && empty($data["modules"])) {
-            $errors['modules'] = get_string('entermodule', 'local_wb_faq');
+        if (isset($data["module"]) && empty($data["module"])) {
+            $errors['module'] = get_string('entermodule', 'local_wb_faq');
         }
 
         if (empty($data["title"])) {

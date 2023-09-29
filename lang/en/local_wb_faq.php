@@ -126,6 +126,7 @@ $string['thankyoutext'] = "Thank you for your message! Our support will get in t
 $string['searchfaqs'] = "FAQs";
 $string['writemessage'] = "Message";
 $string['thankyou'] = "Thank You";
+$string['attachment'] = 'Attachment';
 
 // Error messages.
 $string['entertitle'] = "Please enter a title";
