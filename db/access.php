@@ -42,4 +42,12 @@ $capabilities = [
             'manager' => CAP_ALLOW,
         ],
     ],
+    'local/wb_faq:accessimages' => [
+        'riskbitmask' => RISK_MANAGETRUST,
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_SYSTEM,
+        'archetypes' => [
+            'manager' => CAP_ALLOW,
+        ],
+    ],
 ];

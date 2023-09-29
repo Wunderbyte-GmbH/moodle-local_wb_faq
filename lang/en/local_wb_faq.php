@@ -116,6 +116,7 @@ $string['groups'] = "Groups";
 $string['modules'] = "Modules";
 $string['title'] = "Title";
 $string['message'] = "Message";
+$string['normal'] = "normal";
 $string['low'] = "low";
 $string['medium'] = "medium";
 $string['high'] = "high";
@@ -133,3 +134,10 @@ $string['entertitle'] = "Please enter a title";
 $string['entermessage'] = "Your message is too short";
 $string['entergroup'] = "Please choose a group";
 $string['entermodule'] = "Please choose a module";
+
+// Rest interface.
+$string['resturl'] = "Url for rest interface";
+$string['resturl_desc'] = "The request for support can be sent to an external system";
+$string['usesupport'] = "Show the support icon in the navbar";
+$string['usesupport_desc'] = "The Support Icon in the navbar gives easy access to the faqs";
+$string['imagetoken'] = "Token um Bilder herunterzuladen.";

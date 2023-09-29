@@ -115,6 +115,7 @@ $string['groups'] = "Gruppen";
 $string['modules'] = "Module";
 $string['title'] = "Titel";
 $string['message'] = "Nachricht";
+$string['normal'] = "normal";
 $string['low'] = "niedrig";
 $string['medium'] = "mittel";
 $string['high'] = "hoch";
@@ -132,3 +133,9 @@ $string['entertitle'] = "Bitte geben Sie einen Titel an";
 $string['entermessage'] = "Ihre Nachricht ist zu kurz";
 $string['entergroup'] = "Bite wählen Sie eine Gruppe";
 $string['entermodule'] = "Bite wählen Sie ein Modul";
+
+// Rest interface.
+$string['resturl'] = "Url für externes Support system";
+$string['resturl_desc'] = "Die Supportanfrage kann an ein externes System weitergeleitet werden.";
+$string['usesupport'] = "Zeige Support Link in der Navigationsleiste";
+$string['usesupport_desc'] = "Der Support Link gibt einfachen Zugang zu den FAQs";

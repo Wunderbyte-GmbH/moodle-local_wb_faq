@@ -42,7 +42,7 @@ global $CFG;
 class issues {
 
     /**
-     * Save issues to db.
+     * Save issues to db. Saves attachments and sends issue via rest.
      * @param stdClass $issue
      * @return integer
      */
@@ -51,7 +51,7 @@ class issues {
 
         self::transform_data_to_save($issue);
 
-        $id = $DB->insert_record('local_wb_faq_issues', $issue);
+        $issue->id = $DB->insert_record('local_wb_faq_issues', $issue);
 
         $context = context_system::instance();
 
@@ -63,7 +63,7 @@ class issues {
             $context->id,
             'local_wb_faq',
             'supportmessages',
-            $id,
+            $issue->id,
             [
                 'maxbytes' => 10485760,
                 'areamaxbytes' => 10485760,
@@ -71,7 +71,9 @@ class issues {
             ]
         );
 
-        return $id ?? 0;
+        rest::send_issue($issue);
+
+        return $issue->id ?? 0;
     }
 
     /**

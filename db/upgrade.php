@@ -98,7 +98,7 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2023050800, 'local', 'wb_faq');
     }
 
-    if ($oldversion < 2023092900) {
+    if ($oldversion < 2023092901) {
 
         // Define table local_wb_faq_issues to be created.
         $table = new xmldb_table('local_wb_faq_issues');
@@ -110,7 +110,7 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
         $table->add_field('title', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('message', XMLDB_TYPE_TEXT, null, null, null, null, null);
         $table->add_field('message_format', XMLDB_TYPE_INTEGER, '1', null, null, null, null);
-        $table->add_field('group', XMLDB_TYPE_CHAR, '255', null, null, null, null);
+        $table->add_field('groupname', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('module', XMLDB_TYPE_CHAR, '255', null, null, null, null);
         $table->add_field('usermodified', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
         $table->add_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0');
@@ -125,7 +125,22 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
         }
 
         // Wb_faq savepoint reached.
-        upgrade_plugin_savepoint(true, 2023092900, 'local', 'wb_faq');
+        upgrade_plugin_savepoint(true, 2023092901, 'local', 'wb_faq');
+    }
+
+    if ($oldversion < 2023092902) {
+
+        // Define field status to be added to local_wb_faq_issues.
+        $table = new xmldb_table('local_wb_faq_issues');
+        $field = new xmldb_field('status', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'module');
+
+        // Conditionally launch add field status.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Wb_faq savepoint reached.
+        upgrade_plugin_savepoint(true, 2023092902, 'local', 'wb_faq');
     }
 
     return true;

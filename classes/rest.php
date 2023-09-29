@@ -27,6 +27,7 @@ namespace local_wb_faq;
 use context_system;
 use dml_exception;
 use stdClass;
+use moodle_url;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -51,16 +52,18 @@ class rest {
      * This feteches the array of attached persons for the client and then feteches...
      * ... contact details in a separate request.
      *
-     * @param stdClass $user
+     * @param stdClass $issue
      * @return stdClass
      */
-    public static function send_issue(stdClass $user) {
+    public static function send_issue(stdClass $issue) {
 
         $curl = curl_init();
 
-        $curlarray = self::return_curl_array_post('/rest/v2/users');
+        $url = get_config('local_wb_faq', 'resturl');
 
-        $curlarray[CURLOPT_POSTFIELDS] = json_encode(self::return_postfields_to_create_user($user));
+        $curlarray = self::return_curl_array_post($url);
+
+        $curlarray[CURLOPT_POSTFIELDS] = json_encode(self::return_postfields_to_send_message($issue));
 
         curl_setopt_array($curl, $curlarray);
 
@@ -78,61 +81,106 @@ class rest {
         if (!empty($info["http_code"]) && $info["http_code"] === 409) {
             // This normally happens when the user is already present.
             // We check again if that's the case.
-            $response = self::find_existing_rest_user($user);
         }
         if (!empty($info["http_code"]) && $info["http_code"] === 500) {
             // This normally happens when the user is already present.
             // We check again if that's the case.
-            $response = self::find_existing_rest_user($user);
         }
 
         if (!empty($response)) {
             $response = json_decode($response, false);
         }
-
-        self::check_success($response, $user, rest_ACTION_CREATE);
-
         return $response;
     }
 
     /**
      * Function to return fields to create or update user.
-     * @param stdClass $data
+     * @param stdClass $issue
      * @return object
      */
-    public static function return_postfields_to_send_message(stdClass $data) {
+    public static function return_postfields_to_send_message(stdClass $issue) {
+
+        global $USER;
 
         $data = (object)[
-            "ticketNr" => 558660,
-            "externalIdent" => $data->externaident,
-            "accountId" => $data->accountid,
-            "contactId" => $data->clientid,
-            "ticketText" => $data->messsage,
-            "createdDt" => "2023-05-04T14:56:57",
-            "closedDt" => "2023-05-04T22:08:58",
-            "lastModDt" => "2023-05-04T22:08:58",
+            "ticketNr" => $issue->id,
+            "externalIdent" => 'mdl-'.md5($issue->id . ' ' . $USER->id),
+            "accountId" => $issue->accountid,
+            "contactId" => $issue->clientid,
+            "ticketText" => $issue->messsage,
+            "createdDt" => date('Y-m-d\TH:i:s', $issue->timecreated),
+            "lastModDt" => date('Y-m-d\TH:i:s', $issue->timecreated),
             "status" => "N",
-            "gruppeCode" => "PERS",
-            "modulCode" => "Melde",
+            "gruppeCode" => $issue->groupname,
+            "modulCode" => $issue->module,
             "kontaktTelNr" => null,
             "erreichbarInfo" => null,
             "participant" => null,
-            "priority" => null,
+            "priority" => $issue->priority,
             "bearbeitungen" => [],
             "attachments" => [],
         ];
+
+        // Now we add attachements, if there are any.
+        self::add_attachment($data);
+
         return $data;
     }
 
-    public static function return_curl_array_post(string $url) {
+    /**
+     * @param stdClass $issue
+     */
+    private static function add_attachment(&$data) {
 
-        $baseurl = get_config('local_wb_faq', 'restbaseurl');
+        global $USER;
+
+        $context = context_system::instance();
+
+        // If there is no token we can't transfer images.
+        $token = get_config('local_wb_faq', 'imagetoken');
+
+        $fs = get_file_storage();
+        $files = $fs->get_area_files($context->id, 'local_wb_faq', 'supportmessages', $data->id);
+
+        foreach ($files as $file) {
+
+            $filename = $file->get_filename();
+
+            // We can't deal with this.
+            if (strlen($filename) < 2) {
+                continue;
+            }
+
+            $downloadurl = new moodle_url('/webservice/rest/server.php', [
+                'wsfunction' => 'local_wb_faq_provide_image',
+                'wstoken' => $token ?? '',
+                'moodlewsrestformat' => 'json',
+                'postid' => $data->id,
+                'filename' => $filename,
+            ]);
+
+            $attachment = [
+                'externalIdent' => 'mdl-'.md5('attachment' . $data->id . $USER->id),
+                'lastModDt' => date('Y-m-d\TH:i:s', $data->timecreated),
+                'createdBy' => "<system>",
+                'downloadLink' => $token ? $downloadurl->out(false) : 'novalidtokenavailable',
+            ];
+
+            $data['attachments'][] = $attachment;
+        }
+
+    }
+
+    /**
+     * @param string $url
+     */
+    public static function return_curl_array_post(string $url) {
 
         return [
             CURLOPT_HTTPHEADER => array(
                 'Content-Type: application/json'
               ),
-            CURLOPT_URL => $baseurl . $url,
+            CURLOPT_URL => $url,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -140,38 +188,6 @@ class rest {
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-        ];
-    }
-
-    public static function return_curl_array_get(string $url) {
-
-        $baseurl = get_config('local_wb_faq', 'restbaseurl');
-
-        return [
-            CURLOPT_URL => $baseurl . $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'GET',
-        ];
-    }
-
-    public static function return_curl_array_put(string $url) {
-
-        $baseurl = get_config('local_wb_faq', 'restbaseurl');
-
-        return [
-            CURLOPT_URL => $baseurl . $url,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'PUT',
         ];
     }
 

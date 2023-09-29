@@ -68,8 +68,8 @@ class provide_image extends external_api {
         ]);
 
         $context = context_system::instance();
-        if (!has_capability('local/wb_interface:canmanage', $context)) {
-            throw new moodle_exception('youdonthavetheright', 'local_wb_interface');
+        if (!has_capability('local/wb_faq:accessimages', $context)) {
+            throw new moodle_exception('youdonthavetheright', 'local_wb_faq');
         }
 
         return synchronize_ticket_post::return_image_by_postid($params['postid'], $params['filename']);

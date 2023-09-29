@@ -47,7 +47,8 @@ class supportmessage extends dynamic_form {
 
         $mform = $this->_form;
 
-        $group = $this->_ajaxformdata['group'] ?? '';
+        $group = $this->_ajaxformdata['groupname'] ?? '';
+        $group = trim($group);
 
         // Add priority select field.
         $priorities = [
@@ -81,7 +82,7 @@ class supportmessage extends dynamic_form {
 
         // We only add the groups key if groups are actually defined.
         if (count($groups) > 1) {
-            $mform->addElement('select', 'group', get_string('groups', 'local_wb_faq'), $groups);
+            $mform->addElement('select', 'groupname', get_string('groups', 'local_wb_faq'), $groups);
 
             if (!empty($group)) {
                 $mform->addElement('select', 'module', get_string('modules', 'local_wb_faq'), $modules);
@@ -164,7 +165,7 @@ class supportmessage extends dynamic_form {
         global $USER;
         $data = new stdClass();
 
-        if ($group = $this->_ajaxformdata['group'] ?? null) {
+        if ($group = $this->_ajaxformdata['groupname'] ?? null) {
             $data->groups = $group;
         }
 
@@ -211,8 +212,8 @@ class supportmessage extends dynamic_form {
 
         $errors = array();
 
-        if (isset($data["group"]) && empty($data["group"])) {
-            $errors['group'] = get_string('entergroup', 'local_wb_faq');
+        if (isset($data["groupname"]) && empty($data["groupname"])) {
+            $errors['groupname'] = get_string('entergroup', 'local_wb_faq');
         }
 
         if (isset($data["module"]) && empty($data["module"])) {
@@ -223,7 +224,7 @@ class supportmessage extends dynamic_form {
             $errors['title'] = get_string('entertitle', 'local_wb_faq');
         }
 
-        if (strlen($data["message"]) < 20) {
+        if (strlen($data["message"]) < 5) {
             $errors['message'] = get_string('entermessage', 'local_wb_faq');
         }
 

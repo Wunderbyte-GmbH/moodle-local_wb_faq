@@ -59,6 +59,12 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
         return '';
     }
 
+    $usesupport = get_config('local_wb_faq', 'usesupport');
+
+    if (empty($usesupport)) {
+        return '';
+    }
+
     $data = [
         'thankyou' => get_config('local_wb_faq', 'thankyouforsupportmessage'),
     ];

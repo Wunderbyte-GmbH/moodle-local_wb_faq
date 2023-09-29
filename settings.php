@@ -47,6 +47,23 @@ if ($hassiteconfig) {
             get_string('minmessagelength', 'local_wb_faq'),
             '', 15, PARAM_INT));
 
+    $settings->add(
+        new admin_setting_configcheckbox($componentname . '/usesupport',
+                get_string('usesupport', 'local_wb_faq'),
+                get_string('usesupport_desc', 'local_wb_faq'), 0));
+
+    $settings->add(new admin_setting_configtext(
+        $componentname . '/resturl',
+        get_string('resturl', $componentname),
+        get_string('resturl_desc', $componentname),
+        ''
+    ));
+
+    $settings->add(
+        new admin_setting_configtext('local_wb_faq/imagetoken',
+            get_string('imagetoken', 'local_wb_faq'),
+            '', '', PARAM_ALPHANUMEXT));
+
     $ADMIN->add('localplugins', new admin_category($componentname, get_string('pluginname', $componentname)));
     $ADMIN->add($componentname, $settings);
 }

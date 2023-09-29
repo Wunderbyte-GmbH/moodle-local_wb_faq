@@ -76,7 +76,7 @@ export function listenToSelect(element) {
             // eslint-disable-next-line no-console
             console.log("change", e, e.target.name);
 
-            if (e.target.name == 'groups') {
+            if (e.target.name == 'groupname') {
 
                 e.preventDefault();
 
