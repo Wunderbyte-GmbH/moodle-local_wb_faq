@@ -30,6 +30,7 @@
                 <FIELD NAME="message_format" TYPE="int" LENGTH="1" NOTNULL="false" SEQUENCE="false" COMMENT="Message format value"/>
                 <FIELD NAME="groupname" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Shortname of a group"/>
                 <FIELD NAME="module" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Shortname of a module"/>
+                <FIELD NAME="accountid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
                 <FIELD NAME="usermodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="0" SEQUENCE="false"/>
                 <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>

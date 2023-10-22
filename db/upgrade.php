@@ -143,5 +143,20 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2023092902, 'local', 'wb_faq');
     }
 
+    if ($oldversion < 2023092905) {
+
+        // Define field accountid to be added to local_wb_faq_issues.
+        $table = new xmldb_table('local_wb_faq_issues');
+        $field = new xmldb_field('accountid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'module');
+
+        // Conditionally launch add field accountid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Wb_faq savepoint reached.
+        upgrade_plugin_savepoint(true, 2023092905, 'local', 'wb_faq');
+    }
+
     return true;
 }
