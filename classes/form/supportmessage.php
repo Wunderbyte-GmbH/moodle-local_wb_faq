@@ -15,6 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace local_wb_faq\form;
+use local_wb_faq\wb_faq;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -43,12 +44,34 @@ class supportmessage extends dynamic_form {
      */
     public function definition() {
 
-        global $USER;
+        global $USER, $DB;
 
         $mform = $this->_form;
+        $ajaxformdata = $this->_ajaxformdata;
 
         $group = $this->_ajaxformdata['groupname'] ?? '';
-        $group = trim($group);
+
+        if (class_exists('local_groupmanager\groupmanager')) {
+
+            $sql = "SELECT c.id, gud.userid, gud.identifier, c.accountid, gud.contactid
+                    FROM {local_groupmanager_udata} gud
+                    LEFT JOIN {local_groupmanager_clients} c ON gud.identifier = c.identifier
+                    WHERE gud.userid = :userid";
+            $params['userid'] = $USER->id;
+
+            $records = $DB->get_records_sql($sql, $params);
+
+            if (count($records) > 1) {
+                $clients = [];
+                foreach ($records as $record) {
+                    $clients[$record->accountid] = $record->identifier;
+                }
+                $mform->addElement('select', 'accountid', get_string('employer', 'local_wb_faq'), $clients);
+            } else if (count($records) === 1) {
+                $record = reset($records);
+                $mform->addElement('hidden', 'accountid', $record->accountid);
+            }
+        }
 
         // Add priority select field.
         $priorities = [
@@ -60,25 +83,7 @@ class supportmessage extends dynamic_form {
 
         $mform->addElement('select', 'priority', get_string('priority', 'local_wb_faq'), $priorities);
 
-        // Get an array from the settings.
-        $groupsnmodules = explode(PHP_EOL, get_config('local_wb_faq', 'groupsnmodules'));
-        $groups = [0 => get_string('pleasechoose', 'local_wb_faq')];
-        $modules = [0 => get_string('pleasechoose', 'local_wb_faq')];
-
-        foreach ($groupsnmodules as $line) {
-            if (empty($line)) {
-                continue;
-            }
-            list($shortgroup, $namegroup, $shortmodule, $namemodule) = explode(',', $line);
-            $shortgroup = trim($shortgroup);
-            $groups[$shortgroup] = $namegroup;
-
-            // We only add the modules for the selected group.
-            if ($group == $shortgroup) {
-                $shortmodule = trim($shortmodule);
-                $modules[$shortmodule] = $namemodule;
-            }
-        }
+        list ($modules, $groups) = wb_faq::return_modules_and_groups($group);
 
         // We only add the groups key if groups are actually defined.
         if (count($groups) > 1) {

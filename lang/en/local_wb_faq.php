@@ -140,4 +140,9 @@ $string['resturl'] = "Url for rest interface";
 $string['resturl_desc'] = "The request for support can be sent to an external system";
 $string['usesupport'] = "Show the support icon in the navbar";
 $string['usesupport_desc'] = "The Support Icon in the navbar gives easy access to the faqs";
-$string['imagetoken'] = "Token um Bilder herunterzuladen.";
+$string['imagetoken'] = "Token to download images";
+$string['employer'] = 'Employer';
+
+// Capabilities.
+$string['wb_faq:accessimages'] = "Access images";
+$string['wb_faq:cansendsupportmessage'] = "Can send support message";

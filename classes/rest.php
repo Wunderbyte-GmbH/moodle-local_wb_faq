@@ -28,6 +28,7 @@ use context_system;
 use dml_exception;
 use stdClass;
 use moodle_url;
+use local_wb_faq\issues;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -53,7 +54,7 @@ class rest {
      * ... contact details in a separate request.
      *
      * @param stdClass $issue
-     * @return stdClass
+     * @return array
      */
     public static function send_issue(stdClass $issue) {
 
@@ -78,19 +79,7 @@ class rest {
 
         curl_close($curl);
 
-        if (!empty($info["http_code"]) && $info["http_code"] === 409) {
-            // This normally happens when the user is already present.
-            // We check again if that's the case.
-        }
-        if (!empty($info["http_code"]) && $info["http_code"] === 500) {
-            // This normally happens when the user is already present.
-            // We check again if that's the case.
-        }
-
-        if (!empty($response)) {
-            $response = json_decode($response, false);
-        }
-        return $response;
+        return self::check_success($response, $issue);
     }
 
     /**
@@ -192,41 +181,26 @@ class rest {
     }
 
     /**
-     * This transform the response to std and checks for success (via id).
+     * This checks the response.
+     * If there is no success, we add task to try again later.
      * @param mixed $response
-     * @param stdClass $user
+     * @param mixed $issue
      * @return bool
      * @throws dml_exception
      */
-    private static function check_success($response, stdClass $user, $action = rest_ACTION_CREATE) {
+    private static function check_success($response, $issue) {
 
-        if (!empty($response->id)) {
+        if (!empty($response)) {
+            $response = json_decode($response);
 
-            switch ($action) {
-                case rest_ACTION_CREATE:
-                    $event = rest_created::create(array(
-                        'context' => context_system::instance(),
-                        'other' => ['userid' => $user->id]));
-                    $event->trigger();
-                    return true;
-                case rest_ACTION_UDATE:
-                    $event = rest_updated::create(array(
-                        'context' => context_system::instance(),
-                        'other' => ['userid' => $user->id]));
-                    $event->trigger();
-                    return true;
-                case rest_ACTION_FIND:
-                default:
-                    // We do nothing.
-                    return true;
+            if (!empty($response) && isset($response->id)) {
+                issues::register_successful_transmission($issue);
+                return true;
             }
-        } else {
-            $event = rest_failed::create(array(
-                'context' => context_system::instance(),
-                'other' => ['userid' => $user->id]));
-            $event->trigger();
-            return false;
         }
+        issues::register_failed_transmission($issue);
+
+        return false;
     }
 
     /**

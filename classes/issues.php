@@ -26,9 +26,12 @@ namespace local_wb_faq;
 
 use context_system;
 use dml_exception;
+use moodle_exception;
 use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot . '/local/wb_faq/lib.php');
 
 global $CFG;
 
@@ -97,5 +100,45 @@ class issues {
 
         $issue->timecreated = $now;
         $issue->timemodified = $now;
+    }
+
+    /**
+     * Function to update
+     * @param stdClass $issue
+     * @throws moodle_exception
+     */
+    public static function register_successful_transmission(stdClass $issue) {
+        global $DB;
+
+        if (empty($issue->id)) {
+            throw new moodle_exception('noidpresent', 'local_wb_faq');
+        }
+
+        $data = (object)[
+            'id' => $issue->id,
+            'status' => TRANSMISSION_OK,
+        ];
+
+        $issue->id = $DB->update_record('local_wb_faq_issues', $data);
+    }
+
+    /**
+     * Function to update
+     * @param stdClass $issue
+     * @throws moodle_exception
+     */
+    public static function register_failed_transmission(stdClass $issue) {
+        global $DB;
+
+        if (empty($issue->id)) {
+            throw new moodle_exception('noidpresent', 'local_wb_faq');
+        }
+
+        $data = (object)[
+            'id' => $issue->id,
+            'status' => TRANSMISSION_ERROR,
+        ];
+
+        $issue->id = $DB->update_record('local_wb_faq_issues', $data);
     }
 }

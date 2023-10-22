@@ -139,3 +139,9 @@ $string['resturl'] = "Url für externes Support system";
 $string['resturl_desc'] = "Die Supportanfrage kann an ein externes System weitergeleitet werden.";
 $string['usesupport'] = "Zeige Support Link in der Navigationsleiste";
 $string['usesupport_desc'] = "Der Support Link gibt einfachen Zugang zu den FAQs";
+$string['imagetoken'] = "Token um Bilder herunterzuladen.";
+$string['employer'] = 'Arbeitgeber';
+
+// Capabilities.
+$string['wb_faq:accessimages'] = "Zugriff auf Bilder";
+$string['wb_faq:cansendsupportmessage'] = "Kann Supportnachricht verschicken";

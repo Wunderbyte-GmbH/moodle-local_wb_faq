@@ -20,6 +20,10 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+ define('TRANSMISSION_PENDING', 0);
+ define('TRANSMISSION_ERROR', 1);
+ define('TRANSMISSION_OK', 2);
+
 /**
  * Adds module specific settings to the settings block
  *
@@ -29,21 +33,6 @@
  * $settings is unused, but API requires it. Suppress PHPMD warning.
  *
  */
-/*
-function local_wb_faq_extend_navigation($navigation) {
-    $context = \context_system::instance();
-    if (has_capability('local/wb_faq:canedit', $context)) {
-        $nodehome = $navigation->get('home');
-        if (empty($nodehome)) {
-            $nodehome = $navigation;
-        }
-        $pluginname = get_string('pluginname', 'local_wb_faq');
-        $link = new moodle_url('/local/wb_faq/wb_faq.php', array());
-        $icon = new pix_icon('tennis-ball', $pluginname, 'local_wb_faq');
-        $nodecreatecourse = $nodehome->add($pluginname, $link, navigation_node::NODETYPE_LEAF, $pluginname, 'wb_faq', $icon);
-        $nodecreatecourse->showinflatnavigation = true;
-    }
-} */
 
 /**
  * Renders the popup Link.
