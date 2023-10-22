@@ -85,7 +85,6 @@ class editQuestionForm extends dynamic_form {
                 $data->id
             );
 
-
             // $content = $data->content;
             // unset($data->content);
             // $data->content['text'] = $content;
@@ -104,7 +103,6 @@ class editQuestionForm extends dynamic_form {
      */
     public function process_dynamic_submission(): stdClass {
         global $DB;
-
 
         // This is the correct place to save and update semesters.
         $data = $this->get_data();
@@ -161,7 +159,7 @@ class editQuestionForm extends dynamic_form {
         }
         $mform->addElement('select', 'parentid', get_string('input:parentid', 'local_wb_faq'), $selectinput);
         $mform->addElement('html', '</div></div><div class="row"><div class="col-md-12">');
-        $context = \context_system::instance();
+        $context = context_system::instance();
         $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' => $context);
         $mform->addElement('editor', 'content_editor', get_string('input:content', 'local_wb_faq'),
             '', $editoroptions);

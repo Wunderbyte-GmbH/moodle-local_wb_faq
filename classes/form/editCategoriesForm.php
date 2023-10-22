@@ -74,6 +74,10 @@ class editCategoriesForm extends dynamic_form {
             $data->type = $this->_ajaxformdata['type'];
         }
 
+        if ($group = $this->_ajaxformdata['supplement'] ?? null) {
+            $data->supplement = $group;
+        }
+
         $this->set_data($data);
     }
 
@@ -104,6 +108,7 @@ class editCategoriesForm extends dynamic_form {
     public function definition(): void {
         global $DB;
         $mform = $this->_form;
+        $ajaxformdata = $this->_ajaxformdata;
 
         $mform->addElement('html', '<div id="wb_faq_quickedit-form">');
         $mform->addElement('html', '<div class="container"><div class="row"><div class="col-md-6">');
@@ -146,9 +151,14 @@ class editCategoriesForm extends dynamic_form {
         $mform->addElement('hidden', 'id');
 
         $mform->addElement('html', '</div></div></div>');
+    }
 
+    public function definition_after_data() {
 
-        wb_faq::add_form_elements($mform);
+        $mform = $this->_form;
+        $ajaxformdata = $mform->_defaultValues ?? $this->_ajaxformdata;
+
+        wb_faq::add_form_elements($mform, $ajaxformdata);
 
         // We only show the action button on the admin page, else we likely use the modal which does not need them.
         $data = $this->_ajaxformdata;

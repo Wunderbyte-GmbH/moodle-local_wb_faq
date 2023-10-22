@@ -29,6 +29,10 @@ import {showSuccessNotification, showErrorNotification} from 'local_wb_faq/notif
 import {deleteEntry, toggleVisibility} from 'local_wb_faq/admin';
 import {reloadData} from 'local_wb_faq/faq';
 
+const SELECTORS = {
+    GROUPSUBMIT: '[data-action="groupSubmit"]'
+};
+
 /**
  * Gets called from mustache template.
  *
@@ -206,6 +210,17 @@ const editModalListener = event => {
         modalConfig: {title: getString('addcategory', 'local_wb_faq')},
         // DOM element that should get the focus after the modal dialogue is closed:
         returnFocus: button
+    });
+
+    modalForm.addEventListener('change', e => {
+
+        // eslint-disable-next-line no-console
+        console.log('change', e.target.dataset);
+
+        if (e.target.dataset.onChangeAction == "reloadForm") {
+            const button = document.querySelector(SELECTORS.GROUPSUBMIT);
+            modalForm.processNoSubmitButton(button);
+        }
     });
 
     // Listen to events if you want to execute something on form submit.
