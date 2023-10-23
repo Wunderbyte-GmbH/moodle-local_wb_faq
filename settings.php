@@ -33,6 +33,11 @@ if ($hassiteconfig) {
     $settings = new admin_settingpage($componentname . '_settings', '');
 
     $settings->add(
+        new admin_setting_configcheckbox($componentname . '/accesonlyowncourses',
+                get_string('accesonlyowncourses', 'local_wb_faq'),
+                get_string('accesonlyowncourses_desc', 'local_wb_faq'), 1));
+
+    $settings->add(
         new admin_setting_configtextarea('local_wb_faq/groupsnmodules',
             get_string('groupsnmodules', 'local_wb_faq'),
             '', '', PARAM_TEXT, 60, 10));

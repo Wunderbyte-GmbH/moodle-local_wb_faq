@@ -367,6 +367,11 @@ class wb_faq {
         if (isset($this->courselist[$courseid])) {
             return true;
         }
+
+        if (empty(get_config('local_wb_faq', 'accesonlyowncourses'))) {
+            return true;
+        }
+
         return false;
     }
 

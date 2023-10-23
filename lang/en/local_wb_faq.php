@@ -146,3 +146,7 @@ $string['employer'] = 'Employer';
 // Capabilities.
 $string['wb_faq:accessimages'] = "Access images";
 $string['wb_faq:cansendsupportmessage'] = "Can send support message";
+
+// Settings.
+$string['accesonlyowncourses'] = 'Restrict acces to own courses';
+$string['accesonlyowncourses_desc'] = 'Users can access course specific faqs only if they have access to these courses';
