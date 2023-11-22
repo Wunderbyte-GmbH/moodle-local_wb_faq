@@ -39,16 +39,14 @@ $title = "FAQ";
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
 
-
 $sm = new wb_faq();
 
 $parentid = $sm->get_parentid_from_entryid($entryid);
 echo $OUTPUT->header();
 
-
 $renderer = $PAGE->get_renderer('local_wb_faq');
 $data = new display_search($USER->id, $parentid);
 echo $renderer->render_display_search($data);
-$data = new faq_list($USER->id, $parentid, false);
+$data = new faq_list($USER->id, $parentid, false, $entryid);
 echo $renderer->render_list_faq($data);
 echo $OUTPUT->footer();

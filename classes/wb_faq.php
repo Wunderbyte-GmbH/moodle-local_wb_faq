@@ -210,9 +210,10 @@ class wb_faq {
      * @param int $root - root level from faq
      * @return mixed
      * @param boolean $allowedit
+     * @param integer $entryid
      * @return void
      */
-    public function load_from_cache(bool $json = false, $root = null, $allowedit = false) {
+    public function load_from_cache(bool $json = false, $root = null, $allowedit = false, $entryid = 0) {
         /* TODO only load relevant data */
         global $USER;
         $userid = $USER->id;
@@ -244,7 +245,19 @@ class wb_faq {
             if (isset($node->courseid) && !$this->has_access_to_faq_category($node->courseid, $userid)) {
                 unset($cachedrawdata[$node->id]);
             } else {
+
+                if (!empty($entryid) && !empty($node->entries)) {
+                    foreach ($node->entries as $key => $value) {
+                        if ($value->id == $entryid) {
+                            $node->entries[$key]->open = true;
+                        }
+                    }
+
+                    $node->entries = array_values($node->entries);
+                }
+
                 if (isset($node->categories)) {
+
                     foreach ($node->categories as $key => $category) {
                         $set = 0;
                         if (isset($category->courseid) && !$this->has_access_to_faq_category($category->courseid, $userid)) {
@@ -332,6 +345,7 @@ class wb_faq {
                     $dataarr[$record->parentid] = new stdClass();
                 }
 
+                // $dataarr[$record->parentid]->entries[$record->id] = $record;
                 $dataarr[$record->parentid]->entries[] = $record;
             }
         }

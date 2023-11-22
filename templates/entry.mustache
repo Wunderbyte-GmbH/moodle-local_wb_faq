@@ -43,7 +43,7 @@
   <div class="card">
     <div class="card-header p-0 border-0">
       <h5 class="accordion-header m-0" id="heading-{{id}}-{{uid}}">
-        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="faqcollapse" data-target="#collapse-{{id}}-{{uid}}" aria-expanded="false" aria-controls="collapse-{{id}}-{{uid}}">
+        <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="faqcollapse" data-target="#collapse-{{id}}-{{uid}}" aria-expanded="{{#open}}true{{/open}}{{^open}}false{{/open}}" aria-controls="collapse-{{id}}-{{uid}}">
           <i class="fa fa-angle-double-right mr-3"></i>
           {{title}}
           {{#canedit}}
@@ -63,7 +63,7 @@
         </button>
       </h5>
     </div>
-    <div id="collapse-{{id}}-{{uid}}" class="accordion-collapse collapse" aria-labelledby="heading-{{id}}-{{uid}}">
+    <div id="collapse-{{id}}-{{uid}}" class="accordion-collapse collapse {{#open}}show{{/open}}" aria-labelledby="heading-{{id}}-{{uid}}">
       <div class="accordion-body p-3">
         {{{content}}}
       </div>

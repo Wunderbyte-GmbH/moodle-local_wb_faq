@@ -177,6 +177,10 @@ class editCategoriesForm extends dynamic_form {
     public function validation($data, $files): array {
         $errors = [];
 
+        if (empty($data['courseid'])) {
+            $errors['courseid'] = get_string('nocourseid', 'local_wb_faq');
+        }
+
         return $errors;
     }
 

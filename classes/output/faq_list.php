@@ -58,8 +58,9 @@ class faq_list implements renderable, templatable {
      * @param string $uid
      * @param integer $categoryid
      * @param bool $allowedit
+     * @param integer $entryid
      */
-    public function __construct(string $uid, $categoryid = 0, $allowedit = false) {
+    public function __construct(string $uid, $categoryid = 0, $allowedit = false, int $entryid = 0) {
 
         $this->uid = $uid;
 
@@ -70,7 +71,7 @@ class faq_list implements renderable, templatable {
         }
 
         $faq = new wb_faq();
-        $allfaqs = $faq->load_from_cache(true, $categoryid, $allowedit);
+        $allfaqs = $faq->load_from_cache(true, $categoryid, $allowedit, $entryid);
 
         $data = [];
 
