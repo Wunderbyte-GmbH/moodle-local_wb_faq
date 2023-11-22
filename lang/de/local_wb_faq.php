@@ -149,3 +149,6 @@ $string['wb_faq:cansendsupportmessage'] = "Kann Supportnachricht verschicken";
 // Settings.
 $string['accesonlyowncourses'] = 'Erlaube Zugang nur zu eigenen Kursen';
 $string['accesonlyowncourses_desc'] = 'NutzerInnen können nur FAQs sehen, die Kursen, für die die NutzerInnen Zugang haben, freigegeben wurden.';
+
+$string['entrydeleted'] = "Eintrag wurde gelöscht";
+$string['nocourseid'] = "Bitte wählen Sie einen Kurs aus, dem dieser Eintrag zugeordnet ist";

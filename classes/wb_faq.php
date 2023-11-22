@@ -232,8 +232,12 @@ class wb_faq {
             $cachedrawdata[$root]->toplevel = true;
             $parentid = $root;
             do {
-                $parentid = $cachedrawdata[$parentid]->parentid;
-                $parentids[] = $parentid;
+                if (isset($cachedrawdata[$parentid]) && isset($cachedrawdata[$parentid]->parentid)) {
+                    $parentid = $cachedrawdata[$parentid]->parentid;
+                    $parentids[] = $parentid;
+                } else {
+                    $parentid = null;
+                }
             } while (!empty($parentid));
         }
         foreach ($parentids as $parentid) {

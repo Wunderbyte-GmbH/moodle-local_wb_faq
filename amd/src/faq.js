@@ -24,6 +24,7 @@ import Templates from "core/templates";
 import {increaseCounter} from "local_wb_faq/faqnavbar";
 import {get_string as getString} from "core/str";
 import Ajax from "core/ajax";
+import Notification from 'core/notification';
 
 var clicks = 0;
 
@@ -178,6 +179,17 @@ function render(id, data, uid) {
   templatedata.uid = uid;
 
   if (!templatedata || !templatedata.hasOwnProperty("parentid")) {
+      getString('entrydeleted', 'local_wb_faq').then(message => {
+
+        Notification.addNotification({
+            message,
+            type: "warning"
+        });
+        return;
+    }).catch(e => {
+        // eslint-disable-next-line no-console
+        console.log(e);
+    });
     return;
   }
 
