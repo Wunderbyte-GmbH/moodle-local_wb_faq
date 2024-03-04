@@ -94,10 +94,6 @@ const editModalListener = event => {
         // eslint-disable-next-line no-console
         console.log('delete category');
         confirmDeleteEntry(event);
-    } else if (button.classList.contains('local_wb_faq_edit_category')) {
-        // eslint-disable-next-line no-console
-        console.log('category');
-        openEditCategoriesModal(event);
     }
 };
 
