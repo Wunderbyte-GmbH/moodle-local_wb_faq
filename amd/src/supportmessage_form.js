@@ -20,6 +20,7 @@
  */
 
 import DynamicForm from 'core_form/dynamicform';
+import {showSuccessNotification, showErrorNotification} from 'local_wb_faq/notifications';
 
 const SELECTORS = {
     SUPPORTMESSAGEFORM: "[data-id='supportmessage-form']",
@@ -37,7 +38,7 @@ export const init = () => {
     const elements = document.querySelectorAll(SELECTORS.SUPPORTMESSAGEFORM);
 
     // eslint-disable-next-line no-console
-    console.log('elements');
+    console.log('elements', elements);
 
     elements.forEach(element => {
         listenToSelect(element);
@@ -64,24 +65,18 @@ export function listenToSelect(element) {
         // context as `contextid` query parameter
         dynamicForm.addEventListener(dynamicForm.events.FORM_SUBMITTED, (e) => {
 
-            // eslint-disable-next-line no-console
-            console.log("submitted", e);
+            if (e.detail.baseurl && e.detail.token) {
+                showSuccessNotification();
+                const url = e.detail.baseurl + "?jwt=" + e.detail.token;
 
-            const tab = document.querySelector(SELECTORS.THANKYOUTAB);
-            tab.classList.remove('disabled');
-            tab.click();
-        });
+                // eslint-disable-next-line no-console
+                console.log("url", url);
 
-        dynamicForm.addEventListener('change', (e) => {
-            // eslint-disable-next-line no-console
-            console.log("change", e, e.target.name);
-
-            if (e.target.name == 'groupname') {
-
-                e.preventDefault();
-
-                let button = document.querySelector('[name="submitmodulechoice"]');
-                button.click();
+                window.open(url, '_blank');
+            } else {
+                // eslint-disable-next-line no-console
+                console.error('invalidredirect');
+                showErrorNotification();
             }
         });
 }

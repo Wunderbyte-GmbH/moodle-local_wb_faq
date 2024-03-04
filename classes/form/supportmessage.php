@@ -26,6 +26,7 @@ use context;
 use context_system;
 use core_form\dynamic_form;
 use local_wb_faq\issues;
+use local_wb_faq\jwt;
 use moodle_url;
 use stdClass;
 
@@ -49,77 +50,15 @@ class supportmessage extends dynamic_form {
         $mform = $this->_form;
         $ajaxformdata = $this->_ajaxformdata;
 
-        $group = $this->_ajaxformdata['groupname'] ?? '';
+        // Add group field.
+        $mform->addElement('hidden', 'group');
+        $mform->setType('groups', PARAM_TEXT);
 
-        if (class_exists('local_groupmanager\groupmanager')) {
+        // Add module field.
+        $mform->addElement('hidden', 'module');
+        $mform->setType('module', PARAM_TEXT);
 
-            $sql = "SELECT c.id, gud.userid, gud.identifier, c.accountid, gud.contactid
-                    FROM {local_groupmanager_udata} gud
-                    LEFT JOIN {local_groupmanager_clients} c ON gud.identifier = c.identifier
-                    WHERE gud.userid = :userid";
-            $params['userid'] = $USER->id;
-
-            $records = $DB->get_records_sql($sql, $params);
-
-            if (count($records) > 1) {
-                $clients = [];
-                foreach ($records as $record) {
-                    $clients[$record->accountid] = $record->identifier;
-                }
-                $mform->addElement('select', 'accountid', get_string('employer', 'local_wb_faq'), $clients);
-            } else if (count($records) === 1) {
-                $record = reset($records);
-                $mform->addElement('hidden', 'accountid', $record->accountid);
-            }
-        }
-
-        // Add priority select field.
-        $priorities = [
-            0 => get_string('normal', 'local_wb_faq'),
-            3 => get_string('low', 'local_wb_faq'),
-            1 => get_string('medium', 'local_wb_faq'),
-            2 => get_string('high', 'local_wb_faq'),
-        ];
-
-        $mform->addElement('select', 'priority', get_string('priority', 'local_wb_faq'), $priorities);
-
-        list ($modules, $groups) = wb_faq::return_modules_and_groups($group);
-
-        // We only add the groups key if groups are actually defined.
-        if (count($groups) > 1) {
-            $mform->addElement('select', 'groupname', get_string('groups', 'local_wb_faq'), $groups);
-
-            if (!empty($group)) {
-                $mform->addElement('select', 'module', get_string('modules', 'local_wb_faq'), $modules);
-            }
-        }
-
-        // Button to attach JavaScript to to reload the form.
-        $mform->registerNoSubmitButton('submitmodulechoice');
-        $mform->addElement('submit', 'submitmodulechoice', 'submitmodulechoice',
-            ['class' => 'd-none', 'data-action' => 'submitmodulechoice']);
-
-        // Add title field.
-        $mform->addElement('text', 'title', get_string('title', 'local_wb_faq'));
-        $mform->setType('title', PARAM_TEXT);
-
-        // Add message textarea.
-        $mform->addElement('textarea', 'message', get_string('message', 'local_wb_faq'));
-        $mform->setType('message', PARAM_TEXT);
-
-        $mform->addElement(
-            'filemanager',
-            'attachments',
-            get_string('attachment', 'local_wb_faq'),
-            null,
-            [
-                'maxbytes' => 10485760,
-                'areamaxbytes' => 10485760,
-                'maxfiles' => 2,
-            ]
-        );
-
-        $this->add_action_buttons(false, 'send message');
+        $this->add_action_buttons(false, get_string('contactsupport', 'local_wb_faq'));
 
     }
 
@@ -147,10 +86,10 @@ class supportmessage extends dynamic_form {
 
         $data = $this->get_data();
 
-        // This line saves the issue in local db...
-        // Saves attached files...
-        // And sends the issue via rest, if configured.
-        $issueid = issues::save_issue($data);
+        $token = jwt::return_token(['typ' => 'JWT', 'alg' => 'HS256'], ['user_id' => 123]);
+
+        $data->baseurl = get_config('local_wb_faq', 'supportmessagebaseurl');
+        $data->token = $token;
 
         return $data;
     }
@@ -169,10 +108,6 @@ class supportmessage extends dynamic_form {
 
         global $USER;
         $data = new stdClass();
-
-        if ($group = $this->_ajaxformdata['groupname'] ?? null) {
-            $data->groups = $group;
-        }
 
         $this->set_data($data);
     }
@@ -216,22 +151,6 @@ class supportmessage extends dynamic_form {
     public function validation($data, $files) {
 
         $errors = array();
-
-        if (isset($data["groupname"]) && empty($data["groupname"])) {
-            $errors['groupname'] = get_string('entergroup', 'local_wb_faq');
-        }
-
-        if (isset($data["module"]) && empty($data["module"])) {
-            $errors['module'] = get_string('entermodule', 'local_wb_faq');
-        }
-
-        if (empty($data["title"])) {
-            $errors['title'] = get_string('entertitle', 'local_wb_faq');
-        }
-
-        if (strlen($data["message"]) < 5) {
-            $errors['message'] = get_string('entermessage', 'local_wb_faq');
-        }
 
         return $errors;
     }

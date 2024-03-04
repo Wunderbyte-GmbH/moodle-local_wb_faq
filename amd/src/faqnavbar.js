@@ -29,7 +29,7 @@ import ModalFactory from 'core/modal_factory';
 // Import ModalEvents from 'core/modal_events'.
 
 var modal = null;
-var counterlimit = 3; // Can be overridden.
+var counterlimit = 0; // Can be overridden.
 var counter = 0;
 
 var SELECTORS = {
@@ -175,10 +175,6 @@ async function returnDataForModal(faqdata) {
       key: 'writemessage',
       component: 'local_wb_faq',
     },
-    {
-      key: 'thankyou',
-      component: 'local_wb_faq',
-    },
   ];
 
   const strings = await getstrings(loadstrings);
@@ -197,12 +193,6 @@ async function returnDataForModal(faqdata) {
         "active": false,
         "success": false
       },
-      {
-        "name": strings[2],
-        "id": 'three',
-        "active": false,
-        "success": false
-      }
     ],
     body: {
       thankyou: faqdata.thankyou ?? false

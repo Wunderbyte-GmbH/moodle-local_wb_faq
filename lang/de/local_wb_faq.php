@@ -52,6 +52,9 @@ $string['new_entity'] = 'New Entity';
 $string['edit_entity'] = 'Edit Entity';
 $string['view'] = "View";
 $string['edit'] = "Edit";
+$string['contactsupport'] = "Kontaktiere Support";
+$string['jwtsecret'] = "JWT Secret";
+$string['supportmessagebaseurl'] = "Support Nachricht Basis-URL";
 
 $string['editcategories'] = "Kategorien editieren";
 $string['editquestions'] = "Fragen editieren";
