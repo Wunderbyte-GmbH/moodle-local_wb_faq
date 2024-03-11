@@ -38,16 +38,27 @@ use stdClass;
 
 class jwt {
 
+    public $header = [
+        'typ' => 'JWT',
+        'alg' => 'HS256',
+    ];
+
     /**
      * Return token.
      * @param array $header
      * @param array $payload
      * @return string
      */
-    public static function return_token(array $header, array $payload) {
+    public function return_token(array $payload) {
 
         // Create token header as a JSON string.
-        $header = json_encode($header);
+        $header = json_encode($this->header);
+
+        $payload['iss'] = get_config('local_wb_faq', 'jwtapp');
+        $payload['sub'] = get_string('createsupportticket', 'local_wb_faq');
+        $payload['aud'] = 'KOI';
+        $payload['iat'] = time();
+        $payload['exp'] = strtotime('now + 5 min');
 
         // Create token payload as a JSON string.
         $payload = json_encode($payload);

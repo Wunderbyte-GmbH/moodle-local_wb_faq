@@ -27,6 +27,7 @@ use context_system;
 use core_form\dynamic_form;
 use local_wb_faq\issues;
 use local_wb_faq\jwt;
+use local_wb_faq\support;
 use moodle_url;
 use stdClass;
 
@@ -86,10 +87,7 @@ class supportmessage extends dynamic_form {
 
         $data = $this->get_data();
 
-        $token = jwt::return_token(['typ' => 'JWT', 'alg' => 'HS256'], ['user_id' => 123]);
-
-        $data->baseurl = get_config('local_wb_faq', 'supportmessagebaseurl');
-        $data->token = $token;
+        support::send_ticket($data);
 
         return $data;
     }
@@ -160,6 +158,7 @@ class supportmessage extends dynamic_form {
      * @see moodleform::get_data()
      */
     public function get_data() {
+
         $data = parent::get_data();
         return $data;
     }

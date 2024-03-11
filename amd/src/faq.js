@@ -31,8 +31,8 @@ var clicks = 0;
 const faqs = {};
 
 const SELECTORS = {
-  SUPPORTMESSAGE_MODULE: "id_module",
-  SUPPORTMESSAGE_SUPPLEMENT: "id_supplement",
+  SUPPORTMESSAGE_MODULE: 'div[data-id="supportmessage-form"] input[name="module"][type="hidden"]',
+  SUPPORTMESSAGE_SUPPLEMENT: 'div[data-id="supportmessage-form"] input[name="group"][type="hidden"]',
 };
 
 /**

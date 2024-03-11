@@ -73,6 +73,7 @@ export function listenToSelect(element) {
                 console.log("url", url);
 
                 window.open(url, '_blank');
+                window.location.reload();
             } else {
                 // eslint-disable-next-line no-console
                 console.error('invalidredirect');

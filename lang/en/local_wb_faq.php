@@ -54,6 +54,7 @@ $string['view'] = "View";
 $string['edit'] = "Edit";
 $string['contactsupport'] = "Contact Support";
 $string['jwtsecret'] = "JWT Secret";
+$string['jwtapp'] = "JWT App";
 $string['supportmessagebaseurl'] = "Support message base URL";
 
 $string['editcategories'] = "Edit categories";
@@ -156,3 +157,6 @@ $string['accesonlyowncourses_desc'] = 'Users can access course specific faqs onl
 
 $string['entrydeleted'] = "Entry was deleted";
 $string['nocourseid'] = "Please select a course for this entry.";
+
+$string['supportactioncreate'] = 'Create';
+$string['createsupportticket'] = 'Create support ticket';

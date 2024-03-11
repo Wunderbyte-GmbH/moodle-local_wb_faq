@@ -60,7 +60,11 @@ if ($hassiteconfig) {
     $settings->add(
         new admin_setting_configtext('local_wb_faq/jwtsecret',
             get_string('jwtsecret', 'local_wb_faq'),
-            '', 15, PARAM_ALPHANUM));
+            '', 15, PARAM_TEXT));
+    $settings->add(
+        new admin_setting_configtext('local_wb_faq/jwtapp',
+            get_string('jwtapp', 'local_wb_faq'),
+            '', 15, PARAM_TEXT));
 
     $settings->add(
         new admin_setting_configcheckbox($componentname . '/usesupport',
