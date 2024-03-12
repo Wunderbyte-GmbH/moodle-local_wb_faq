@@ -157,5 +157,8 @@ $string['accesonlyowncourses_desc'] = 'NutzerInnen können nur FAQs sehen, die K
 $string['entrydeleted'] = "Eintrag wurde gelöscht";
 $string['nocourseid'] = "Bitte wählen Sie einen Kurs aus, dem dieser Eintrag zugeordnet ist";
 
+// Caching Definitions.
+$string['cachedef_faqcache'] = "Frequently Asked Questions.";
+
 $string['supportactioncreate'] = 'Anfrage';
 $string['createsupportticket'] = 'Supportticket anlegen';
