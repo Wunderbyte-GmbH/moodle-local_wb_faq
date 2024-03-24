@@ -53,9 +53,10 @@ $string['edit_entity'] = 'Edit Entity';
 $string['view'] = "View";
 $string['edit'] = "Edit";
 $string['contactsupport'] = "Contact Support";
+$string['createticket'] = 'Create Ticket';
 $string['jwtsecret'] = "JWT Secret";
 $string['jwtapp'] = "JWT App";
-$string['supportmessagebaseurl'] = "Support message base URL";
+$string['supportmessagebaseurl'] = "Support message base i";
 
 $string['editcategories'] = "Edit categories";
 $string['editquestions'] = "Edit questions";
@@ -160,3 +161,15 @@ $string['nocourseid'] = "Please select a course for this entry.";
 
 $string['supportactioncreate'] = 'Create';
 $string['createsupportticket'] = 'Create support ticket';
+
+// Support.
+$string['support'] = 'Support';
+$string['supportanfrage'] = 'Support Anfrage';
+$string['supportvertrieb'] = 'Anfrage an den Vertrieb <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
+$string['supportstörung'] = 'Störung melden <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
+$string['supportmytickets'] = 'Meine Tickets <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
+$string['team'] = 'Comm-Unity Team <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
+
+// Debug.
+$string['debug'] = 'Debug mode';
+$string['debug_desc'] = 'Debug mode will eg. echo the jwt token instead of redirecting directly';

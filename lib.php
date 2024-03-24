@@ -41,7 +41,7 @@
  * @return string The HTML
  */
 function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
-    global $CFG;
+    global $CFG, $COURSE, $PAGE, $DB;
 
     // Early bail out conditions.
     if (!isloggedin() || isguestuser()) {
@@ -54,11 +54,106 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
         return '';
     }
 
-    $data = [
-        'thankyou' => get_config('local_wb_faq', 'thankyouforsupportmessage'),
-    ];
+    $modal = $renderer->render_from_template('local_wb_faq/navbar/popoverbutton', []);
 
-    $output = $renderer->render_from_template('local_wb_faq/navbar/popoverbutton', $data);
+    // Determine if we have a group to submit.
+    $context = $PAGE->context;
+
+    switch ($context->contextlevel) {
+        case CONTEXT_COURSE:
+
+            $section = optional_param('section', null, PARAM_INT);
+
+            // If there is no section, we join on the coursename.
+            if ($section === null) {
+                $where = "JOIN {course} c ON c.id=cs.course
+                          JOIN {local_wb_faq_entry} wfe ON wfe.title=c.fullname
+                          WHERE cs.course=:course
+                          LIMIT 1";
+            } else {
+                // If there is one, we can join on the section name.
+                $where = "LEFT JOIN {local_wb_faq_entry} wfe ON wfe.title=cs.name
+                          WHERE cs.section = :section AND cs.course=:course
+                          LIMIT 1";
+            }
+            $sql = "SELECT DISTINCT cs.id, wfe.module, wfe.supplement as group
+                    FROM {course_sections} cs
+                    $where";
+            $params = [
+                'section' => $section,
+                'course' => $COURSE->id,
+
+            ];
+            $record = $DB->get_record_sql($sql, $params);
+            break;
+        case CONTEXT_MODULE:
+            list($course, $cm) = get_course_and_cm_from_cmid($context->instanceid);
+            $sql = "SELECT cs.id, wfe.module, wfe.supplement as group
+                    FROM {course_sections} cs
+                    LEFT JOIN {local_wb_faq_entry} wfe on wfe.title=cs.name
+                    WHERE cs.id = :sectionid";
+            $params = [
+                'sectionid' => $cm->section,
+            ];
+            $record = $DB->get_record_sql($sql, $params);
+            break;
+        case CONTEXT_COURSECAT:
+
+            $sql = "SELECT cc.id, wfe.module, wfe.supplement as group
+                    FROM {course_categories} cc
+                    LEFT JOIN {local_wb_faq_entry} wfe on wfe.title=cc.name
+                    WHERE cc.id=:categoryid";
+            $params = [
+                'categoryid' => $context->instanceid,
+            ];
+            $record = $DB->get_record_sql($sql, $params);
+
+            break;
+        case CONTEXT_SYSTEM:
+            $record = (object)[
+                'group' => 'SONST',
+                'module' => 'Sons',
+            ];
+            break;
+    }
+
+    if (!is_object($record)) {
+        $record = new stdClass();
+    }
+
+    $record->group = $record->group ?? 'SONST';
+    $record->module = $record->gromoduleup ?? 'Sons';
+
+    // Create the links to the transfer.php.
+    $supportvertrieburl = new moodle_url('/local/wb_faq/transfer.php', [
+        'type' => 'vertrieb',
+        'group' => $record->group,
+        'module' => $record->module,
+    ]);
+
+    $supportmyticketsurl = new moodle_url('/local/wb_faq/transfer.php', [
+        'type' => 'mymessages',
+        'group' => $record->group,
+        'module' => $record->module,
+    ]);
+
+    $output = '<div class="popover-region nav-link icon-no-margin dropdown">
+        <button class="btn btn-secondary dropdown-toggle" type="button"
+        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        '. get_string('support', 'local_wb_faq') .'
+        </button>
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">'
+            . $modal . '</a>
+            <a class="dropdown-item" href="' . $supportvertrieburl->out() . '" target="_blank">'
+                . get_string('supportvertrieb', 'local_wb_faq') . '</a>
+            <a class="dropdown-item" href="' . $supportmyticketsurl->out() . '" target="_blank">'
+                . get_string('supportmytickets', 'local_wb_faq') . '</a>
+            <a class="dropdown-item" href="https://services.comm-unity.at/extranet/#!/mitarbeiter">'
+                . get_string('team', 'local_wb_faq') . '</a>
+        </div>
+    </div>';
+
     return $output;
 }
 

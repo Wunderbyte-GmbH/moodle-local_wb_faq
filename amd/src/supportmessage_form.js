@@ -24,7 +24,7 @@ import {showSuccessNotification, showErrorNotification} from 'local_wb_faq/notif
 
 const SELECTORS = {
     SUPPORTMESSAGEFORM: "[data-id='supportmessage-form']",
-    THANKYOUTAB: '#faq-nav-pillsthree-tab',
+    CREATETICKETBUTTON: "input.wb-faq-create-ticket-button",
 };
 
 /**
@@ -50,7 +50,7 @@ export const init = () => {
  *  @param {*} element
  *
  */
-export function listenToSelect(element) {
+export async function listenToSelect(element) {
         // Initialize the form - pass the container element and the form class name.
         const dynamicForm = new DynamicForm(
             element,
@@ -59,7 +59,11 @@ export function listenToSelect(element) {
         // eslint-disable-next-line no-console
         console.log(dynamicForm);
 
-        dynamicForm.load();
+        await dynamicForm.load();
+
+        const button = document.querySelector(SELECTORS.CREATETICKETBUTTON);
+        button.classList.remove('btn-primary');
+        button.classList.add('btn-outline-primary');
 
         // If a user selects a context, redirect to a URL that includes the selected
         // context as `contextid` query parameter

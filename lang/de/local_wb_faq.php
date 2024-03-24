@@ -53,6 +53,7 @@ $string['edit_entity'] = 'Edit Entity';
 $string['view'] = "View";
 $string['edit'] = "Edit";
 $string['contactsupport'] = "Kontaktiere Support";
+$string['createticket'] = 'Ticket erstellen';
 $string['jwtsecret'] = "JWT Secret";
 $string['jwtapp'] = "JWT App";
 $string['supportmessagebaseurl'] = "Support Nachricht Basis-URL";
@@ -162,3 +163,15 @@ $string['cachedef_faqcache'] = "Frequently Asked Questions.";
 
 $string['supportactioncreate'] = 'Anfrage';
 $string['createsupportticket'] = 'Supportticket anlegen';
+
+// Support.
+$string['support'] = 'Support';
+$string['supportanfrage'] = 'Support Anfrage';
+$string['supportvertrieb'] = 'Anfrage an den Vertrieb <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
+$string['supportstörung'] = 'Störung melden <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
+$string['supportmytickets'] = 'Meine Tickets <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
+$string['team'] = 'Comm-Unity Team <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
+
+// Debug.
+$string['debug'] = 'Debug Modus';
+$string['debug_desc'] = 'Debug Modus hilf beim Finden von Fehlern, zum Beispiel indem die jwt tokens ausgegeben werden, statt direkt weiterzuleiten.';

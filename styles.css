@@ -89,7 +89,7 @@ input:checked + .slider:before {
 
 #wb_faqrelation-form ul [aria-expanded="false"]:before {
   content: "\f054";
-  font-family: FontAwesome;
+  font-family: 'FontAwesome', 'Font Awesome 6 Free';
   position: absolute;
   left: 5px;
 }
@@ -105,7 +105,7 @@ input:checked + .slider:before {
 
 #wb_faqrelation-form ul [aria-expanded="true"]:before {
   content: "\f078";
-  font-family: FontAwesome;
+  font-family: 'FontAwesome', 'Font Awesome 6 Free';
   position: absolute;
   left: 5px;
 }
@@ -226,4 +226,10 @@ input:checked + .slider:before {
   background: #357a32; /* Bootstrap success color.*/
   margin: 7px 7px;
   text-align: center;
+}
+
+input.wb-faq-create-ticket-button::after {
+  content: "\f101";
+  font-family: 'FontAwesome', 'Font Awesome 6 Free';
+  margin-left: 5px;
 }

@@ -35,7 +35,7 @@ var counter = 0;
 var SELECTORS = {
   TABS: 'faq-page-navbar-tab a.nav-link',
   FAQTAB: '#faq-nav-pillsone-tab',
-  MESSAGETAB: '#faq-nav-pillstwo-tab',
+  SUPPORTMESSAGEBUTTON: '[data-id="supportmessage-form"]',
   THANKYOUTAB: '#faq-nav-pillsthree-tab',
 };
 
@@ -73,10 +73,10 @@ export function increaseCounter(max = false) {
   console.log('counter', counter);
 
   if (counter >= counterlimit) {
-    const tabs = document.querySelectorAll(SELECTORS.MESSAGETAB);
+    const tabs = document.querySelectorAll(SELECTORS.SUPPORTMESSAGEBUTTON);
 
     tabs.forEach(tab => {
-      tab.classList.remove('disabled');
+      tab.classList.remove('hidden');
     });
   }
 }
@@ -171,10 +171,6 @@ async function returnDataForModal(faqdata) {
       key: 'searchfaqs',
       component: 'local_wb_faq',
     },
-    {
-      key: 'writemessage',
-      component: 'local_wb_faq',
-    },
   ];
 
   const strings = await getstrings(loadstrings);
@@ -186,13 +182,7 @@ async function returnDataForModal(faqdata) {
           "id": 'one',
           "active": true,
           "success": true
-      },
-      {
-        "name": strings[1],
-        "id": 'two',
-        "active": false,
-        "success": false
-      },
+      }
     ],
     body: {
       thankyou: faqdata.thankyou ?? false

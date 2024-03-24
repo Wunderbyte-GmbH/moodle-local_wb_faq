@@ -53,14 +53,20 @@ class supportmessage extends dynamic_form {
 
         // Add group field.
         $mform->addElement('hidden', 'group');
-        $mform->setType('groups', PARAM_TEXT);
+        $mform->setType('group', PARAM_TEXT);
 
         // Add module field.
         $mform->addElement('hidden', 'module');
         $mform->setType('module', PARAM_TEXT);
 
-        $this->add_action_buttons(false, get_string('contactsupport', 'local_wb_faq'));
-
+        $mform->addElement(
+            'submit',
+            'submitbutton',
+            get_string('createticket', 'local_wb_faq'),
+            [
+                'class' => 'wb-faq-create-ticket-button',
+            ]
+        );
     }
 
     /**
@@ -87,7 +93,8 @@ class supportmessage extends dynamic_form {
 
         $data = $this->get_data();
 
-        support::send_ticket($data);
+        // Rewrite the data object to return to JS.
+        $data = support::send_ticket($data);
 
         return $data;
     }

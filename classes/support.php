@@ -25,6 +25,9 @@
 
 namespace local_wb_faq;
 
+use dml_exception;
+use coding_exception;
+use local_groupmanager\groupmanager;
 use stdClass;
 
 /**
@@ -36,8 +39,11 @@ use stdClass;
 class support {
 
     /**
-     *
-     * @return void
+     * Supportanfrage.
+     * @param stdClass $data
+     * @return object
+     * @throws dml_exception
+     * @throws coding_exception
      */
     public static function send_ticket(stdClass $data) {
 
@@ -48,21 +54,59 @@ class support {
         $data->userName = $USER->username;
 
         // We also need the contactid and the account it.
-        list($contactid, $accountid) = explode('-', $USER->idnumber);
+        $clients = groupmanager::get_clients_for_user($USER);
 
-        $data->contactId = $contactid ?? 0;
-        $data->accountId = $accountid ?? 0;
+        // We break when we have the right client.
+        foreach ($clients as $client) {
+            if ($client->identifier == $USER->institution) {
+                break;
+            }
+        }
+        $data->contactId = $client->contactid ?? 0;
+        $data->accountId = $client->accountid ?? 0;
         $data->problemText = '';
-        $data->action = get_string('supportactioncreate', 'local_wb_faq');
+        $data->action = $data->action ?? get_string('supportactioncreate', 'local_wb_faq');
+        $data->sub = "Supportticket anlegen";
 
         $token = $jwt->return_token((array)$data);
 
-        $data->baseurl = get_config('local_wb_faq', 'supportmessagebaseurl');
-        $data->token = $token;
+        return (object)[
+            'baseurl' => get_config('local_wb_faq', 'supportmessagebaseurl'),
+            'token' => $token,
+        ];
 
     }
 
-    public static function see_all_tickets() {
+    /**
+     * See my tickets.
+     * @param stdClass $data
+     * @return object
+     * @throws dml_exception
+     */
+    public static function see_all_tickets(stdClass $data) {
+        global $USER;
 
+        $jwt = new jwt();
+
+        $data->userName = $USER->username;
+
+        // We also need the contactid and the account it.
+        $clients = groupmanager::get_clients_for_user($USER);
+
+        // We break when we have the right client.
+        foreach ($clients as $client) {
+            if ($client->identifier == $USER->institution) {
+                break;
+            }
+        }
+
+        $data->accountId = $client->accountid ?? 0;
+        $data->sub = "Meine Supporttickets";
+        $token = $jwt->return_token((array)$data);
+
+        return (object)[
+            'baseurl' => get_config('local_wb_faq', 'supportmessagebaseurl'),
+            'token' => $token,
+        ];
     }
 }
