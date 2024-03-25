@@ -76,7 +76,7 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
                           WHERE cs.section = :section AND cs.course=:course
                           LIMIT 1";
             }
-            $sql = "SELECT DISTINCT cs.id, wfe.module, wfe.supplement as group
+            $sql = "SELECT DISTINCT cs.id, wfe.module, wfe.supplement as supplement
                     FROM {course_sections} cs
                     $where";
             $params = [
@@ -88,7 +88,7 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
             break;
         case CONTEXT_MODULE:
             list($course, $cm) = get_course_and_cm_from_cmid($context->instanceid);
-            $sql = "SELECT cs.id, wfe.module, wfe.supplement as group
+            $sql = "SELECT cs.id, wfe.module, wfe.supplement as supplement
                     FROM {course_sections} cs
                     LEFT JOIN {local_wb_faq_entry} wfe on wfe.title=cs.name
                     WHERE cs.id = :sectionid";
@@ -99,7 +99,7 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
             break;
         case CONTEXT_COURSECAT:
 
-            $sql = "SELECT cc.id, wfe.module, wfe.supplement as group
+            $sql = "SELECT cc.id, wfe.module, wfe.supplement as supplement
                     FROM {course_categories} cc
                     LEFT JOIN {local_wb_faq_entry} wfe on wfe.title=cc.name
                     WHERE cc.id=:categoryid";
@@ -119,10 +119,14 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
 
     if (!is_object($record)) {
         $record = new stdClass();
+    } else {
+        // In mysql family, we can't use group as column name.
+        $record->group = $record->supplement ?? null;
+        unset($record->supplement);
     }
 
     $record->group = $record->group ?? 'SONST';
-    $record->module = $record->gromoduleup ?? 'Sons';
+    $record->module = $record->module ?? 'Sons';
 
     // Create the links to the transfer.php.
     $supportvertrieburl = new moodle_url('/local/wb_faq/transfer.php', [
