@@ -109,9 +109,6 @@ function addEvents(data, root, uid) {
 
   let searchbox = document.querySelector(".wb_faq_searchbox-" + uid);
 
-  // eslint-disable-next-line no-console
-  console.log("searchbox", searchbox);
-
   if (searchbox) {
     searchbox.addEventListener("click", (e) => {
       let button = e.target;
@@ -211,6 +208,16 @@ function render(id, data, uid) {
     .then(({html, js}) => {
 
       Templates.replaceNodeContents(".local_wb_faq-" + uid, html, js);
+
+      const breadcrumbs = container.querySelectorAll('.wb-breadcrumb h3');
+      const last = breadcrumbs[breadcrumbs.length - 1];
+      // eslint-disable-next-line no-console
+      console.log(last);
+
+      last.classList.remove(['btn-primary']);
+      last.classList.add(['btn-nolabel']);
+      last.removeAttribute('data-action');
+
       return;
     })
     .catch((e) => {
@@ -259,8 +266,6 @@ function setValuesToSelect(e) {
 
   // With every click, we increase the counter.
   increaseCounter();
-  // eslint-disable-next-line no-console
-  console.log(e.target.dataset.supplement, e.target.dataset.module);
 
   const moduleElement = document.querySelector(SELECTORS.SUPPORTMESSAGE_MODULE);
   const supplementElement = document.querySelector(SELECTORS.SUPPORTMESSAGE_SUPPLEMENT);
