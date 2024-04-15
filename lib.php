@@ -150,9 +150,13 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
             <a class="dropdown-item" href="#">'
             . $modal . '</a>
             <a class="dropdown-item" href="' . $supportvertrieburl->out() . '" target="_blank">'
+                . get_string('supportweiterbildung', 'local_wb_faq') . '</a>
+            <a class="dropdown-item" href="' . $supportvertrieburl->out() . '" target="_blank">'
                 . get_string('supportvertrieb', 'local_wb_faq') . '</a>
             <a class="dropdown-item" href="' . $supportmyticketsurl->out() . '" target="_blank">'
                 . get_string('supportmytickets', 'local_wb_faq') . '</a>
+            <a class="dropdown-item" href="' . $supportmyticketsurl->out() . '" target="_blank">'
+                . get_string('supportstoerung', 'local_wb_faq') . '</a>
             <a class="dropdown-item" href="https://services.comm-unity.at/extranet/#!/mitarbeiter">'
                 . get_string('team', 'local_wb_faq') . '</a>
         </div>

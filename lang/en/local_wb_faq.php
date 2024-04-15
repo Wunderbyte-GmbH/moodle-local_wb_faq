@@ -165,8 +165,9 @@ $string['createsupportticket'] = 'Create support ticket';
 // Support.
 $string['support'] = 'Support';
 $string['supportanfrage'] = 'Support Anfrage';
+$string['supportweiterbildung'] = 'Aus- und Weiterbildung <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
 $string['supportvertrieb'] = 'Anfrage an den Vertrieb <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
-$string['supportstörung'] = 'Störung melden <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
+$string['supportstoerung'] = 'Störung melden <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
 $string['supportmytickets'] = 'Meine Tickets <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
 $string['team'] = 'Comm-Unity Team <i class="fa fa-angle-double-right" aria-hidden="true"></i>';
 
