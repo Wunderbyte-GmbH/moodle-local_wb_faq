@@ -209,7 +209,7 @@ function render(id, data, uid) {
 
       Templates.replaceNodeContents(".local_wb_faq-" + uid, html, js);
 
-      const breadcrumbs = container.querySelectorAll('.wb-breadcrumb h3');
+      const breadcrumbs = container.querySelectorAll('.wb-breadcrumb div');
       const last = breadcrumbs[breadcrumbs.length - 1];
       // eslint-disable-next-line no-console
       console.log(last);
