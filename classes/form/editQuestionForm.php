@@ -76,7 +76,7 @@ class editQuestionForm extends dynamic_form {
                 'content',
 
                 // The options.
-                $this->get_textfield_options(),
+                wb_faq::get_textfield_options(),
 
                 // The combination of contextid, component, filearea, and itemid.
                 $context,
@@ -106,21 +106,6 @@ class editQuestionForm extends dynamic_form {
 
         // This is the correct place to save and update semesters.
         $data = $this->get_data();
-
-        $data = file_postupdate_standard_editor(
-            // The submitted data.
-            $data,
-
-            // The field name in the database.
-            'content',
-
-            // The options.
-            $this->get_textfield_options(),
-
-            'local_wb_faq',
-            'faq_entry',
-            $data->id
-        );
 
         $settingsmanager = new wb_faq();
         if ($data->id) {
@@ -159,10 +144,10 @@ class editQuestionForm extends dynamic_form {
         }
         $mform->addElement('select', 'parentid', get_string('input:parentid', 'local_wb_faq'), $selectinput);
         $mform->addElement('html', '</div></div><div class="row"><div class="col-md-12">');
-        $context = context_system::instance();
-        $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true, 'context' => $context);
+
+        $editoroptions = wb_faq::get_textfield_options();
         $mform->addElement('editor', 'content_editor', get_string('input:content', 'local_wb_faq'),
-            '', $editoroptions);
+            null, $editoroptions);
         $mform->setType('content', PARAM_RAW);
         $mform->addElement('hidden', 'id');
 
@@ -194,20 +179,5 @@ class editQuestionForm extends dynamic_form {
      */
     protected function get_page_url_for_dynamic_submission(): moodle_url {
         return new moodle_url('/local/wb_faq/admin.php');
-    }
-
-    /**
-     * As we need it twice, we create a function.
-     * @return array
-     */
-    private function get_textfield_options() {
-
-        $context = $this->get_context_for_dynamic_submission();
-
-        return [
-            'trusttext' => true,
-            'subdirs' => true,
-            'context' => $context,
-        ];
     }
 }

@@ -57,7 +57,7 @@ class get_faq_data extends external_api {
     public static function execute(): array {
         global $USER, $PAGE;
         $context = \context_system::instance();
-        require_capability('local/wb_faq:canedit', $context);
+        // require_capability('local/wb_faq:canedit', $context);
         $data = new faq_list($USER->id, 0, true);
         $PAGE->set_context($context);
         $renderer = $PAGE->get_renderer('local_wb_faq');
@@ -75,7 +75,7 @@ class get_faq_data extends external_api {
             'root' => new external_value(PARAM_INT, 'root'),
             'allowedit' => new external_value(PARAM_BOOL, 'Allowedit'),
             'uid' => new external_value(PARAM_TEXT, 'uniqueid'),
-            'canedit' => new external_value(PARAM_BOOL, 'canedit')
+            'canedit' => new external_value(PARAM_BOOL, 'canedit', VALUE_DEFAULT, false)
             )
         );
     }

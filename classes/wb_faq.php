@@ -36,6 +36,9 @@ use stdClass;
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+
+defined('MOODLE_INTERNAL') || die();
+require_once($CFG->libdir . '/filelib.php');
 class wb_faq {
 
     public $courselist;
@@ -345,6 +348,14 @@ class wb_faq {
             // If its a question.
             if ($record->type == 1) {
 
+                $record->content = file_rewrite_pluginfile_urls(
+                    $record->content,
+                    'pluginfile.php',
+                    $context->id,
+                    'local_wb_faq',
+                    'faq_entry',
+                    $record->id);
+
                 if (!isset($dataarr[$record->parentid])) {
                     $dataarr[$record->parentid] = new stdClass();
                 }
@@ -490,6 +501,23 @@ class wb_faq {
         $data->timemodified = time();
 
         $id = $DB->insert_record('local_wb_faq_entry', $data);
+
+        $data->id = $id;
+        $data = file_postupdate_standard_editor(
+            // The submitted data.
+            $data,
+            // The field name in the database.
+            'content',
+            // The options.
+            self::get_textfield_options(),
+
+            'local_wb_faq',
+            'faq_entry',
+            $id ?? 1 // We don't have this id yet.
+        );
+
+        $DB->update_record('local_wb_faq_entry', $data);
+
         $context = \context_system::instance();
         $userid = $USER->id;
         $event = \local_wb_faq\event\faq_entry_added::create(
@@ -515,8 +543,23 @@ class wb_faq {
     public function update_faq(stdClass $data, $allowedit = false): int {
         global $DB, $USER;
 
+        $data = file_postupdate_standard_editor(
+            // The submitted data.
+            $data,
+            // The field name in the database.
+            'content',
+            // The options.
+            self::get_textfield_options(),
+            context_system::instance(),
+            'local_wb_faq',
+            'faq_entry',
+            $data->id
+        );
+
         $data->timemodified = time();
         $update = $DB->update_record('local_wb_faq_entry', $data);
+
+        // Here we also need to permanently save the files.
 
         cache_helper::purge_by_event('setbackfaqlist');
         if ($update) {
@@ -778,5 +821,22 @@ class wb_faq {
         }
 
         return [$groups, $modules];
+    }
+
+    /**
+     * As we need it twice, we create a function.
+     * @return array
+     */
+    public static function get_textfield_options() {
+
+        $context = context_system::instance();
+
+        return [
+            'trusttext' => true,
+            'subdirs' => true,
+            'context' => $context,
+            'maxfiles' => EDITOR_UNLIMITED_FILES,
+            'noclean' => true,
+        ];
     }
 }

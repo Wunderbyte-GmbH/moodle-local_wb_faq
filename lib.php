@@ -191,7 +191,13 @@ function local_wb_faq_pluginfile($course, $birecordorcm, $context, $filearea, $a
         $itemid = array_pop($args);
         $file = $fs->get_file($context->id, 'local_wb_faq', $filearea, $itemid, '/', $filename);
         // Todo: Maybe put in fall back image.
+    } else {
+        $itemid = array_pop($args);
+        if (!$file = $fs->get_file($context->id, 'local_wb_faq', $filearea, $itemid, '/', $filename) or $file->is_directory()) {
+            send_file_not_found();
+        }
     }
+
 
     \core\session\manager::write_close();
     send_stored_file($file, null, 0, $forcedownload, $options);
