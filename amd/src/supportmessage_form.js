@@ -32,13 +32,7 @@ const SELECTORS = {
  */
 export const init = () => {
 
-    // eslint-disable-next-line no-console
-    console.log('init');
-
     const elements = document.querySelectorAll(SELECTORS.SUPPORTMESSAGEFORM);
-
-    // eslint-disable-next-line no-console
-    console.log('elements', elements);
 
     elements.forEach(element => {
         listenToSelect(element);
@@ -56,9 +50,6 @@ export async function listenToSelect(element) {
             element,
             'local_wb_faq\\form\\supportmessage');
 
-        // eslint-disable-next-line no-console
-        console.log(dynamicForm);
-
         await dynamicForm.load();
 
         const button = document.querySelector(SELECTORS.CREATETICKETBUTTON);
@@ -71,10 +62,7 @@ export async function listenToSelect(element) {
 
             if (e.detail.baseurl && e.detail.token) {
                 showSuccessNotification();
-                const url = e.detail.baseurl + "?jwt=" + e.detail.token;
-
-                // eslint-disable-next-line no-console
-                console.log("url", url);
+                const url = e.detail.baseurl + "jwtaccess?jwt=" + e.detail.token;
 
                 window.open(url, '_blank');
                 window.location.reload();

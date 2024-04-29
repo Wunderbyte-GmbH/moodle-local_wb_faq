@@ -26,8 +26,6 @@ import {get_string as getString} from "core/str";
 import Ajax from "core/ajax";
 import Notification from 'core/notification';
 
-var clicks = 0;
-
 const faqs = {};
 
 const SELECTORS = {
@@ -43,7 +41,6 @@ const SELECTORS = {
  * @param {string} uid
  */
 export const init = (data, root, uid) => {
-  clicks = 0;
 
   // Make sure we never run the same init js twice.
   if (faqs[uid]) {
@@ -52,8 +49,6 @@ export const init = (data, root, uid) => {
 
   faqs[uid] = true;
 
-  // eslint-disable-next-line no-console
-  console.log("faq.js ", uid, root, data);
   render(root, data, uid);
   addEvents(data, root, uid);
 };
@@ -83,9 +78,7 @@ function addEvents(data, root, uid) {
 
         let button = e.target;
         if (button.dataset.toggle == "faqcollapse") {
-          clicks++;
-          // eslint-disable-next-line no-console
-          console.log(clicks);
+
           if (button.classList.contains("collapsed")) {
             button.classList.remove("collapsed");
             document.querySelector(button.dataset.target).classList.add("show");
@@ -114,7 +107,6 @@ function addEvents(data, root, uid) {
       let button = e.target;
       // eslint-disable-next-line no-console
       if (button.dataset.toggle == "faqcollapse") {
-        clicks++;
 
         if (button.classList.contains("collapsed")) {
           button.classList.remove("collapsed");
@@ -211,8 +203,6 @@ function render(id, data, uid) {
 
       const breadcrumbs = container.querySelectorAll('.wb-breadcrumb div');
       const last = breadcrumbs[breadcrumbs.length - 1];
-      // eslint-disable-next-line no-console
-      console.log(last);
 
       last.classList.remove(['btn-primary']);
       last.classList.add(['btn-nolabel']);
@@ -271,13 +261,11 @@ function setValuesToSelect(e) {
   const supplementElement = document.querySelector(SELECTORS.SUPPORTMESSAGE_SUPPLEMENT);
 
   if (moduleElement) {
-    // eslint-disable-next-line no-console
-    console.log(e.target.dataset.module);
+
     moduleElement.value = e.target.dataset.module;
   }
   if (supplementElement) {
-    // eslint-disable-next-line no-console
-    console.log(e.target.dataset.supplement);
+
     supplementElement.value = e.target.dataset.supplement;
   }
 }

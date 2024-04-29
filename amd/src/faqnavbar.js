@@ -21,7 +21,6 @@
 
 //
 import {get_strings as getstrings} from "core/str";
-import Config from "core/config";
 import Ajax from "core/ajax";
 import Templates from "core/templates";
 import MyModal from 'local_wb_faq/custommodal';
@@ -45,11 +44,6 @@ var SELECTORS = {
  */
 export function init() {
 
-  // eslint-disable-next-line no-console
-  console.log('init navbar called');
-  // eslint-disable-next-line no-console
-  console.log(Config);
-
   addEvents();
 }
 
@@ -69,9 +63,6 @@ export function increaseCounter(max = false) {
 
   counter++;
 
-  // eslint-disable-next-line no-console
-  console.log('counter', counter);
-
   if (counter >= counterlimit) {
     const tabs = document.querySelectorAll(SELECTORS.SUPPORTMESSAGEBUTTON);
 
@@ -89,9 +80,6 @@ async function addEvents() {
 
   if (!button) {
 
-    // eslint-disable-next-line no-console
-    console.log('couldnt find button');
-
     return;
   }
 
@@ -101,13 +89,7 @@ async function addEvents() {
 
   button.initialized = true;
 
-  // eslint-disable-next-line no-console
-  console.log('found button', button);
-
-  button.addEventListener('click', async e => {
-
-    // eslint-disable-next-line no-console
-    console.log('found e', e);
+  button.addEventListener('click', async () => {
 
     Ajax.call([
       {

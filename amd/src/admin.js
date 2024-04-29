@@ -54,9 +54,6 @@ function addEvents(data) {
             }
             if (e.target.dataset.action == "delete") {
 
-                // eslint-disable-next-line no-console
-                console.log('we want to delete', e.target.dataset.targetid);
-
                 confirmDeleteEntry(e);
 
                 // e.target.closest('tr').remove();
@@ -97,10 +94,8 @@ function render(id, data) {
         args: {
             'id': id
         },
-        done: function(result) {
+        done: function() {
 
-            // eslint-disable-next-line no-console
-            console.log('deleted', result, id);
             return;
         },
     }]);
@@ -116,10 +111,8 @@ function render(id, data) {
         args: {
             'id': id
         },
-        done: function(result) {
+        done: function() {
 
-            // eslint-disable-next-line no-console
-            console.log('toggled', result, id);
             return;
         },
     }]);
@@ -131,9 +124,6 @@ function render(id, data) {
  * @param {*} type
  */
 function renderedit(id, type) {
-
-    // eslint-disable-next-line no-console
-    console.log("renderedit", id, type);
 
     let json = {'id': type + '-' + id};
     let container = document.querySelector('#local_wb_faq_admin .view-' + type + '-' + id);

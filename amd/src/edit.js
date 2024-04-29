@@ -46,11 +46,6 @@ export const init = () => {
         if (!element.dataset.initialized) {
             element.addEventListener('click', editModalListener);
             element.dataset.initialized = true;
-        } else {
-
-            // Just to make sure during development that this is not called to often.
-            // eslint-disable-next-line no-console
-            console.log('unnecessary call of init');
         }
     });
 };
@@ -60,8 +55,7 @@ export const init = () => {
  * @param {*} event
  */
 const editModalListener = event => {
-    // eslint-disable-next-line no-console
-    console.log('edit.js', event);
+
     let button = event.target;
 
     if (button.tagName.toLowerCase() === 'i') {
@@ -69,30 +63,24 @@ const editModalListener = event => {
     }
 
     if (button.classList.contains('local_wb_faq_edit_question')) {
-        // eslint-disable-next-line no-console
-        console.log('question');
+
         openEditQuestionsModal(event);
 
     } else if (button.classList.contains('local_wb_faq_delete_question')) {
-        // eslint-disable-next-line no-console
-        console.log('delete question');
+
         confirmDeleteEntry(event);
     } else if (button.classList.contains('local_wb_faq_toggle_entry_visibility')) {
-        // eslint-disable-next-line no-console
-        console.log('toggle visibility');
+
         confirmToggleVisibility(event);
     } else if (button.classList.contains('local_wb_faq_toggle_category_visibility')) {
-        // eslint-disable-next-line no-console
-        console.log('toggle visibility');
+
         confirmToggleVisibility(event);
     } else if (button.classList.contains('local_wb_faq_edit_category')) {
-        // eslint-disable-next-line no-console
-        console.log('edit category');
+
         openEditCategoriesModal(event);
 
     } else if (button.classList.contains('local_wb_faq_delete_category')) {
-        // eslint-disable-next-line no-console
-        console.log('delete category');
+
         confirmDeleteEntry(event);
     }
 };
@@ -210,9 +198,6 @@ const editModalListener = event => {
 
     modalForm.addEventListener('change', e => {
 
-        // eslint-disable-next-line no-console
-        console.log('change', e.target.dataset);
-
         if (e.target.dataset.onChangeAction == "reloadForm") {
             const button = document.querySelector(SELECTORS.GROUPSUBMIT);
             modalForm.processNoSubmitButton(button);
@@ -221,10 +206,7 @@ const editModalListener = event => {
 
     // Listen to events if you want to execute something on form submit.
     // Event detail will contain everything the process() function returned:
-    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, (e) => {
-        const response = e.detail;
-        // eslint-disable-next-line no-console
-        console.log('Response of the modal: ', response);
+    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, () => {
 
         showSuccessNotification();
         if (uid) {
@@ -251,9 +233,6 @@ const editModalListener = event => {
  */
  export function confirmDeleteEntry(event) {
 
-    // eslint-disable-next-line no-console
-    console.log('confirm delete', event);
-
     let button = event.target;
     let entryid = 0;
 
@@ -274,13 +253,9 @@ const editModalListener = event => {
     } else if (button.dataset
             && button.dataset.action
             && button.dataset.action == 'delete') {
-                // eslint-disable-next-line no-console
-                console.log('here we delete');
 
                 entryid = button.dataset.targetid;
     } else {
-        // eslint-disable-next-line no-console
-        console.log('no delete entry to delete', button);
         return;
     }
 
@@ -290,9 +265,6 @@ const editModalListener = event => {
         {key: 'confirmdeleteentry', component: 'local_wb_faq'}
     ]
     ).then(strings => {
-
-        // eslint-disable-next-line no-console
-        console.log(strings);
 
         ModalFactory.create({type: ModalFactory.types.SAVE_CANCEL}).then(modal => {
 
@@ -326,9 +298,6 @@ const editModalListener = event => {
                         // Todo: We should react only on a success response from delete.
                         deleteEntry(entryid);
                         showSuccessNotification();
-                    } else {
-                        // eslint-disable-next-line no-console
-                        console.log('couldnt find right element', elementid, entryid);
                     }
                 });
 
@@ -354,9 +323,6 @@ const editModalListener = event => {
  */
  export function confirmToggleVisibility(event) {
 
-    // eslint-disable-next-line no-console
-    console.log('confirmToggleVisibility', event.target);
-
     let button = event.target;
     let entryid = 0;
 
@@ -364,9 +330,6 @@ const editModalListener = event => {
     if (button.tagName.toLowerCase() !== 'a') {
         button = button.parentElement;
     }
-
-    // eslint-disable-next-line no-console
-    console.log('ctv', event.target, button.tagName, button);
 
     // No difference at the moment between deleting question or category, but there could be.
     if (button.classList.contains('local_wb_faq_toggle_entry_visibility')) {
@@ -378,8 +341,6 @@ const editModalListener = event => {
             entryid = button.dataset.id;
         }
     } else {
-        // eslint-disable-next-line no-console
-        console.log('no entry to toggle');
         return;
     }
 
@@ -416,9 +377,6 @@ const editModalListener = event => {
 
                         let ielement = button.querySelector('i.toggle-visibility');
 
-                        // eslint-disable-next-line no-console
-                        console.log(ielement, button.classList);
-
                         if (ielement) {
                             if (ielement.classList.contains('fa-eye-slash')) {
                                 ielement.classList.replace('fa-eye-slash', 'fa-eye');
@@ -432,9 +390,6 @@ const editModalListener = event => {
 
 
 
-                    } else {
-                        // eslint-disable-next-line no-console
-                        console.log('couldnt find right element');
                     }
                 });
 

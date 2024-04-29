@@ -40,7 +40,7 @@ class jwt {
 
     public $header = [
         'typ' => 'JWT',
-        'alg' => 'HS256',
+        'alg' => 'HS512',
     ];
 
     /**
@@ -55,7 +55,7 @@ class jwt {
         $header = json_encode($this->header);
 
         $payload['iss'] = get_config('local_wb_faq', 'jwtapp');
-        $payload['aud'] = 'KOI';
+        $payload['aud'] = ['KOI'];
         $payload['iat'] = time();
         $payload['exp'] = strtotime('now + 5 min');
 
@@ -70,7 +70,7 @@ class jwt {
 
         // Create Signature Hash.
         $signature = hash_hmac(
-            'sha256',
+            'sha512',
             $base64urlheader . "." . $base64urlpayload,
             get_config('local_wb_faq', 'jwtsecret'),
             true);

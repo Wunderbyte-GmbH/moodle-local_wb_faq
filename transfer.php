@@ -30,8 +30,8 @@ require_once('../../config.php');
 require_login();
 
 $type = required_param('type', PARAM_TEXT);
-$group = required_param('group', PARAM_TEXT);
-$module = required_param('module', PARAM_TEXT);
+$group = optional_param('group', '', PARAM_TEXT);
+$module = optional_param('module', '', PARAM_TEXT);
 
 // Here we create the jwt token.
 
@@ -40,9 +40,25 @@ $data = new stdClass();
 $data->group = $group;
 $data->module = $module;
 
+$urlprefix = 'jwtaccess';
+
 switch ($type) {
     case 'vertrieb':
         $data->action = 'Vertriebsanfrage';
+        unset($data->group);
+        unset($data->module);
+        $data = support::send_ticket($data, );
+        break;
+    case 'problem':
+        unset($data->group);
+        unset($data->module);
+        $data->action = 'Stoerung';
+        $data = support::send_ticket($data);
+        break;
+    case 'stoerung':
+        unset($data->group);
+        unset($data->module);
+        $data->action = 'Stoerung';
         $data = support::send_ticket($data);
         break;
     case 'mymessages':
@@ -53,8 +69,8 @@ switch ($type) {
 }
 
 if (get_config('local_wb_faq', 'debug')) {
-    echo $data->token;
+    echo "$data->baseurl" . "$urlprefix?jwt=$data->token";
 } else {
     // We just redirect to the baseurl & send the token.
-    redirect("$data->baseurl?jwt=$data->token");
+    redirect("$data->baseurl" . "$urlprefix?jwt=$data->token");
 }

@@ -94,6 +94,7 @@ class supportmessage extends dynamic_form {
         $data = $this->get_data();
 
         // Rewrite the data object to return to JS.
+        $data->action = 'Anfrage';
         $data = support::send_ticket($data);
 
         return $data;

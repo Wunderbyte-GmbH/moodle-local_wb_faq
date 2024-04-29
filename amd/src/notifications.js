@@ -29,9 +29,6 @@ import {get_string as getString} from 'core/str';
  */
  export function showSuccessNotification() {
 
-    // eslint-disable-next-line no-console
-    console.log('showSuccessNotification');
-
     getString('savesuccess', 'local_wb_faq').then(message => {
 
         Notification.addNotification({

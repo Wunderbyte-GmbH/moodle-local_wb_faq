@@ -25,10 +25,7 @@ import {increaseCounter} from "local_wb_faq/faqnavbar";
 
 var searcharray = [];
 
-export const searchInput = (inputClass, elementToHide, elementToSearch, uid) => {
-
-    // eslint-disable-next-line no-console
-    console.log('searchinput uid: ', uid);
+export const searchInput = (inputClass, elementToHide, elementToSearch) => {
 
     let input, filter, li, a, i, txtValue;
     input = document.querySelector(inputClass);
@@ -49,8 +46,6 @@ export const searchInput = (inputClass, elementToHide, elementToSearch, uid) => 
 export const searchJSON = (listContainer, inputClass, json) => {
     let arr = [];
     // Select Container
-    // eslint-disable-next-line no-console
-    console.log(listContainer, inputClass, Object.values(json));
     let container = document.querySelector(listContainer);
     let searchVal = document.querySelector(inputClass).value.toUpperCase();
 
@@ -59,8 +54,6 @@ export const searchJSON = (listContainer, inputClass, json) => {
         json = JSON.parse(json);
     }
 
-    // eslint-disable-next-line no-console
-    console.log(searchVal);
     if (searchVal.length > 3) {
         let i = 0;
         Object.values(json).forEach(e=>{
@@ -92,8 +85,6 @@ export const searchJSON = (listContainer, inputClass, json) => {
         if (searcharray.length < 1) {
             getString('noresult', 'local_wb_faq').then(value => {
 
-                // eslint-disable-next-line no-console
-                console.log(value);
                 container.innerHTML = value;
                 return;
             }).catch(e => {
@@ -117,8 +108,6 @@ export const searchJSON = (listContainer, inputClass, json) => {
 
         getString('stringtooshort', 'local_wb_faq').then(value => {
 
-            // eslint-disable-next-line no-console
-            console.log(value);
             container.innerHTML = value;
             return;
         }).catch(e => {
@@ -132,8 +121,6 @@ export const searchJSON = (listContainer, inputClass, json) => {
 };
 
 export const init = (searchInputID, listContainer, elementToHide, elementToSearch, json = null) => {
-    // eslint-disable-next-line no-console
-    console.log("initSearch", searchInputID, listContainer);
 
     const searchInputElement = document.querySelector(searchInputID);
 
@@ -147,8 +134,6 @@ export const init = (searchInputID, listContainer, elementToHide, elementToSearc
 
 export const render = (data, container) => {
     // Render
-    // eslint-disable-next-line no-console
-    console.log(container);
 
     Templates.renderForPromise('local_wb_faq/searchbox', data).then(({html}) => {
         container.innerHTML = "";

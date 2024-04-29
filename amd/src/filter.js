@@ -25,21 +25,17 @@ var checked = {};
 var categories = [];
 /**
  * Initial function
- * @param {string} filtercontainer
- * @param {string} singledatacontainer
  */
-export const init = (filtercontainer, singledatacontainer) => {
+export const init = () => {
 
-  // eslint-disable-next-line no-console
-  console.log(filtercontainer, singledatacontainer);
   var allCheckboxes = document.querySelectorAll("input[type=checkbox]");
 
-  document.querySelectorAll(".form-group").forEach(function (e) {
+  document.querySelectorAll(".form-group").forEach(function(e) {
     categories.push(e.getAttribute("name"));
     getChecked(e.getAttribute("name"));
   });
 
-  Array.prototype.forEach.call(allCheckboxes, function (el) {
+  Array.prototype.forEach.call(allCheckboxes, function(el) {
     el.addEventListener("change", toggleCheckbox);
   });
 };
@@ -71,13 +67,9 @@ export const getChecked = (name) => {
  * Compares checked boxes with classes of Elements and shows or hides them.
  */
 export const setVisibility = () => {
-  /* eslint-disable no-console */
-  console.log(categories);
   allPlayers.forEach(function (el) {
     let display = true;
     categories.forEach(function (c) {
-      /* eslint-disable no-console */
-      console.log(el.classList);
       let intersection = checked[c].length
         ? Array.from(Object.values(el.dataset)).filter((x) =>
             checked[c].includes(x)

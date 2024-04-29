@@ -65,7 +65,7 @@ class support {
         $data->contactId = $client->contactid ?? 0;
         $data->accountId = $client->accountid ?? 0;
         $data->problemText = '';
-        $data->action = $data->action ?? get_string('supportactioncreate', 'local_wb_faq');
+        $data->action = $data->action ?? 'Anfrage';
         $data->sub = "Supportticket anlegen";
 
         $token = $jwt->return_token((array)$data);
@@ -100,6 +100,7 @@ class support {
             }
         }
 
+        $data->contactId = $client->contactid ?? 0;
         $data->accountId = $client->accountid ?? 0;
         $data->sub = "Meine Supporttickets";
         $token = $jwt->return_token((array)$data);
