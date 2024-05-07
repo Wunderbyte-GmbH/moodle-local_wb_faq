@@ -24,7 +24,6 @@ import Templates from "core/templates";
 import {increaseCounter} from "local_wb_faq/faqnavbar";
 import {get_string as getString} from "core/str";
 import Ajax from "core/ajax";
-import Notification from 'core/notification';
 
 const faqs = {};
 
@@ -161,6 +160,10 @@ function render(id, data, uid) {
   let templatedata = json[id] ?? null;
 
   if (!templatedata) {
+
+    // eslint-disable-next-line no-console
+    console.log('no templatedata for id: ', id, data);
+
     return;
   }
 
@@ -168,17 +171,9 @@ function render(id, data, uid) {
   templatedata.uid = uid;
 
   if (!templatedata || !templatedata.hasOwnProperty("parentid")) {
-      getString('entrydeleted', 'local_wb_faq').then(message => {
 
-        Notification.addNotification({
-            message,
-            type: "warning"
-        });
-        return;
-    }).catch(e => {
-        // eslint-disable-next-line no-console
-        console.log(e);
-    });
+    // eslint-disable-next-line no-console
+    console.error('no data or no parentid found', templatedata);
     return;
   }
 
@@ -186,10 +181,17 @@ function render(id, data, uid) {
     templatedata.parenttitle = getString("faq", "local_wb_faq");
   }
 
+  // eslint-disable-next-line no-console
+  console.log('templatedata: ', templatedata);
+
   // Select Container
   let container = document.querySelector(".local_wb_faq-" + uid);
 
   if (!container) {
+
+    // eslint-disable-next-line no-console
+    console.log('container not found, selector ', ".local_wb_faq-" + uid);
+
     return;
   }
 
