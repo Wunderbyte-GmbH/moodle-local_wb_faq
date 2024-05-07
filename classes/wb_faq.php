@@ -302,7 +302,7 @@ class wb_faq {
 
             if (has_capability('local/wb_faq:canedit', $context)) {
                 if ($record->enabled != 1) {
-                    unset($record->enabled);
+                    $record->enabled = false;
                 }
             } else {
                 if ($record->enabled != 1) {
