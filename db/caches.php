@@ -26,10 +26,10 @@ defined('MOODLE_INTERNAL') || die;
 
 $definitions = array(
     'faqcache' => array(
-        'mode' => cache_store::MODE_APPLICATION,
+        'mode' => cache_store::MODE_SESSION,
         'simplekeys' => true,
         'staticacceleration' => true,
-        'staticaccelerationsize' => 1,
+        'staticaccelerationsize' => 10,
         'invalidationevents' => ['setbackfaqlist']
     )
 );
