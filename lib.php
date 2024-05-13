@@ -75,6 +75,10 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
         'type' => 'mymessages',
     ]);
 
+    $teamurl = new moodle_url('/local/wb_faq/transfer.php', [
+        'type' => 'team',
+    ]);
+
     $output = '<div class="popover-region nav-link icon-no-margin dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button"
         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -91,7 +95,7 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
                 . get_string('supportmytickets', 'local_wb_faq') . '</a>
             <a class="dropdown-item" href="' . $supportstoerungburl->out() . '" target="_blank">'
                 . get_string('supportstoerung', 'local_wb_faq') . '</a>
-            <a class="dropdown-item" href="https://services.comm-unity.at/extranet/#!/mitarbeiter" target="_blank">'
+            <a class="dropdown-item" href="' . $teamurl->out() . '" target="_blank">'
                 . get_string('team', 'local_wb_faq') . '</a>
         </div>
     </div>';
