@@ -20,7 +20,7 @@
  */
 
 import DynamicForm from 'core_form/dynamicform';
-import {showSuccessNotification, showErrorNotification} from 'local_wb_faq/notifications';
+import {showErrorNotification} from 'local_wb_faq/notifications';
 
 const SELECTORS = {
     SUPPORTMESSAGEFORM: "[data-id='supportmessage-form']",
@@ -60,10 +60,10 @@ export async function listenToSelect(element) {
         // context as `contextid` query parameter
         dynamicForm.addEventListener(dynamicForm.events.FORM_SUBMITTED, (e) => {
 
-            if (e.detail.baseurl && e.detail.token) {
-                showSuccessNotification();
-                const url = e.detail.baseurl + "jwtaccess?jwt=" + e.detail.token;
+            e.preventDefault();
 
+            if (e.detail.baseurl && e.detail.token) {
+                const url = e.detail.baseurl + "jwtaccess?jwt=" + e.detail.token;
                 window.open(url, '_blank');
                 window.location.reload();
             } else {
