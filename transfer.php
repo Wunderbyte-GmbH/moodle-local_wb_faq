@@ -49,10 +49,10 @@ switch ($type) {
         unset($data->module);
         $data = support::send_ticket($data, );
         break;
-    case 'problem':
+    case 'ausbildung':
         unset($data->group);
         unset($data->module);
-        $data->action = 'Stoerung';
+        $data->action = 'Ausbildung';
         $data = support::send_ticket($data);
         break;
     case 'stoerung':

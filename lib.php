@@ -62,6 +62,11 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
     ]);
 
     // Create the links to the transfer.php.
+    $supportausbildungburl = new moodle_url('/local/wb_faq/transfer.php', [
+        'type' => 'ausbildung',
+    ]);
+
+    // Create the links to the transfer.php.
     $supportstoerungburl = new moodle_url('/local/wb_faq/transfer.php', [
         'type' => 'stoerung',
     ]);
@@ -78,7 +83,7 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="#">'
             . $modal . '</a>
-            <a class="dropdown-item" href="' . $supportvertrieburl->out() . '" target="_blank">'
+            <a class="dropdown-item" href="' . $supportausbildungburl->out() . '" target="_blank">'
                 . get_string('supportweiterbildung', 'local_wb_faq') . '</a>
             <a class="dropdown-item" href="' . $supportvertrieburl->out() . '" target="_blank">'
                 . get_string('supportvertrieb', 'local_wb_faq') . '</a>
