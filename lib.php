@@ -44,7 +44,7 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
     global $CFG, $COURSE, $PAGE, $DB;
 
     // Early bail out conditions.
-    if (!isloggedin() || isguestuser()) {
+    if (!isloggedin()) {
         return '';
     }
 
