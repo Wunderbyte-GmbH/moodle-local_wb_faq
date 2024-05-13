@@ -384,6 +384,7 @@ const editModalListener = event => {
                                 ielement.classList.replace('fa-eye', 'fa-eye-slash');
                             }
                             showSuccessNotification();
+                            window.location.reload();
                         } else {
                             window.location.reload();
                         }
