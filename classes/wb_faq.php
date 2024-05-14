@@ -408,7 +408,7 @@ class wb_faq {
      * Set courselist variable
      */
     public function set_courselist() {
-        $this->courselist = enrol_get_my_courses();
+        $this->courselist = enrol_get_my_courses(null, null, 0, [], true);
     }
     /**
      * Add Breadcrumbs to flat & hierarchical tree.
