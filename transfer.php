@@ -65,7 +65,7 @@ switch ($type) {
         unset($data->group);
         unset($data->module);
         unset($data->action);
-        $data->sub = 'Comm-Unitiy Mitarbeiter';
+        $data->sub = 'Comm-Unity Mitarbeiter';
         $data = support::send_ticket($data);
         break;
     case 'mymessages':

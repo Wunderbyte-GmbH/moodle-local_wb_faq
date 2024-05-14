@@ -66,8 +66,8 @@ class support {
         $data->accountId = $client->accountid ?? 0;
         if (empty($data->sub)) {
             $data->problemText = '';
+            $data->action = $data->action ?? 'Anfrage';
         }
-        $data->action = $data->action ?? 'Anfrage';
         $data->sub = $data->sub ?? "Supportticket anlegen";
 
         $token = $jwt->return_token((array)$data);
