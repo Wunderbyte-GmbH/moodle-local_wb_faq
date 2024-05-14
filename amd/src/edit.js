@@ -131,7 +131,10 @@ const editModalListener = event => {
 
     // Listen to events if you want to execute something on form submit.
     // Event detail will contain everything the process() function returned:
-    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, () => {
+    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, (e) => {
+
+        e.preventDefault();
+
         showSuccessNotification();
         if (uid) {
             reloadData(uid, parentid);
@@ -206,7 +209,9 @@ const editModalListener = event => {
 
     // Listen to events if you want to execute something on form submit.
     // Event detail will contain everything the process() function returned:
-    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, () => {
+    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, (e) => {
+
+        e.preventDefault();
 
         showSuccessNotification();
         if (uid) {

@@ -65,7 +65,10 @@ export async function listenToSelect(element) {
             if (e.detail.baseurl && e.detail.token) {
                 const url = e.detail.baseurl + "jwtaccess?jwt=" + e.detail.token;
                 window.open(url, '_blank');
-                window.location.reload();
+
+                setTimeout(() => {
+                    window.location.reload();
+                }, 200);
             } else {
                 // eslint-disable-next-line no-console
                 console.error('invalidredirect');
