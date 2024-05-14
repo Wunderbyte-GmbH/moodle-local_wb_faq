@@ -68,7 +68,7 @@ export async function listenToSelect(element) {
 
                 setTimeout(() => {
                     window.location.reload();
-                }, 200);
+                }, 400);
             } else {
                 // eslint-disable-next-line no-console
                 console.error('invalidredirect');
