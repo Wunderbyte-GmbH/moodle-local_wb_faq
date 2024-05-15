@@ -61,14 +61,12 @@ export async function listenToSelect(element) {
         dynamicForm.addEventListener(dynamicForm.events.FORM_SUBMITTED, (e) => {
 
             e.preventDefault();
+            e.stopPropagation();
 
             if (e.detail.baseurl && e.detail.token) {
                 const url = e.detail.baseurl + "jwtaccess?jwt=" + e.detail.token;
-                window.open(url, '_blank');
-
-                setTimeout(() => {
-                    window.location.reload();
-                }, 1000);
+                openInNewTab(url);
+                window.location.reload();
             } else {
                 // eslint-disable-next-line no-console
                 console.error('invalidredirect');
@@ -76,3 +74,15 @@ export async function listenToSelect(element) {
             }
         });
 }
+
+/**
+ * To open in new tab.
+ * @param {*} href
+ */
+function openInNewTab(href) {
+    Object.assign(document.createElement('a'), {
+      target: '_blank',
+      rel: 'noopener noreferrer',
+      href: href,
+    }).click();
+  }
