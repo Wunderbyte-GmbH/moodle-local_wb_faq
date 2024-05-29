@@ -203,7 +203,20 @@ function render(id, data, uid) {
 
       Templates.replaceNodeContents(".local_wb_faq-" + uid, html, js);
 
+      // Remove button attribute for
       const breadcrumbs = container.querySelectorAll('.wb-breadcrumb div');
+
+      breadcrumbs.forEach(breadcrumb => {
+        try {
+          if (breadcrumb.dataset.targetid != 0
+              && !json[breadcrumb.dataset.targetid]) {
+                throw new Error();
+              }
+        } catch (e) {
+          breadcrumb.classList.add('d-none');
+        }
+      });
+
       const last = breadcrumbs[breadcrumbs.length - 1];
 
       last.classList.remove(['btn-primary']);
