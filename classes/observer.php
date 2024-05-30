@@ -15,17 +15,38 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Event observers used in forum.
+ *
  * @package    local_wb_faq
- * @copyright  2022 Wunderbyte GmbH (info@wunderbyte.at)
- * @author     Thomas Winkler
+ * @copyright  2024 Georg Maißer <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+namespace local_wb_faq;
 
-$observers = [
-    [
-        'eventname' => '\core\event\user_loggedin',
-        'callback' => '\local_wb_faq\observer::user_loggedin',
-    ],
-];
+/**
+ * Event observer for local_wb_faq.
+ */
+class observer {
+
+    /**
+     * Triggered via payment_error event from any payment provider
+     * If we receive a payment error, check for the order id in our shopping cart history.
+     * And set it to error, if it was pending.
+     *
+     * @param \core\event\base $event
+     * @return string
+     */
+    public static function user_loggedin(\core\event\base $event): string {
+
+        global $USER;
+
+        $data = $event->get_data();
+
+        if (get_config('local_wb_faq', 'draweropen')) {
+            set_user_preference('drawer-open-block', "1", $USER->id);
+        }
+
+        return 'registered_payment_error';
+    }
+}

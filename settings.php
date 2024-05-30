@@ -76,6 +76,11 @@ if ($hassiteconfig) {
                 get_string('debug', 'local_wb_faq'),
                 get_string('debug_desc', 'local_wb_faq'), 0));
 
+    $settings->add(
+        new admin_setting_configcheckbox($componentname . '/draweropen',
+                get_string('draweropen', 'local_wb_faq'),
+                get_string('draweropen_desc', 'local_wb_faq'), 0));
+
     $ADMIN->add('localplugins', new admin_category($componentname, get_string('pluginname', $componentname)));
     $ADMIN->add($componentname, $settings);
 }

@@ -80,6 +80,10 @@ $string['root'] = 'Top Level';
 
 $string['wb_faq:canedit'] = 'Manage FAQ';
 
+$string['draweropen'] = "Block open after login";
+$string['draweropen_desc'] = "With this setting, the block on the right side can be forced open after every new login from a user.";
+
+
 // Shortcodes.
 
 $string['displayfaqs'] = "Display FAQs";

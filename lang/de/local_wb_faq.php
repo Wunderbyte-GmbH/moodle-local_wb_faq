@@ -80,6 +80,9 @@ $string['root'] = 'Oberste Ebene';
 
 $string['wb_faq:canedit'] = 'Verwalte FAQ';
 
+$string['draweropen'] = "Block offen nach login";
+$string['draweropen_desc'] = "Mit dieser Einstellung kann erzwungen werden, dass der Block auf der rechten Seite nach jedem neuerlichen Login offen ist.";
+
 // Shortcodes.
 $string['displayfaqs'] = "Zeige FAQs";
 $string['categorynotfound'] = 'Kategorie "{$a}" nicht gefunden';
