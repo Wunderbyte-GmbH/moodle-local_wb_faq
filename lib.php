@@ -78,7 +78,7 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
         'type' => 'team',
     ]);
 
-    $output = '<div class="popover-region nav-link icon-no-margin dropdown">
+    $output = '<div class="popover-region nav-link icon-no-margin dropdown d-none">
         <button class="btn btn-secondary dropdown-toggle" type="button"
         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         '. get_string('support', 'local_wb_faq') .'
@@ -86,15 +86,15 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="#">'
             . $modal . '</a>
-            <a class="dropdown-item" href="' . $supportausbildungburl->out() . '" target="_blank">'
+            <a class="dropdown-item"data-id="link-weiterbildung" href="' . $supportausbildungburl->out() . '" target="_blank">'
                 . get_string('supportweiterbildung', 'local_wb_faq') . '</a>
-            <a class="dropdown-item" href="' . $supportvertrieburl->out() . '" target="_blank">'
+            <a class="dropdown-item" data-id="link-vertrieb" href="' . $supportvertrieburl->out() . '" target="_blank">'
                 . get_string('supportvertrieb', 'local_wb_faq') . '</a>
-            <a class="dropdown-item" href="' . $supportmyticketsurl->out() . '" target="_blank">'
+            <a class="dropdown-item" data-id="link-meine-tickets" href="' . $supportmyticketsurl->out() . '" target="_blank">'
                 . get_string('supportmytickets', 'local_wb_faq') . '</a>
-            <a class="dropdown-item" href="' . $supportstoerungburl->out() . '" target="_blank">'
+            <a class="dropdown-item" data-id="link-stoerung" href="' . $supportstoerungburl->out() . '" target="_blank">'
                 . get_string('supportstoerung', 'local_wb_faq') . '</a>
-            <a class="dropdown-item" href="' . $teamurl->out() . '" target="_blank">'
+            <a class="dropdown-item" data-id="link-team" href="' . $teamurl->out() . '" target="_blank">'
                 . get_string('team', 'local_wb_faq') . '</a>
         </div>
     </div>';
@@ -134,7 +134,6 @@ function local_wb_faq_pluginfile($course, $birecordorcm, $context, $filearea, $a
             send_file_not_found();
         }
     }
-
 
     \core\session\manager::write_close();
     send_stored_file($file, null, 0, $forcedownload, $options);
