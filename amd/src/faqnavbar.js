@@ -188,7 +188,7 @@ function addLinks() {
 
   // First, fetch the url from the corresponding but hidden link in the navbar.
 
-  const ticketbuttons = document.querySelectorAll('a.[data-id="ticket-aufgeben"]');
+  const ticketbuttons = document.querySelectorAll('a[data-id="ticket-aufgeben"]');
 
   if (ticketbuttons) {
     ticketbuttons.forEach(button => {
@@ -200,7 +200,7 @@ function addLinks() {
   }
 
   const vertriebslink = document.querySelector('[data-id="link-vertrieb"]');
-  const vertriebbuttons = document.querySelectorAll('a.[data-id="anfrage-vertrieb"]');
+  const vertriebbuttons = document.querySelectorAll('a[data-id="anfrage-vertrieb"]');
   if (vertriebbuttons) {
     vertriebbuttons.forEach(button => {
       button.setAttribute('href', vertriebslink);
@@ -209,7 +209,7 @@ function addLinks() {
   }
 
   const stoerunglink = document.querySelector('[data-id="link-stoerung"]');
-  const stoerungsbuttons = document.querySelectorAll('a.[data-id="stoerung-melden"]');
+  const stoerungsbuttons = document.querySelectorAll('a[data-id="stoerung-melden"]');
   if (stoerungsbuttons) {
     stoerungsbuttons.forEach(button => {
       button.setAttribute('href', stoerunglink);
@@ -218,7 +218,7 @@ function addLinks() {
   }
 
   const meinetickets = document.querySelector('[data-id="link-meine-tickets"]');
-  const meineticketsbuttons = document.querySelectorAll('a.[data-id="meine-tickets"]');
+  const meineticketsbuttons = document.querySelectorAll('a[data-id="meine-tickets"]');
   if (meineticketsbuttons) {
     meineticketsbuttons.forEach(button => {
       button.setAttribute('href', meinetickets);
@@ -227,7 +227,7 @@ function addLinks() {
   }
 
   const weiterbildungslink = document.querySelector('[data-id="link-weiterbildung"]');
-  const weiterbildungsbuttons = document.querySelectorAll('a.[data-id="weiterbildung"]');
+  const weiterbildungsbuttons = document.querySelectorAll('a[data-id="weiterbildung"]');
   if (weiterbildungsbuttons) {
     weiterbildungsbuttons.forEach(button => {
       button.setAttribute('href', weiterbildungslink);
