@@ -78,7 +78,7 @@ function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
         'type' => 'team',
     ]);
 
-    $output = '<div class="popover-region nav-link icon-no-margin dropdown d-none">
+    $output = '<div class="popover-region nav-link icon-no-margin dropdown">
         <button class="btn btn-secondary dropdown-toggle" type="button"
         id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         '. get_string('support', 'local_wb_faq') .'
