@@ -204,20 +204,32 @@ function render(id, data, uid) {
       Templates.replaceNodeContents(".local_wb_faq-" + uid, html, js);
 
       // Remove button attribute for
-      const breadcrumbs = container.querySelectorAll('.wb-breadcrumb div');
+      const breadcrumbs = container.querySelectorAll('.wb-breadcrumb div.btn');
 
       breadcrumbs.forEach(breadcrumb => {
         try {
           if (breadcrumb.dataset.targetid != 0
               && !json[breadcrumb.dataset.targetid]) {
                 throw new Error();
-              }
+            }
         } catch (e) {
           breadcrumb.classList.add('d-none');
         }
       });
 
       const last = breadcrumbs[breadcrumbs.length - 1];
+      const first = breadcrumbs[0];
+
+      // eslint-disable-next-line no-console
+      console.log('id', id);
+
+      if (id != 0) {
+        // eslint-disable-next-line no-console
+        console.log('first', first);
+        first.classList.remove(['btn-primary']);
+        first.classList.add(['btn-nolabel']);
+        first.removeAttribute('data-action');
+      }
 
       last.classList.remove(['btn-primary']);
       last.classList.add(['btn-nolabel']);
