@@ -165,9 +165,6 @@ function render(id, data, uid) {
 
   if (!templatedata) {
 
-    // eslint-disable-next-line no-console
-    console.log('no templatedata for id: ', id, data);
-
     return;
   }
 
@@ -185,16 +182,10 @@ function render(id, data, uid) {
     templatedata.parenttitle = getString("faq", "local_wb_faq");
   }
 
-  // eslint-disable-next-line no-console
-  console.log('templatedata: ', templatedata);
-
   // Select Container
   let container = document.querySelector(".local_wb_faq-" + uid);
 
   if (!container) {
-
-    // eslint-disable-next-line no-console
-    console.log('container not found, selector ', ".local_wb_faq-" + uid);
 
     return;
   }
@@ -224,15 +215,7 @@ function render(id, data, uid) {
       const last = breadcrumbs[breadcrumbs.length - 1];
       const first = breadcrumbs[0];
 
-      // eslint-disable-next-line no-console
-      console.log('id', id);
-
-      // eslint-disable-next-line no-console
-      console.log('initialroot', initialroot);
-
       if (initialroot != 0) {
-        // eslint-disable-next-line no-console
-        console.log('first', first);
         first.classList.remove(['btn-primary']);
         first.classList.add(['btn-nolabel']);
         first.removeAttribute('data-action');
