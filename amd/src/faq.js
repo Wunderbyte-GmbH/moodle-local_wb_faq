@@ -27,6 +27,8 @@ import Ajax from "core/ajax";
 
 const faqs = {};
 
+var initialroot = 0;
+
 const SELECTORS = {
   SUPPORTMESSAGE_MODULE: 'div[data-id="supportmessage-form"] input[name="module"][type="hidden"]',
   SUPPORTMESSAGE_SUPPLEMENT: 'div[data-id="supportmessage-form"] input[name="group"][type="hidden"]',
@@ -47,6 +49,8 @@ export const init = (data, root, uid) => {
   }
 
   faqs[uid] = true;
+
+  initialroot = root;
 
   render(root, data, uid);
   addEvents(data, root, uid);
@@ -223,17 +227,23 @@ function render(id, data, uid) {
       // eslint-disable-next-line no-console
       console.log('id', id);
 
-      if (id != 0) {
+      // eslint-disable-next-line no-console
+      console.log('initialroot', initialroot);
+
+      if (initialroot != 0) {
         // eslint-disable-next-line no-console
         console.log('first', first);
         first.classList.remove(['btn-primary']);
         first.classList.add(['btn-nolabel']);
         first.removeAttribute('data-action');
+        first.classList.add('d-none');
       }
 
       last.classList.remove(['btn-primary']);
       last.classList.add(['btn-nolabel']);
       last.removeAttribute('data-action');
+      last.classList.add('d-none');
+
 
       return;
     })
