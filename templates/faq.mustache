@@ -41,26 +41,23 @@
     <a class="local_wb_faq_edit_button local_wb_faq_edit_question btn btn-secondary" data-faqroot="{{root}}" data-uid="{{uid}}">{{#str}} addquestion, local_wb_faq {{/str}} <i class="fa fa-plus"></i></a>
   </span>
   {{/canedit}}
-<div class="d-flex mt-2">
-  {{#breadcrumbs}}
-    <div class="btn btn-primary mb-2 px-4 mr-2" data-action="goto" data-targetid='{{id}}'>{{name}}</div>
-  {{/breadcrumbs}}
+
+  <!-- Existing code for displaying breadcrumbs -->
+  <div class="d-flex mt-2">
+    {{#breadcrumbs}}
+      <div class="btn btn-primary mb-2 px-4 mr-2" data-action="goto" data-targetid='{{id}}'>{{name}}</div>
+    {{/breadcrumbs}}
+  </div>
 </div>
-</div>
+
 <ul class="draggable-cat list-unstyled">
-{{#categories}}
-  {{>local_wb_faq/category}}
-{{/categories}}
-</ul>
-<ul class="accordion draggable list-unstyled" id="wb-faq-accordion">
-{{#entries}}
-  {{>local_wb_faq/entry}}
-{{/entries}}
+  {{#categories}}
+    {{>local_wb_faq/category}}
+  {{/categories}}
 </ul>
 
-{{#js}}
-require(['local_wb_faq/reordering'], function(reordering) {
-  reordering.init('.draggable');
-  reordering.init('.draggable-cat');
-});
-{{/js}}
+<ul class="accordion draggable list-unstyled" id="wb-faq-accordion">
+  {{#entries}}
+    {{>local_wb_faq/entry}}
+  {{/entries}}
+</ul>

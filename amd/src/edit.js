@@ -80,7 +80,6 @@ const editModalListener = event => {
         openEditCategoriesModal(event);
 
     } else if (button.classList.contains('local_wb_faq_delete_category')) {
-
         confirmDeleteEntry(event);
     }
 };
@@ -132,15 +131,15 @@ const editModalListener = event => {
     // Listen to events if you want to execute something on form submit.
     // Event detail will contain everything the process() function returned:
     modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, (e) => {
-
         e.preventDefault();
-
         showSuccessNotification();
         if (uid) {
             reloadData(uid, parentid);
         } else {
             window.location.reload();
         }
+        // Properly close the modal after the form is submitted
+        modalForm.modal.hide();
     });
 
     // Show the form.
@@ -219,6 +218,8 @@ const editModalListener = event => {
         } else {
             window.location.reload();
         }
+        // Properly close the modal after the form is submitted
+        modalForm.modal.hide();
     });
 
     // Show the form.

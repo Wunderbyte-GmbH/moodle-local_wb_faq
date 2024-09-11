@@ -86,8 +86,6 @@ class editCategoriesForm extends dynamic_form {
      * @return stdClass|null
      */
     public function process_dynamic_submission(): stdClass {
-        global $DB;
-
         // This is the correct place to save and update semesters.
         $data = $this->get_data();
 
@@ -108,8 +106,6 @@ class editCategoriesForm extends dynamic_form {
     public function definition(): void {
         global $DB;
         $mform = $this->_form;
-        $ajaxformdata = $this->_ajaxformdata;
-
         $mform->addElement('html', '<div id="wb_faq_quickedit-form">');
         $mform->addElement('html', '<div class="container"><div class="row"><div class="col-md-6">');
         $mform->addElement('text', 'title', get_string('input:title', 'local_wb_faq'));
@@ -132,10 +128,8 @@ class editCategoriesForm extends dynamic_form {
             'noselectionstring' => get_string('allareas', 'search'),
         );
 
-        $mform->addElement('autocomplete', 'courseid', get_string('choosecourse', 'local_wb_faq'), $coursesarray, $options);
-        $mform->addRule('courseid', get_string('required'), 'required');
-
         $mform->addElement('hidden', 'type', 0);
+        $mform->addElement('hidden', 'nobuttons', 0);
 
         $mform->addElement('html', '</div><div class="col-md-6">');
         $sql = "SELECT id, title From {local_wb_faq_entry} WHERE type = '0'";
@@ -147,6 +141,11 @@ class editCategoriesForm extends dynamic_form {
         }
         $mform->addElement('select', 'parentid', get_string('input:parentid', 'local_wb_faq'), $selectinput);
         $mform->addElement('html', '</div></div><div class="row"><div class="col-md-12">');
+        $mform->addElement('html', '<div class="form-group row" style="margin-bottom: 275px;">');  // Added margin-bottom
+        $mform->addElement('html', '<label class="col-md-4 col-form-label">' . get_string('choosecourse', 'local_wb_faq') . '</label>');
+        $mform->addElement('html', '<div class="col-md-8">');
+        $mform->addElement('autocomplete', 'courseid', '', $coursesarray, $options);  // Leave label empty since it's handled above
+        $mform->addElement('html', '</div></div>');
 
         $mform->addElement('hidden', 'id');
 

@@ -22,7 +22,6 @@
 import Templates from "core/templates";
 
 import {increaseCounter} from "local_wb_faq/faqnavbar";
-import {get_string as getString} from "core/str";
 import Ajax from "core/ajax";
 
 const faqs = {};
@@ -155,7 +154,6 @@ function addEvents(data, root, uid) {
  * @param {string} uid
  */
 function render(id, data, uid) {
-
   let json = data;
   if (typeof data === 'string') {
     json = JSON.parse(data);
@@ -163,30 +161,24 @@ function render(id, data, uid) {
 
   let templatedata = json[id] ?? null;
 
+  // Ensure templatedata has default values if empty
   if (!templatedata) {
-
-    return;
+    templatedata = {
+      root: id,
+      uid: uid,
+      canedit: true,
+      categories: [],
+      entries: []
+    };
   }
 
   templatedata.root = id;
   templatedata.uid = uid;
 
-  if (!templatedata || !templatedata.hasOwnProperty("parentid")) {
-
-    // eslint-disable-next-line no-console
-    console.error('no data or no parentid found', templatedata);
-    return;
-  }
-
-  if (templatedata.parentid == "") {
-    templatedata.parenttitle = getString("faq", "local_wb_faq");
-  }
-
   // Select Container
   let container = document.querySelector(".local_wb_faq-" + uid);
 
   if (!container) {
-
     return;
   }
 
@@ -197,7 +189,6 @@ function render(id, data, uid) {
     .then(({html, js}) => {
 
       Templates.replaceNodeContents(".local_wb_faq-" + uid, html, js);
-
       // Remove button attribute for
       const breadcrumbs = container.querySelectorAll('.wb-breadcrumb div.btn');
 
@@ -245,28 +236,35 @@ export const reloadData = (uid, parentid) => {
   loadData(uid, parentid);
 };
 
-export const loadData = (uid, parentid) =>
-  Ajax.call([
-    {
-      methodname: "local_wb_faq_get_faq_data",
-      args: {},
-      done: function(data) {
-        let newdata = JSON.parse(data.json);
+export const loadData = (uid, parentid) => {
+  Ajax.call([{
+    methodname: "local_wb_faq_get_faq_data",
+    args: {},
+    done: function(data) {
+      let newdata = JSON.parse(data.json);
 
-        if (!uid) {
-          return newdata;
-        }
+      // Provide default data if nothing is returned
+      if (!newdata || Object.keys(newdata).length === 0) {
+        newdata = {
+          "0": {
+            parentid: '',
+            title: 'Welcome to the FAQ',
+            entries: []
+          }
+        };
+      }
 
+      if (uid) {
         addEvents(newdata, parentid, uid);
         render(parentid, newdata, uid);
-        return '';
-      },
-      fail: function(ex) {
+      }
+    },
+    fail: function(ex) {
         // eslint-disable-next-line no-console
         console.log(ex);
-      },
     },
-  ]);
+  }]);
+};
 
 /**
  *
