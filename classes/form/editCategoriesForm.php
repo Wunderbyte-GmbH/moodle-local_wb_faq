@@ -60,10 +60,10 @@ class editCategoriesForm extends dynamic_form {
     public function set_data_for_dynamic_submission(): void {
         global $DB;
 
-        $data = new stdClass;
+        $data = new stdClass();
 
         if ($this->_ajaxformdata['id'] && $this->_ajaxformdata['id'] > 0) {
-            $data = new stdClass;
+            $data = new stdClass();
             $data = $DB->get_record('local_wb_faq_entry', array('id' => $this->_ajaxformdata['id']));
             $content = $data->content;
             unset($data->content);

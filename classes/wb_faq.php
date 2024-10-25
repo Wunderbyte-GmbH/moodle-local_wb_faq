@@ -541,14 +541,17 @@ class wb_faq {
 
         $DB->update_record('local_wb_faq_entry', $data);
 
-        $context = \context_system::instance();
+        $context = context_system::instance();
         $userid = $USER->id;
-        $event = \local_wb_faq\event\faq_entry_added::create(
-            array(
-             'objectid' => $id,
-             'context' => $context,
-             'relateduserid' => $userid));
-        $event->trigger();
+        // $event = \local_wb_faq\event\faq_entry_added::create(
+        //     [
+        //         'objectid' => $id,
+        //         'context' => $context,
+        //         'relateduserid' => $userid,
+        //         'other' => [],
+        //     ]
+        // );
+        // $event->trigger();
 
         cache_helper::purge_by_event('setbackfaqlist');
 
@@ -608,18 +611,21 @@ class wb_faq {
     public static function delete_entry(int $id) {
         global $DB, $USER;
 
-        $result = $DB->delete_records('local_wb_faq_entry', array('id' => $id));
+        $result = $DB->delete_records('local_wb_faq_entry', ['id' => $id]);
 
         cache_helper::purge_by_event('setbackfaqlist');
         if ($result) {
-            $context = \context_system::instance();
+            $context = context_system::instance();
             $userid = $USER->id;
-            $event = \local_wb_faq\event\faq_entry_added::create(
-                array(
-                    'objectid' => $id,
-                    'context' => $context,
-                    'relateduserid'    => $userid));
-            $event->trigger();
+            // $event = \local_wb_faq\event\faq_entry_deleted::create(
+            //     [
+            //         'objectid' => $id,
+            //         'context' => $context,
+            //         'relateduserid' => $userid,
+            //         'other' => [],
+            //     ]
+            // );
+            // $event->trigger();
         }
         return $result ? 1 : 0;
     }

@@ -53,11 +53,6 @@ if ($hassiteconfig) {
             '', 15, PARAM_INT));
 
     $settings->add(
-        new admin_setting_configtext('local_wb_faq/supportmessagebaseurl',
-            get_string('supportmessagebaseurl', 'local_wb_faq'),
-            '', 15, PARAM_URL));
-
-    $settings->add(
         new admin_setting_configtext('local_wb_faq/jwtsecret',
             get_string('jwtsecret', 'local_wb_faq'),
             '', 15, PARAM_TEXT));
