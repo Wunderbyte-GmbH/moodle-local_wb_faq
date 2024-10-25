@@ -72,6 +72,7 @@ class editCategoriesForm extends dynamic_form {
         } else {
             $data->parentid = $this->_ajaxformdata['parentid'];
             $data->type = $this->_ajaxformdata['type'];
+            $data->courseid = 1;
         }
 
         if ($group = $this->_ajaxformdata['supplement'] ?? null) {
