@@ -233,3 +233,7 @@ input.wb-faq-create-ticket-button::after {
   font-family: 'FontAwesome', 'Font Awesome 6 Free';
   margin-left: 5px;
 }
+
+.hidefaq {
+  display: none;
+}

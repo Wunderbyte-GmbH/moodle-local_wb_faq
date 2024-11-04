@@ -199,7 +199,7 @@ function render(id, data, uid) {
                 throw new Error();
             }
         } catch (e) {
-          breadcrumb.classList.add('d-none');
+          breadcrumb.classList.add('hidefaq');
         }
       });
 
@@ -210,13 +210,13 @@ function render(id, data, uid) {
         first.classList.remove(['btn-primary']);
         first.classList.add(['btn-nolabel']);
         first.removeAttribute('data-action');
-        first.classList.add('d-none');
+        first.classList.add('hidefaq');
       }
 
       last.classList.remove(['btn-primary']);
       last.classList.add(['btn-nolabel']);
       last.removeAttribute('data-action');
-      last.classList.add('d-none');
+      last.classList.add('hidefaq');
 
 
       return;
