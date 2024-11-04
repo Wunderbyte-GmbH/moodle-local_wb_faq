@@ -161,6 +161,8 @@ $string['accesonlyowncourses_desc'] = 'NutzerInnen können nur FAQs sehen, die K
 $string['entrydeleted'] = "Eintrag wurde gelöscht";
 $string['nocourseid'] = "Bitte wählen Sie einen Kurs aus, dem dieser Eintrag zugeordnet ist";
 
+$string['mapstrings'] = 'Ändere Breadcrumb Namen mit einer JSON Zuordnung e.g. {"Cat1": "User"}';
+
 // Caching Definitions.
 $string['cachedef_faqcache'] = "Frequently Asked Questions.";
 

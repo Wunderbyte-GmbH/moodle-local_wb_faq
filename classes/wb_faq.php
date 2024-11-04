@@ -413,6 +413,17 @@ class wb_faq {
     public function set_courselist() {
         $this->courselist = enrol_get_my_courses(null, null, 0, [], true);
     }
+
+    /**
+     * Get mapped strings
+     *
+     * @return array
+     */
+    public static function get_string_map() {
+        $stringmap = json_decode(get_config('local_wb_faq', 'mapstrings'), true);
+        return $stringmap;
+    }
+
     /**
      * Add Breadcrumbs to flat & hierarchical tree.
      *
@@ -421,6 +432,7 @@ class wb_faq {
      * @return void
      */
     private static function add_breadcrumb(&$node, &$flattree) {
+        $map = self::get_string_map() ?? [];
 
         if (!$node) {
             return;
@@ -436,9 +448,11 @@ class wb_faq {
         if (isset($node->categories)) {
             foreach ($node->categories as $category) {
                 $category->breadcrumbs = $node->breadcrumbs ?? [];
+                $title = $map[$category->title] ?? $category->title;
                 $category->breadcrumbs[] = [
-                    'name' => $category->title,
-                    'id' => $category->id ?? 0
+                    'name' => $title,
+                    'id' => $category->id ?? 0,
+                    'datacat' => $category->title
                 ];
 
                 self::add_breadcrumb($category, $flattree);
@@ -446,6 +460,7 @@ class wb_faq {
         }
         if (isset($node->id)) {
             $flattree[$node->id]->breadcrumbs = $node->breadcrumbs;
+            $flattree[$node->id]->headertitle = end($node->breadcrumbs);
         }
     }
 

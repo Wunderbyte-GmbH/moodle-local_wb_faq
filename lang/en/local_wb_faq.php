@@ -166,6 +166,8 @@ $string['nocourseid'] = "Please select a course for this entry.";
 $string['supportactioncreate'] = 'Create';
 $string['createsupportticket'] = 'Create support ticket';
 
+$string['mapstrings'] = 'Change breadcrumb strings in a JSON Map e.g. {"Cat1": "User"}';
+
 // Support.
 $string['support'] = 'Support';
 $string['supportonlineticket'] = 'Online-Ticket';
