@@ -453,7 +453,7 @@ class wb_faq {
                 $category->breadcrumbs[] = [
                     'name' => $title,
                     'id' => $category->id ?? 0,
-                    'datacat' => $category->title
+                    'datacat' => $category->title,
                 ];
 
                 self::add_breadcrumb($category, $flattree);
@@ -462,6 +462,7 @@ class wb_faq {
         if (isset($node->id)) {
             $flattree[$node->id]->breadcrumbs = $node->breadcrumbs;
             $flattree[$node->id]->headertitle = end($node->breadcrumbs);
+            end($flattree[$node->id]->breadcrumbs)->active = "true";
         }
     }
 
