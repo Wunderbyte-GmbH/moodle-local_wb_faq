@@ -345,6 +345,7 @@ class wb_faq {
                     }
                 }
             }
+            $record->title = format_string($record->title);
             // If its a question.
             if ($record->type == 1) {
 
@@ -355,6 +356,8 @@ class wb_faq {
                     'local_wb_faq',
                     'faq_entry',
                     $record->id);
+
+                $record->content = format_text($record->content);
 
                 if (!isset($dataarr[$record->parentid])) {
                     $dataarr[$record->parentid] = new stdClass();

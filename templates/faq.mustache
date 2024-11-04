@@ -61,3 +61,11 @@
     {{>local_wb_faq/entry}}
   {{/entries}}
 </ul>
+
+
+{{#js}}
+require(['local_wb_faq/reordering'], function(reordering) {
+  reordering.init('.draggable');
+  reordering.init('.draggable-cat');
+});
+{{/js}}
