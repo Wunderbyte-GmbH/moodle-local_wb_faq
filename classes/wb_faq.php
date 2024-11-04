@@ -460,9 +460,12 @@ class wb_faq {
             }
         }
         if (isset($node->id)) {
+            if (!empty($node->breadcrumbs)) {
+                $lastkey = array_key_last($node->breadcrumbs);
+                $node->breadcrumbs[$lastkey]['active'] = true;
+            }
             $flattree[$node->id]->breadcrumbs = $node->breadcrumbs;
             $flattree[$node->id]->headertitle = end($node->breadcrumbs);
-            end($flattree[$node->id]->breadcrumbs)->active = "true";
         }
     }
 
