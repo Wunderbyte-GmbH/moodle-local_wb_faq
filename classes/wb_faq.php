@@ -441,6 +441,7 @@ class wb_faq {
         if (!isset($node->breadcrumbs)) {
             $node->breadcrumbs[] = [
                 'name' => $node->title ?? get_string('faq', 'local_wb_faq'),
+                'datacat' => $node->title ?? get_string('faq', 'local_wb_faq'),
                 'id' => $node->id ?? 0
             ];
         }
