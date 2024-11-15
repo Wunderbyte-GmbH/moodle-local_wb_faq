@@ -50,16 +50,16 @@ if ($hassiteconfig) {
     $settings->add(
         new admin_setting_configtext('local_wb_faq/minmessagelength',
             get_string('minmessagelength', 'local_wb_faq'),
-            '', 15, PARAM_INT));
+            '', '', PARAM_INT));
 
     $settings->add(
         new admin_setting_configtext('local_wb_faq/jwtsecret',
             get_string('jwtsecret', 'local_wb_faq'),
-            '', 15, PARAM_TEXT));
+            '', '', PARAM_TEXT));
     $settings->add(
         new admin_setting_configtext('local_wb_faq/jwtapp',
             get_string('jwtapp', 'local_wb_faq'),
-            '', 15, PARAM_TEXT));
+            '', '', PARAM_TEXT));
     $settings->add(
         new admin_setting_configtext('local_wb_faq/mapstrings',
             get_string('mapstrings', 'local_wb_faq'),
