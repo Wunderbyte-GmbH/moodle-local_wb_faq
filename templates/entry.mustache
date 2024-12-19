@@ -36,7 +36,7 @@
 
 <li class="accordion-item" data-id="{{id}}" data-sortorder="{{sortorder}}">
   {{#canedit}}
-  <span tabindex="0" role="button" aria-haspopup="true" data-drag-type="move" title="{{title}}">
+  <span tabindex="0" role="button" aria-haspopup="true" data-drag-type="move" title="{{{title}}}">
     <i class="fa fa-arrows"></i>
   </span>
   {{/canedit}}
@@ -45,7 +45,7 @@
       <h5 class="accordion-header m-0" id="heading-{{id}}-{{uid}}">
         <button class="btn btn-link btn-block text-left collapsed" type="button" data-toggle="faqcollapse" data-target="#collapse-{{id}}-{{uid}}" aria-expanded="{{#open}}true{{/open}}{{^open}}false{{/open}}" aria-controls="collapse-{{id}}-{{uid}}">
           <i class="fa fa-angle-double-right mr-3"></i>
-          {{title}}
+          {{{title}}}
           {{#canedit}}
             <span class="wb_faq_edit_entry_elements">
               {{#enabled}}
