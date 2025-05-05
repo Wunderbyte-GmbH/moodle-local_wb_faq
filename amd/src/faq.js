@@ -87,12 +87,14 @@ function addEvents(data, root, uid) {
             document
               .querySelector(button.dataset.target)
               .classList.remove("hide");
+            button.setAttribute('aria-expanded', 'true'); 
           } else {
             button.classList.add("collapsed");
             document.querySelector(button.dataset.target).classList.add("hide");
             document
               .querySelector(button.dataset.target)
               .classList.remove("show");
+              button.setAttribute('aria-expanded', 'false'); 
           }
         }
         if (e.target.dataset.action == "goto") {
@@ -116,12 +118,14 @@ function addEvents(data, root, uid) {
           document
             .querySelector(button.dataset.target)
             .classList.remove("hide");
+          button.setAttribute('aria-expanded', 'true'); 
         } else {
           button.classList.add("collapsed");
           document.querySelector(button.dataset.target).classList.add("hide");
           document
             .querySelector(button.dataset.target)
             .classList.remove("show");
+          button.setAttribute('aria-expanded', 'false'); 
         }
       }
       if (e.target.dataset.action == "goto") {
