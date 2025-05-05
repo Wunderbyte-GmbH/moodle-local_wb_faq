@@ -35,6 +35,7 @@ $PAGE->set_url(new moodle_url('/local/wb_faq/index.php', array()));
 $title = "FAQ";
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
+$PAGE->set_pagelayout('frontpage');
 
 echo $OUTPUT->header();
 
@@ -42,7 +43,7 @@ $renderer = $PAGE->get_renderer('local_wb_faq');
 
 $data = new display_search($USER->id, 0);
 echo $renderer->render_display_search($data);
-$data = new faq_list($USER->id, 0, true);
+$data = new faq_list($USER->id, 0, false);
 $return = $data->export_for_template($renderer);
 echo $renderer->render_list_faq($data);
 echo $OUTPUT->footer();
