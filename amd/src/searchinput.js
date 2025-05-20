@@ -28,7 +28,7 @@ var searcharray = [];
 export const searchInput = (inputClass, elementToHide, elementToSearch) => {
 
     let input, filter, li, a, i, txtValue;
-    input = normalizeString(document.querySelector(inputClass));
+    input = document.querySelector(inputClass);
     filter = normalizeString(input.value.toUpperCase());
     li = document.querySelectorAll(elementToHide);
     for (i = 0; i < li.length; i++) {
@@ -53,7 +53,7 @@ export const searchJSON = (listContainer, inputClass, json) => {
     let arr = [];
     // Select Container
     let container = document.querySelector(listContainer);
-    let searchVal = normalizeString(document.querySelector(inputClass).value.toUpperCase());
+    let searchVal = normalizeString(document.querySelector(inputClass).value);
 
     // Make sure we have parsed json.
     if (typeof json === 'string') {
