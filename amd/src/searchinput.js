@@ -28,12 +28,12 @@ var searcharray = [];
 export const searchInput = (inputClass, elementToHide, elementToSearch) => {
 
     let input, filter, li, a, i, txtValue;
-    input = document.querySelector(inputClass);
-    filter = input.value.toUpperCase();
+    input = normalizeString(document.querySelector(inputClass));
+    filter = normalizeString(input.value.toUpperCase());
     li = document.querySelectorAll(elementToHide);
     for (i = 0; i < li.length; i++) {
         a = li[i].querySelector(elementToSearch);
-        txtValue = a.textContent || a.innerText;
+        txtValue = normalizeString(a.textContent || a.innerText);
 
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
             li[i].style.display = "";
@@ -43,11 +43,17 @@ export const searchInput = (inputClass, elementToHide, elementToSearch) => {
     }
 };
 
+const normalizeString = str => str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase();
+
+
 export const searchJSON = (listContainer, inputClass, json) => {
     let arr = [];
     // Select Container
     let container = document.querySelector(listContainer);
-    let searchVal = document.querySelector(inputClass).value.toUpperCase();
+    let searchVal = normalizeString(document.querySelector(inputClass).value.toUpperCase());
 
     // Make sure we have parsed json.
     if (typeof json === 'string') {
@@ -57,8 +63,8 @@ export const searchJSON = (listContainer, inputClass, json) => {
     if (searchVal.length > 3) {
         let i = 0;
         Object.values(json).forEach(e=>{
-             if ((e.content && e.content.toUpperCase().indexOf(searchVal) > -1)
-                || (e.title && e.title.toUpperCase().indexOf(searchVal) > -1)) {
+             if ((e.content && normalizeString(e.content).indexOf(searchVal) > -1)
+                || (e.title && normalizeString(e.title).indexOf(searchVal) > -1)) {
                 arr[i] = e;
                 if (e.type == 0) {
                     arr[i].iscategory = true;
