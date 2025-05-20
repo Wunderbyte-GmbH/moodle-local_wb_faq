@@ -34,7 +34,6 @@ export const searchInput = (inputClass, elementToHide, elementToSearch) => {
     for (i = 0; i < li.length; i++) {
         a = li[i].querySelector(elementToSearch);
         txtValue = normalizeString(a.textContent || a.innerText);
-
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
             li[i].style.display = "";
         } else {
@@ -45,25 +44,26 @@ export const searchInput = (inputClass, elementToHide, elementToSearch) => {
 
 const normalizeString = str => str
     .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/ä/g, 'ae').replace(/Ä/g, 'Ae')
+    .replace(/ö/g, 'oe').replace(/Ö/g, 'Oe')
+    .replace(/ü/g, 'ue').replace(/Ü/g, 'Ue')
+    .replace(/ß/g, 'ss')
     .toUpperCase();
 
 
 export const searchJSON = (listContainer, inputClass, json) => {
     let arr = [];
-    // Select Container
     let container = document.querySelector(listContainer);
     let searchVal = normalizeString(document.querySelector(inputClass).value);
 
-    // Make sure we have parsed json.
     if (typeof json === 'string') {
         json = JSON.parse(json);
     }
 
     if (searchVal.length > 3) {
         let i = 0;
-        Object.values(json).forEach(e=>{
-             if ((e.content && normalizeString(e.content).indexOf(searchVal) > -1)
+        Object.values(json).forEach(e => {
+            if ((e.content && normalizeString(e.content).indexOf(searchVal) > -1)
                 || (e.title && normalizeString(e.title).indexOf(searchVal) > -1)) {
                 arr[i] = e;
                 if (e.type == 0) {
@@ -73,56 +73,42 @@ export const searchJSON = (listContainer, inputClass, json) => {
             }
         });
 
-        for (let i = 0; i < arr.length; i++) {
+        const shouldRender = (
+            arr.length !== searcharray.length ||
+            arr.some((item, idx) => item.id !== searcharray[idx]?.id)
+        );
 
-            if (typeof searcharray[i] === 'undefined') {
-                render(arr, container);
-                break;
-            }
-
-            if (arr[i].id != searcharray[i].id) {
-
-                render(arr, container);
-                break;
-            }
+        if (shouldRender) {
+            render(arr, container);
         }
+
         searcharray = arr;
 
         if (searcharray.length < 1) {
             getString('noresult', 'local_wb_faq').then(value => {
-
                 container.innerHTML = value;
                 return;
             }).catch(e => {
-                // eslint-disable-next-line no-console
                 console.log(e);
             });
-            // If we didn't find anything, we just increase the counter.
-            // User might need to search a few times.
             increaseCounter();
         } else {
-            // If we had a valid input, we allow to continue to the input form.
             increaseCounter(true);
         }
 
     } else if (searchVal.length == 0) {
-
         container.innerHTML = '';
         searcharray = [];
 
     } else {
-
         getString('stringtooshort', 'local_wb_faq').then(value => {
-
             container.innerHTML = value;
             return;
         }).catch(e => {
-            // eslint-disable-next-line no-console
             console.log(e);
         });
 
         searcharray = [];
-
     }
 };
 
@@ -139,7 +125,6 @@ export const init = (searchInputID, listContainer, elementToHide, elementToSearc
 
 
 export const render = (data, container) => {
-    // Render
 
     Templates.renderForPromise('local_wb_faq/searchbox', data).then(({html}) => {
         container.innerHTML = "";
