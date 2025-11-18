@@ -52,6 +52,9 @@ $string['new_entity'] = 'New Entity';
 $string['edit_entity'] = 'Edit Entity';
 $string['view'] = "View";
 $string['edit'] = "Edit";
+// Caching Definitions.
+$string['cachedef_faqcache'] = "Frequently Asked Questions.";
+
 $string['contactsupport'] = "Contact Support";
 $string['createticket'] = 'Create Ticket';
 $string['jwtsecret'] = "JWT Secret";
