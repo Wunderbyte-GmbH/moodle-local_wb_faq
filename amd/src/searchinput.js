@@ -89,6 +89,7 @@ export const searchJSON = (listContainer, inputClass, json) => {
                 container.innerHTML = value;
                 return;
             }).catch(e => {
+                // eslint-disable-next-line no-console
                 console.log(e);
             });
             increaseCounter();
@@ -105,6 +106,7 @@ export const searchJSON = (listContainer, inputClass, json) => {
             container.innerHTML = value;
             return;
         }).catch(e => {
+            // eslint-disable-next-line no-console
             console.log(e);
         });
 
@@ -125,8 +127,7 @@ export const init = (searchInputID, listContainer, elementToHide, elementToSearc
 
 
 export const render = (data, container) => {
-
-    Templates.renderForPromise('local_wb_faq/searchbox', data).then(({html}) => {
+    Templates.renderForPromise('local_wb_faq/searchbox', {items: data}).then(({html}) => {
         container.innerHTML = "";
         container.insertAdjacentHTML('afterbegin', html);
         return;
