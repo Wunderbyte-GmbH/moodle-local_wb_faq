@@ -1,0 +1,121 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template mod_mooduell/viewpage
+    Template which defines a mooduell view page.
+    Classes required for JS:
+    * none
+    Data attributes required for JS:
+    * none
+    Context variables required for this template:
+    Example context (json):
+    {
+        "entries" : [
+            [
+               {
+                  "id":"1",
+                  "parentid":"0",
+                  "type":"category",
+                  "title":"Haben sie blbalbla ....?",
+                  "content" : "....",
+                  "sortorder" : "1"
+               },
+              {
+                  "id":"1",
+                  "parentid":"1",
+                  "type":"question",
+                  "title":"Haben sie blbalbla ....?",
+                  "content": "jashfjafjlahfja fajfl hajfdha ljdf a",
+                  "sortorder" : "1"
+
+               },
+               {
+                  "id":"1",
+                  "parentid":"1",
+                  "type":"question",
+                  "title":"Haben sie blbalbla ....?",
+                  "content": "jashfjafjlahfja fajfl hajfdha ljdf a"
+               }
+            ]
+        ]
+    }
+}}
+<style>
+  #sticky-buttons {
+    position: fixed;
+    margin-top: -6.5em;
+  }
+
+  #local_wb_faq_new_entry {
+    margin-top: 6.5em;
+  }
+</style>
+
+<div id="local_wb_faq_admin">
+  <div id="sticky-buttons">
+  <div id="local_wb_faq_add" class="btn btn-primary d-block my-1" data-action="quickedit" data-targetid="0" data-type="1">Add new Entry</div>
+  <div id="local_wb_faq_add" class="btn btn-primary d-block my-1" data-action="quickedit" data-targetid="0" data-type="0">Add new Category</div>
+  </div>
+
+  <div id="local_wb_faq_new_entry"></div>
+  <table id="local_wb_faq_table" class="table table-dark">
+    <thead>
+      <th>id</th>
+      <th>content</th>
+      <th>type</th>
+      <th>parentid</th>
+    </thead>
+    <tbody>
+      {{#entries}}
+      <tr class="view-{{type}}-{{id}}">
+        <td>{{id}}</td>
+        <td>
+          <strong>{{title}}</strong>
+          {{#content}}
+          <p>{{{content}}}</p>
+          {{/content}}
+          <div class="">
+          <button type="button" class="btn btn-outline-light btn-sm" data-action="quickedit" data-targetid="{{id}}" data-type="{{type}}" aria-label="{{title}}" aria-expanded="false">
+          QuickEdit
+          </button>
+          |
+          <button type="button" class="btn btn-outline-light btn-sm" data-action="delete" data-targetid="{{id}}" data-type="{{type}}" aria-label="{{title}}" aria-expanded="false">
+          Löschen
+          </button>
+          {{#iscategory}}
+          |
+          <button type="button" class="btn btn-outline-light btn-sm" data-action="addquestion" data-targetid="{{id}}" data-type="{{type}}" aria-label="{{title}}" aria-expanded="false">
+          Frage hinzufügen
+          </button>
+          {{/iscategory}}
+          </div>
+        </td>
+        <td>
+          {{type}}
+        </td>
+        <td>
+          {{parentid}}
+        </td>
+      </tr>
+      {{/entries}}
+    </tbody>
+  </table>
+</div>
+
+
+{{#js}}
+  require(['local_wb_faq/admin'], function(faq) {
+    faq.init("{'json':'aasf'}", 1);
+  });
+{{/js}}

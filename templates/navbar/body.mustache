@@ -1,0 +1,51 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_wb_faq/navbar/body
+
+    Classes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "tabs": [
+            {
+                "name": "mytabname",
+                "active": true,
+                "success": true
+            }
+        ]
+        "body": [
+            {
+                "thankyou": "Thank you",
+            }
+        ],
+
+    }
+}}
+<div class="faq-page-navbar-body-container col-md-12">
+        {{> local_wb_faq/navbar/header }}
+        {{> local_wb_faq/display_search_modal }}
+        {{> local_wb_faq/faq_list_modal }}
+        <div data-id="supportmessage-form" class="hidden"></div>
+</div>
+
+{{#js}}
+require(['local_wb_faq/supportmessage_form'], function(init) {
+    init.init();
+  });
+{{/js}}

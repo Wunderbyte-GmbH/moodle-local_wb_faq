@@ -1,0 +1,43 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template local_wb_faq/navbar/header
+
+    Classes required for JS:
+    * none
+
+    Example context (json):
+    {
+        "tabs": [
+            {
+                "name": "mytabname",
+                "active": true,
+                "success": true
+            }
+        ]
+    }
+}}
+
+<ul class="nav nav-pills mb-3" id="faq-nav-pillstab" role="tablist">
+    {{#tabs}}
+        <li class="nav-item faq-page-navbar-tab">
+            <a class="nav-link {{#active}}active{{/active}} {{^active}}disabled{{/active}}" id="faq-nav-pills{{{id}}}-tab" data-toggle="pill" href="#faq-nav-pills{{{id}}}" role="tab" aria-controls="faq-nav-pills{{{id}}}" aria-selected="true">
+                {{name}}
+            </a>
+        </li>
+    {{/tabs}}
+</ul>
