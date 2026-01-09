@@ -27,7 +27,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_wb_faq';
 $plugin->release = '0.2.8';
-$plugin->version = 2026010900;
+$plugin->version = 2026010901;
 $plugin->requires = 2020061500;
-$plugin->supported = [45];
+$plugin->supported = [405];
 $plugin->maturity = MATURITY_ALPHA;
