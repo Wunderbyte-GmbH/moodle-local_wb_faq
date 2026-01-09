@@ -61,17 +61,7 @@ export const searchJSON = (listContainer, inputClass, json) => {
     }
 
     if (searchVal.length > 3) {
-        let i = 0;
-        Object.values(json).forEach(e => {
-            if ((e.content && normalizeString(e.content).indexOf(searchVal) > -1)
-                || (e.title && normalizeString(e.title).indexOf(searchVal) > -1)) {
-                arr[i] = e;
-                if (e.type == 0) {
-                    arr[i].iscategory = true;
-                }
-                i++;
-            }
-        });
+        arr = searchJson(json, searchVal);
 
         const shouldRender = (
             arr.length !== searcharray.length ||
@@ -113,6 +103,50 @@ export const searchJSON = (listContainer, inputClass, json) => {
         searcharray = [];
     }
 };
+
+/**
+ * Search json function
+ *
+ * @param {*} jsonObj
+ * @param {*} searchVal
+ *
+ * @return array
+ *
+ */
+function searchJson(jsonObj, searchVal) {
+    const arr = [];
+
+    /**
+     * Recurse function
+     *
+     * @param {*} entries
+     *
+     * @return array
+     *
+     */
+    function recurse(entries) {
+        entries.forEach(e => {
+            // Check title/content for match
+            if ((e.content && normalizeString(e.content).indexOf(searchVal) > -1)
+                || (e.title && normalizeString(e.title).indexOf(searchVal) > -1)) {
+                const copy = { ...e };
+                if (e.type === 0) {
+                        copy.iscategory = true;
+                }
+                arr.push(copy);
+            }
+
+            // Recurse into nested entries
+            if (e.entries && Array.isArray(e.entries)) {
+                recurse(e.entries);
+            }
+        });
+    }
+
+    // Start recursion from the root
+    recurse(Object.values(jsonObj));
+    return arr;
+}
 
 export const init = (searchInputID, listContainer, elementToHide, elementToSearch, json = null) => {
 
