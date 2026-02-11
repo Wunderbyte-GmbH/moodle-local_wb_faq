@@ -134,6 +134,9 @@ class editQuestionForm extends dynamic_form {
         $mform->addElement('advcheckbox', 'enabled', get_string('invisible', 'local_wb_faq'));
         $mform->setDefault('enabled', 1);
 
+        $mform->addElement('text', 'sortorder', get_string('input:sortorder', 'local_wb_faq'));
+        $mform->setType('sortorder', PARAM_INT);
+
         $mform->addElement('html', '</div><div class="col-md-6">');
         $sql = "SELECT id, title From {local_wb_faq_entry} WHERE type = '0'";
         $parents = $DB->get_records_sql($sql);
