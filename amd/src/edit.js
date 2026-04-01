@@ -22,12 +22,12 @@
 
 
 import ModalForm from 'core_form/modalform';
-import ModalFactory from 'core/modal_factory';
+import ModalSaveCancel from 'core/modal_save_cancel';
 import ModalEvents from 'core/modal_events';
-import {get_string as getString, get_strings as getStrings} from 'core/str';
-import {showSuccessNotification, showErrorNotification} from 'local_wb_faq/notifications';
-import {deleteEntry, toggleVisibility} from 'local_wb_faq/admin';
-import {reloadData} from 'local_wb_faq/faq';
+import { get_string as getString, get_strings as getStrings } from 'core/str';
+import { showSuccessNotification, showErrorNotification } from 'local_wb_faq/notifications';
+import { deleteEntry, toggleVisibility } from 'local_wb_faq/admin';
+import { reloadData } from 'local_wb_faq/faq';
 
 const SELECTORS = {
     GROUPSUBMIT: '[data-action="groupSubmit"]'
@@ -88,7 +88,7 @@ const editModalListener = event => {
  * Opens the Modal to edit questions.
  * @param {*} event the click event
  */
- function openEditQuestionsModal(event) {
+function openEditQuestionsModal(event) {
 
     let button = event.target;
     let entryid = 0;
@@ -123,7 +123,7 @@ const editModalListener = event => {
             'parentid': parentid
         },
         // Pass any configuration settings to the modal dialogue, for example, the title:
-        modalConfig: {title: getString('addquestion', 'local_wb_faq')},
+        modalConfig: { title: getString('addquestion', 'local_wb_faq') },
         // DOM element that should get the focus after the modal dialogue is closed:
         returnFocus: button
     });
@@ -158,7 +158,7 @@ const editModalListener = event => {
  * Opens the Modal to edit questions.
  * @param {*} event the click event
  */
- function openEditCategoriesModal(event) {
+function openEditCategoriesModal(event) {
 
     let button = event.target;
     let entryid = 0;
@@ -193,7 +193,7 @@ const editModalListener = event => {
             'parentid': parentid
         },
         // Pass any configuration settings to the modal dialogue, for example, the title:
-        modalConfig: {title: getString('addcategory', 'local_wb_faq')},
+        modalConfig: { title: getString('addcategory', 'local_wb_faq') },
         // DOM element that should get the focus after the modal dialogue is closed:
         returnFocus: button
     });
@@ -237,7 +237,7 @@ const editModalListener = event => {
 /**
  * @param {*} event
  */
- export function confirmDeleteEntry(event) {
+export function confirmDeleteEntry(event) {
 
     let button = event.target;
     let entryid = 0;
@@ -257,69 +257,60 @@ const editModalListener = event => {
             entryid = button.dataset.id;
         }
     } else if (button.dataset
-            && button.dataset.action
-            && button.dataset.action == 'delete') {
+        && button.dataset.action
+        && button.dataset.action == 'delete') {
 
-                entryid = button.dataset.targetid;
+        entryid = button.dataset.targetid;
     } else {
         return;
     }
 
     getStrings([
-        {key: 'confirmdeleteentrytitle', component: 'local_wb_faq'},
-        {key: 'confirmdeleteentrybody', component: 'local_wb_faq'},
-        {key: 'confirmdeleteentry', component: 'local_wb_faq'}
-    ]
-    ).then(strings => {
-
-        ModalFactory.create({type: ModalFactory.types.SAVE_CANCEL}).then(modal => {
-
-            modal.setTitle(strings[0]);
-                modal.setBody(strings[1]);
-                modal.setSaveButtonText(strings[2]);
-                modal.getRoot().on(ModalEvents.save, function() {
-
-                    // Looking for the question.
-                    let entry = button.closest('li.accordion-item');
-                    let elementid = 0;
-
-                    // We need to be looking for the category, not a question.
+        { key: 'confirmdeleteentrytitle', component: 'local_wb_faq' },
+        { key: 'confirmdeleteentrybody', component: 'local_wb_faq' },
+        { key: 'confirmdeleteentry', component: 'local_wb_faq' }
+    ]).then(strings => {
+        ModalSaveCancel.create({
+            title: strings[0],
+            body: strings[1],
+            buttons: { save: strings[2] },
+        }).then(modal => {
+            modal.getRoot().on(ModalEvents.save, function () {
+                // Looking for the question.
+                let entry = button.closest('li.accordion-item');
+                let elementid = 0;
+                // We need to be looking for the category, not a question.
+                if (!entry) {
+                    entry = button.closest('[data-action="goto"]');
                     if (!entry) {
-                        entry = button.closest('[data-action="goto"]');
-
-                        if (!entry) {
-                            // If we still don't find the entry, we are in admin mode.
-                            entry = event.target.closest('tr');
-                            elementid = button.dataset.targetid;
-                        } else {
-                            elementid = entry.dataset.targetid;
-                        }
+                        // If we still don't find the entry, we are in admin mode.
+                        entry = event.target.closest('tr');
+                        elementid = button.dataset.targetid;
                     } else {
-                        elementid = entry.dataset.id;
+                        elementid = entry.dataset.targetid;
                     }
-
-                    // This is to verify that we've actually found the right dom element.
-                    if (elementid == entryid) {
-                        entry.remove();
-                        // Todo: We should react only on a success response from delete.
-                        deleteEntry(entryid);
-                        showSuccessNotification();
-                    }
-                });
-
-                modal.show();
-                return modal;
+                } else {
+                    elementid = entry.dataset.id;
+                }
+                // This is to verify that we've actually found the right dom element.
+                if (elementid == entryid) {
+                    entry.remove();
+                    // Todo: We should react only on a success response from delete.
+                    deleteEntry(entryid);
+                    showSuccessNotification();
+                }
+            });
+            modal.show();
+            return modal;
         }).catch(e => {
             // eslint-disable-next-line no-console
             console.log(e);
-
             showErrorNotification();
         });
         return true;
     }).catch(e => {
         // eslint-disable-next-line no-console
         console.log(e);
-
         showErrorNotification();
     });
 }
@@ -327,7 +318,7 @@ const editModalListener = event => {
 /**
  * @param {*} event
  */
- export function confirmToggleVisibility(event) {
+export function confirmToggleVisibility(event) {
 
     let button = event.target;
     let entryid = 0;
@@ -351,68 +342,55 @@ const editModalListener = event => {
     }
 
     getStrings([
-        {key: 'confirmtogglevisibilitytitle', component: 'local_wb_faq'},
-        {key: 'confirmtogglevisibilitybody', component: 'local_wb_faq'},
-        {key: 'confirmtogglevisibility', component: 'local_wb_faq'}
-    ]
-    ).then(strings => {
-
-        ModalFactory.create({type: ModalFactory.types.SAVE_CANCEL}).then(modal => {
-
-            modal.setTitle(strings[0]);
-                modal.setBody(strings[1]);
-                modal.setSaveButtonText(strings[2]);
-                modal.getRoot().on(ModalEvents.save, function() {
-
-                    // Looking for the question.
-                    let entry = button.closest('li.accordion-item');
-                    let elementid = 0;
-
-                    // We need to be looking for the category, not a question.
-                    if (!entry) {
-                        entry = button.closest('[data-action="goto"]');
-                        elementid = entry.dataset.targetid;
-                    } else {
-                        elementid = entry.dataset.id;
-                    }
-
-                    // This is to verify that we've actually found the right dom element.
-                    if (elementid == entryid) {
-                        // Todo: We should react only on a success response from delete.
-                        toggleVisibility(entryid);
-
-                        let ielement = button.querySelector('i.toggle-visibility');
-
-                        if (ielement) {
-                            if (ielement.classList.contains('fa-eye-slash')) {
-                                ielement.classList.replace('fa-eye-slash', 'fa-eye');
-                            } else {
-                                ielement.classList.replace('fa-eye', 'fa-eye-slash');
-                            }
-                            showSuccessNotification();
-                            window.location.reload();
+        { key: 'confirmtogglevisibilitytitle', component: 'local_wb_faq' },
+        { key: 'confirmtogglevisibilitybody', component: 'local_wb_faq' },
+        { key: 'confirmtogglevisibility', component: 'local_wb_faq' }
+    ]).then(strings => {
+        ModalSaveCancel.create({
+            title: strings[0],
+            body: strings[1],
+            buttons: { save: strings[2] },
+        }).then(modal => {
+            modal.getRoot().on(ModalEvents.save, function () {
+                // Looking for the question.
+                let entry = button.closest('li.accordion-item');
+                let elementid = 0;
+                // We need to be looking for the category, not a question.
+                if (!entry) {
+                    entry = button.closest('[data-action="goto"]');
+                    elementid = entry.dataset.targetid;
+                } else {
+                    elementid = entry.dataset.id;
+                }
+                // This is to verify that we've actually found the right dom element.
+                if (elementid == entryid) {
+                    // Todo: We should react only on a success response from delete.
+                    toggleVisibility(entryid);
+                    let ielement = button.querySelector('i.toggle-visibility');
+                    if (ielement) {
+                        if (ielement.classList.contains('fa-eye-slash')) {
+                            ielement.classList.replace('fa-eye-slash', 'fa-eye');
                         } else {
-                            window.location.reload();
+                            ielement.classList.replace('fa-eye', 'fa-eye-slash');
                         }
-
-
-
+                        showSuccessNotification();
+                        window.location.reload();
+                    } else {
+                        window.location.reload();
                     }
-                });
-
-                modal.show();
-                return modal;
+                }
+            });
+            modal.show();
+            return modal;
         }).catch(e => {
             // eslint-disable-next-line no-console
             console.log(e);
-
             showErrorNotification();
         });
         return true;
     }).catch(e => {
         // eslint-disable-next-line no-console
         console.log(e);
-
         showErrorNotification();
     });
 }

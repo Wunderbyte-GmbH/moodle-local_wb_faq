@@ -24,7 +24,6 @@ import {get_strings as getstrings} from "core/str";
 import Ajax from "core/ajax";
 import Templates from "core/templates";
 import MyModal from 'local_wb_faq/custommodal';
-import ModalFactory from 'core/modal_factory';
 // Import ModalEvents from 'core/modal_events'.
 
 var modal = null;
@@ -125,20 +124,12 @@ async function addEvents() {
  */
 async function createModal(data) {
 
-  modal = await ModalFactory.create({
-    type: MyModal.TYPE,
+  modal = await MyModal.create({
     large: true,
     body: Templates.render('local_wb_faq/navbar/body', data),
     footer: '',
-  }).then(modal => {
-    modal.setRemoveOnClose(false);
-
-    return modal;
-  }).catch(e => {
-    // eslint-disable-next-line no-console
-    console.error(e);
   });
-
+  modal.setRemoveOnClose(false);
   modal.show();
 }
 
