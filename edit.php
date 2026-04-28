@@ -25,7 +25,7 @@
 
 require_once(dirname(__FILE__) . '/../../config.php');
 require_once($CFG->dirroot . '/local/wb_faq/lib.php');
-use local_wb_faq\form\edit_form;
+use local_wb_faq\form\editQuestionForm;
 use core_customfield\api;
 
 $entityid = optional_param('id', 0, PARAM_INT);
@@ -50,12 +50,12 @@ $settingsmanager = new \local_wb_faq\wb_faq();
 
 if ($entityid) {
     $data = \local_wb_faq\wb_faq::get_settings_forform($entityid);
-    $mform = new edit_form($data);
+    $mform = new editQuestionForm($data);
     $handler = local_wb_faq\customfield\wb_faq_handler::create();
     $handler->instance_form_before_set_data($data);
     $mform->set_data($data);
 } else {
-    $mform = new edit_form();
+    $mform = new editQuestionForm();
 }
 
 // Print the page header.

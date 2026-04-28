@@ -35,7 +35,7 @@ $PAGE->set_url(new moodle_url('/local/wb_faq/index.php', array()));
 $title = "FAQ";
 $PAGE->set_title($title);
 $PAGE->set_heading($title);
-$PAGE->set_pagelayout('frontpage');
+$PAGE->set_pagelayout('standard');
 
 echo $OUTPUT->header();
 

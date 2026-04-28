@@ -29,5 +29,5 @@ $plugin->component = 'local_wb_faq';
 $plugin->release = '0.2.11';
 $plugin->version = 2024122000;
 $plugin->requires = 2020061500;
-$plugin->supported = [39, 43];
+$plugin->supported = [39, 45];
 $plugin->maturity = MATURITY_ALPHA;
