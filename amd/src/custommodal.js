@@ -24,7 +24,6 @@
 // import Ajax from "core/ajax";
 
 import Modal from 'core/modal';
-import ModalRegistry from 'core/modal_registry';
 
 const NavbarModal = class extends Modal {
   static TYPE = "local_wb_faq/navbar/navbarmodal";
@@ -40,5 +39,4 @@ const NavbarModal = class extends Modal {
   }
 };
 
-ModalRegistry.register(NavbarModal.TYPE, NavbarModal, NavbarModal.TEMPLATE);
 export default NavbarModal;
