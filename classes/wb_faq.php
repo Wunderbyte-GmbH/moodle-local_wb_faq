@@ -442,7 +442,8 @@ class wb_faq {
             $node->breadcrumbs[] = [
                 'name' => $node->title ?? get_string('faq', 'local_wb_faq'),
                 'datacat' => $node->title ?? get_string('faq', 'local_wb_faq'),
-                'id' => $node->id ?? 0
+                'id' => $node->id ?? 0,
+                'active' => false,
             ];
         }
 
@@ -454,6 +455,7 @@ class wb_faq {
                     'name' => $title,
                     'id' => $category->id ?? 0,
                     'datacat' => $category->title,
+                    'active' => false,
                 ];
 
                 self::add_breadcrumb($category, $flattree);
