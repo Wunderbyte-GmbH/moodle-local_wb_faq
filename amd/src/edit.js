@@ -1,4 +1,3 @@
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -14,383 +13,124 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * @package    local_wunderbyte_table
- * @copyright  Wunderbyte GmbH <info@wunderbyte.at>
+/**
+ * The edit controls of a FAQ instance.
+ *
+ * @module     local_wb_faq/edit
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
+import Ajax from 'core/ajax';
 import ModalForm from 'core_form/modalform';
-import ModalSaveCancel from 'core/modal_save_cancel';
-import ModalEvents from 'core/modal_events';
-import { get_string as getString, get_strings as getStrings } from 'core/str';
-import { showSuccessNotification, showErrorNotification } from 'local_wb_faq/notifications';
-import { deleteEntry, toggleVisibility } from 'local_wb_faq/admin';
-import { reloadData } from 'local_wb_faq/faq';
+import Notification from 'core/notification';
+import {add as addToast} from 'core/toast';
+import {get_string as getString} from 'core/str';
+import {reload} from 'local_wb_faq/faq';
 
-const SELECTORS = {
-    GROUPSUBMIT: '[data-action="groupSubmit"]'
+const FORMS = {
+    category: {
+        formClass: 'local_wb_faq\\form\\edit_category_form',
+        addTitle: 'addcategory',
+        editTitle: 'editcategory',
+    },
+    question: {
+        formClass: 'local_wb_faq\\form\\edit_question_form',
+        addTitle: 'addquestion',
+        editTitle: 'editquestion',
+    },
 };
 
 /**
- * Gets called from mustache template.
+ * Tells the user about the success and shows the changed data.
  *
+ * @param {string} uid
+ * @param {string} stringkey
+ * @returns {Promise}
  */
-export const init = () => {
-
-    // Find all container.
-    const containers = document.querySelectorAll('.local_wb_faq_container');
-
-    containers.forEach(element => {
-        if (!element.dataset.initialized) {
-            element.addEventListener('click', editModalListener);
-            element.dataset.initialized = true;
-        }
-    });
+const finish = async(uid, stringkey) => {
+    await reload(uid);
+    await addToast(getString(stringkey, 'local_wb_faq'));
 };
 
 /**
- * Modal listener to open the edit Modals.
- * @param {*} event
+ * Opens the form to add or edit a record.
+ *
+ * @param {string} uid
+ * @param {HTMLElement} control
  */
-const editModalListener = event => {
+const openForm = (uid, control) => {
+    const form = FORMS[control.dataset.type];
+    const id = Number(control.dataset.id ?? 0);
+    const region = control.closest('[data-region="wb-faq"]');
+    const parentid = Number(region.querySelector('[data-region="faq-current"]').dataset.categoryid);
 
-    let button = event.target;
-
-    if (button.tagName.toLowerCase() === 'i') {
-        button = button.parentElement;
-    }
-
-    if (button.classList.contains('local_wb_faq_edit_question')) {
-
-        openEditQuestionsModal(event);
-
-    } else if (button.classList.contains('local_wb_faq_delete_question')) {
-
-        confirmDeleteEntry(event);
-    } else if (button.classList.contains('local_wb_faq_toggle_entry_visibility')) {
-
-        confirmToggleVisibility(event);
-    } else if (button.classList.contains('local_wb_faq_toggle_category_visibility')) {
-
-        confirmToggleVisibility(event);
-    } else if (button.classList.contains('local_wb_faq_edit_category')) {
-
-        openEditCategoriesModal(event);
-
-    } else if (button.classList.contains('local_wb_faq_delete_category')) {
-        confirmDeleteEntry(event);
-    }
+    const modalForm = new ModalForm({
+        formClass: form.formClass,
+        args: {id, parentid},
+        modalConfig: {title: getString(id ? form.editTitle : form.addTitle, 'local_wb_faq'), large: true},
+        returnFocus: control,
+    });
+    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, event => {
+        event.preventDefault();
+        modalForm.modal.hide();
+        finish(uid, 'savesuccess').catch(Notification.exception);
+    });
+    modalForm.show().catch(Notification.exception);
 };
 
 /**
- * Opens the Modal to edit questions.
- * @param {*} event the click event
+ * Asks for confirmation and then calls a webservice.
+ *
+ * @param {string} uid
+ * @param {HTMLElement} control
+ * @param {string} methodname
+ * @param {string} stringprefix
+ * @param {string} successkey
+ * @returns {Promise}
  */
-function openEditQuestionsModal(event) {
+const confirmAndCall = (uid, control, methodname, stringprefix, successkey) => Notification.saveCancelPromise(
+    getString(`${stringprefix}title`, 'local_wb_faq'),
+    getString(`${stringprefix}body`, 'local_wb_faq'),
+    getString(stringprefix, 'local_wb_faq'),
+).then(() => Ajax.call([{methodname, args: {id: Number(control.dataset.id)}}])[0])
+.then(() => finish(uid, successkey));
 
-    let button = event.target;
-    let entryid = 0;
-    let parentid = 0;
-    let uid = 0;
+/**
+ * Starts the edit controls of a FAQ instance.
+ *
+ * @param {string} uid
+ */
+export const init = uid => {
+    const region = document.querySelector(`[data-region="wb-faq"][data-uid="${uid}"]`);
 
-    if (button.tagName.toLowerCase() !== 'a') {
-        button = button.parentElement;
-    }
-
-    if (button.dataset.id) {
-        entryid = button.dataset.id;
-    }
-
-    if (button.dataset.faqroot) {
-        parentid = button.dataset.faqroot;
-    }
-
-    if (button.dataset.uid) {
-        uid = button.dataset.uid;
-    }
-
-    const modalForm = new ModalForm({
-
-        // Name of the class where form is defined (must extend \core_form\dynamic_form):
-        formClass: "local_wb_faq\\form\\editQuestionForm",
-        // Add as many arguments as you need, they will be passed to the form:
-        args: {
-            'id': entryid,
-            'type': 1,
-            'nobuttons': true,
-            'parentid': parentid
-        },
-        // Pass any configuration settings to the modal dialogue, for example, the title:
-        modalConfig: { title: getString('addquestion', 'local_wb_faq') },
-        // DOM element that should get the focus after the modal dialogue is closed:
-        returnFocus: button
-    });
-
-    // Listen to events if you want to execute something on form submit.
-    // Event detail will contain everything the process() function returned:
-    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, (e) => {
+    region.addEventListener('click', e => {
+        const control = e.target.closest('[data-edit-action]');
+        if (!control) {
+            return;
+        }
         e.preventDefault();
-        showSuccessNotification();
-        if (uid) {
-            reloadData(uid, parentid);
-        } else {
-            window.location.reload();
-        }
-        // Properly close the modal after the form is submitted
-        modalForm.modal.hide();
-    });
+        e.stopPropagation();
 
-    // Show the form.
-    modalForm.show().then(() => {
+        // The user cancelling a confirmation is a rejection too, which needs no message.
+        const ignoreCancel = error => {
+            if (error && error.message !== undefined) {
+                Notification.exception(error);
+            }
+        };
 
-        return;
-    }).catch(e => {
-        // eslint-disable-next-line no-console
-        console.log(e);
-
-        showErrorNotification();
-    });
-}
-
-/**
- * Opens the Modal to edit questions.
- * @param {*} event the click event
- */
-function openEditCategoriesModal(event) {
-
-    let button = event.target;
-    let entryid = 0;
-    let parentid = 0;
-    let uid = 0;
-
-    if (button.tagName.toLowerCase() !== 'a') {
-        button = button.parentElement;
-    }
-
-    if (button.dataset.id) {
-        entryid = button.dataset.id;
-    }
-
-    if (button.dataset.faqroot) {
-        parentid = button.dataset.faqroot;
-    }
-
-    if (button.dataset.uid) {
-        uid = button.dataset.uid;
-    }
-
-    const modalForm = new ModalForm({
-
-        // Name of the class where form is defined (must extend \core_form\dynamic_form):
-        formClass: "local_wb_faq\\form\\editCategoriesForm",
-        // Add as many arguments as you need, they will be passed to the form:
-        args: {
-            'id': entryid,
-            'type': 0,
-            'nobuttons': true,
-            'parentid': parentid
-        },
-        // Pass any configuration settings to the modal dialogue, for example, the title:
-        modalConfig: { title: getString('addcategory', 'local_wb_faq') },
-        // DOM element that should get the focus after the modal dialogue is closed:
-        returnFocus: button
-    });
-
-    modalForm.addEventListener('change', e => {
-
-        if (e.target.dataset.onChangeAction == "reloadForm") {
-            const button = document.querySelector(SELECTORS.GROUPSUBMIT);
-            modalForm.processNoSubmitButton(button);
+        switch (control.dataset.editAction) {
+            case 'form':
+                openForm(uid, control);
+                break;
+            case 'delete':
+                confirmAndCall(uid, control, 'local_wb_faq_delete_entry', 'confirmdeleteentry', 'entrydeleted')
+                    .catch(ignoreCancel);
+                break;
+            case 'toggle':
+                confirmAndCall(uid, control, 'local_wb_faq_toggle_entry_visibility', 'confirmtogglevisibility', 'savesuccess')
+                    .catch(ignoreCancel);
+                break;
         }
     });
-
-    // Listen to events if you want to execute something on form submit.
-    // Event detail will contain everything the process() function returned:
-    modalForm.addEventListener(modalForm.events.FORM_SUBMITTED, (e) => {
-
-        e.preventDefault();
-
-        showSuccessNotification();
-        if (uid) {
-            reloadData(uid, parentid);
-        } else {
-            window.location.reload();
-        }
-        // Properly close the modal after the form is submitted
-        modalForm.modal.hide();
-    });
-
-    // Show the form.
-    modalForm.show().then(() => {
-
-        return;
-    }).catch(e => {
-        // eslint-disable-next-line no-console
-        console.log(e);
-
-        showErrorNotification();
-    });
-}
-
-/**
- * @param {*} event
- */
-export function confirmDeleteEntry(event) {
-
-    let button = event.target;
-    let entryid = 0;
-
-    // We assume we delete a question.
-    if (!((button.tagName.toLowerCase() == 'a')
-        || (button.tagName.toLowerCase() == 'button'))) {
-        button = button.parentElement;
-    }
-    // No difference at the moment between deleting question or category, but there could be.
-    if (button.classList.contains('local_wb_faq_delete_question')) {
-        if (button.dataset.id) {
-            entryid = button.dataset.id;
-        }
-    } else if (button.classList.contains('local_wb_faq_delete_category')) {
-        if (button.dataset.id) {
-            entryid = button.dataset.id;
-        }
-    } else if (button.dataset
-        && button.dataset.action
-        && button.dataset.action == 'delete') {
-
-        entryid = button.dataset.targetid;
-    } else {
-        return;
-    }
-
-    getStrings([
-        { key: 'confirmdeleteentrytitle', component: 'local_wb_faq' },
-        { key: 'confirmdeleteentrybody', component: 'local_wb_faq' },
-        { key: 'confirmdeleteentry', component: 'local_wb_faq' }
-    ]).then(strings => {
-        ModalSaveCancel.create({
-            title: strings[0],
-            body: strings[1],
-            buttons: { save: strings[2] },
-        }).then(modal => {
-            modal.getRoot().on(ModalEvents.save, function () {
-                // Looking for the question.
-                let entry = button.closest('li.accordion-item');
-                let elementid = 0;
-                // We need to be looking for the category, not a question.
-                if (!entry) {
-                    entry = button.closest('[data-action="goto"]');
-                    if (!entry) {
-                        // If we still don't find the entry, we are in admin mode.
-                        entry = event.target.closest('tr');
-                        elementid = button.dataset.targetid;
-                    } else {
-                        elementid = entry.dataset.targetid;
-                    }
-                } else {
-                    elementid = entry.dataset.id;
-                }
-                // This is to verify that we've actually found the right dom element.
-                if (elementid == entryid) {
-                    entry.remove();
-                    // Todo: We should react only on a success response from delete.
-                    deleteEntry(entryid);
-                    showSuccessNotification();
-                }
-            });
-            modal.show();
-            return modal;
-        }).catch(e => {
-            // eslint-disable-next-line no-console
-            console.log(e);
-            showErrorNotification();
-        });
-        return true;
-    }).catch(e => {
-        // eslint-disable-next-line no-console
-        console.log(e);
-        showErrorNotification();
-    });
-}
-
-/**
- * @param {*} event
- */
-export function confirmToggleVisibility(event) {
-
-    let button = event.target;
-    let entryid = 0;
-
-    // We assume we delete a question.
-    if (button.tagName.toLowerCase() !== 'a') {
-        button = button.parentElement;
-    }
-
-    // No difference at the moment between deleting question or category, but there could be.
-    if (button.classList.contains('local_wb_faq_toggle_entry_visibility')) {
-        if (button.dataset.id) {
-            entryid = button.dataset.id;
-        }
-    } else if (button.classList.contains('local_wb_faq_toggle_category_visibility')) {
-        if (button.dataset.id) {
-            entryid = button.dataset.id;
-        }
-    } else {
-        return;
-    }
-
-    getStrings([
-        { key: 'confirmtogglevisibilitytitle', component: 'local_wb_faq' },
-        { key: 'confirmtogglevisibilitybody', component: 'local_wb_faq' },
-        { key: 'confirmtogglevisibility', component: 'local_wb_faq' }
-    ]).then(strings => {
-        ModalSaveCancel.create({
-            title: strings[0],
-            body: strings[1],
-            buttons: { save: strings[2] },
-        }).then(modal => {
-            modal.getRoot().on(ModalEvents.save, function () {
-                // Looking for the question.
-                let entry = button.closest('li.accordion-item');
-                let elementid = 0;
-                // We need to be looking for the category, not a question.
-                if (!entry) {
-                    entry = button.closest('[data-action="goto"]');
-                    elementid = entry.dataset.targetid;
-                } else {
-                    elementid = entry.dataset.id;
-                }
-                // This is to verify that we've actually found the right dom element.
-                if (elementid == entryid) {
-                    // Todo: We should react only on a success response from delete.
-                    toggleVisibility(entryid);
-                    let ielement = button.querySelector('i.toggle-visibility');
-                    if (ielement) {
-                        if (ielement.classList.contains('fa-eye-slash')) {
-                            ielement.classList.replace('fa-eye-slash', 'fa-eye');
-                        } else {
-                            ielement.classList.replace('fa-eye', 'fa-eye-slash');
-                        }
-                        showSuccessNotification();
-                        window.location.reload();
-                    } else {
-                        window.location.reload();
-                    }
-                }
-            });
-            modal.show();
-            return modal;
-        }).catch(e => {
-            // eslint-disable-next-line no-console
-            console.log(e);
-            showErrorNotification();
-        });
-        return true;
-    }).catch(e => {
-        // eslint-disable-next-line no-console
-        console.log(e);
-        showErrorNotification();
-    });
-}
+};

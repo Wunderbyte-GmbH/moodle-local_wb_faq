@@ -1,57 +1,45 @@
 {{!
     This file is part of Moodle - http://moodle.org/
+
     Moodle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+
     Moodle is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
+
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_mooduell/viewpage
-    Template which defines a mooduell view page.
-    Classes required for JS:
-    * none
-    Data attributes required for JS:
-    * none
-    Context variables required for this template:
+    @template local_wb_faq/faq_list
+
+    A complete FAQ instance. The current state comes rendered by the server, later states are loaded by local_wb_faq/faq.
+
     Example context (json):
-    {
-        "categories" : [
-            [
-               {
-                  "catid":"7",
-                  "contextid":"1",
-                  "catname":"MooDuell Pr\u00e4sentation",
-                  "courseid":"50"
-               }
-            ]
-        ]
-    }
+    {"uid": "abc", "root": 0, "categoryid": 0, "entryid": 0, "page": 0, "query": "", "minlength": 3, "pageurl": "#", "formaction": "#", "showsearch": true, "hiddenparams": []}
 }}
-
-<div class="local_wb_faq_container local_wb_faq_container-{{uid}}">
-  <div class="local_wb_faq-{{uid}}"></div>
+<div class="local_wb_faq_container" data-region="wb-faq" data-uid="{{uid}}" data-root="{{root}}" data-categoryid="{{categoryid}}" data-entryid="{{entryid}}" data-page="{{page}}" data-query="{{query}}" data-allowedit="{{#allowedit}}1{{/allowedit}}" data-nologin="{{#nologin}}1{{/nologin}}" data-history="{{#history}}1{{/history}}" data-pageurl="{{{pageurl}}}" data-minlength="{{minlength}}">
+    {{#editurl}}<p class="text-end text-right"><a class="btn btn-secondary" href="{{{editurl}}}">{{#str}} wb_faq:canedit, local_wb_faq {{/str}}</a></p>{{/editurl}}
+    {{#showsearch}}
+    {{> local_wb_faq/display_search }}
+    {{/showsearch}}
+    <div class="sr-only visually-hidden" role="status" data-region="faq-status"></div>
+    <div data-region="faq-content" aria-busy="false">
+        {{#search}}{{> local_wb_faq/search_results }}{{/search}}
+        {{#category}}{{> local_wb_faq/faq }}{{/category}}
+    </div>
 </div>
-
-{{! Has to be included this way to make it work when lazy loaded via ajax }}
-<script>
-  if (typeof require == 'function') {
-      require(['local_wb_faq/faq', 'local_wb_faq/searchinput'], function(faq,search) {
-        faq.init({{{json}}}, {{{root}}}, '{{{uid}}}');
-      });
-  }
-</script>
-
 {{#js}}
-    require(['local_wb_faq/faq', 'local_wb_faq/searchinput'], function(faq,search) {
-      faq.init({{{json}}}, {{{root}}}, '{{{uid}}}');
-    });
-    require(['local_wb_faq/edit'], function(edit) {
-      edit.init();
-    });
+require(['local_wb_faq/faq'], function(faq) {
+    faq.init('{{uid}}');
+});
+{{#allowedit}}
+require(['local_wb_faq/edit'], function(edit) {
+    edit.init('{{uid}}');
+});
+{{/allowedit}}
 {{/js}}

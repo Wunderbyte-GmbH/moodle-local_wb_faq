@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,46 +12,37 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin event observers are registered here.
+ * Renderer of the plugin.
  *
- * @package local_entites
- * @copyright 2022 Wunderbyte Gmbh <info@wunderbyte.at>
- * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_wb_faq
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+declare(strict_types=1);
 
 namespace local_wb_faq\output;
 
 use plugin_renderer_base;
-use templatable;
 
 /**
  * Renderer class.
- * @package mod_mooduell
+ *
+ * @package    local_wb_faq
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class renderer extends plugin_renderer_base {
-
     /**
-     * Render a faq list.
+     * Renders a FAQ instance.
      *
-     * @param templatable $viewpage
-     * @return string|boolean
+     * @param faq_list $faq
+     * @return string
      */
-    public function render_list_faq(templatable $data) {
-        $data = $data->export_for_template($this);
-        return $this->render_from_template('local_wb_faq/faq_list', $data);
-    }
-
-    /**
-     * Render a searchfield.
-     *
-     * @param templatable $viewpage
-     * @return string|boolean
-     */
-    public function render_display_search(templatable $data) {
-        $data = $data->export_for_template($this);
-        return $this->render_from_template('local_wb_faq/display_search', $data);
+    public function render_faq_list(faq_list $faq): string {
+        return $this->render_from_template('local_wb_faq/faq_list', $faq->export_for_template($this));
     }
 }

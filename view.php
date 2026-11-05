@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,41 +12,39 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
+ * Stable link to a category or question, used by the global search and the events.
+ *
  * @package    local_wb_faq
- * @copyright  2022 Wunderbyte GmbH
- * @author     Thomas Winkler
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use local_wb_faq\form\categories;
-use local_wb_faq\output\display_search;
-use local_wb_faq\output\faq_list;
-use local_wb_faq\wb_faq;
+declare(strict_types=1);
 
-require_once('../../config.php');
+// phpcs:ignore moodle.Files.RequireLogin.Missing -- The login check below depends on a setting.
+require_once(__DIR__ . '/../../config.php');
 
+use local_wb_faq\local\access;
+use local_wb_faq\local\entry_repository;
+use local_wb_faq\local\page_url;
 
-$entryid = optional_param('id', 0, PARAM_INT);
-$context = \context_system::instance();
-$PAGE->set_context($context);
-require_login();
-$PAGE->set_url(new moodle_url('/local/wb_faq/view.php', array('id' => $entryid)));
+$id = required_param('id', PARAM_INT);
 
-$title = "FAQ";
-$PAGE->set_title($title);
-$PAGE->set_heading($title);
+$PAGE->set_context(context_system::instance());
+$PAGE->set_url(new moodle_url('/local/wb_faq/view.php', ['id' => $id]));
 
-$sm = new wb_faq();
+// Whether users who are not logged in can read the FAQ depends on the settings.
+if (!access::can_read()) {
+    require_login();
+}
 
-$parentid = $sm->get_parentid_from_entryid($entryid);
-echo $OUTPUT->header();
+$urls = new page_url(new moodle_url('/local/wb_faq/index.php'));
+$record = (new entry_repository())->get($id);
+if ($record && (string)$record->type === entry_repository::TYPE_QUESTION) {
+    redirect(new moodle_url($urls->category(0, 0, $id)));
+}
 
-$renderer = $PAGE->get_renderer('local_wb_faq');
-$data = new display_search($USER->id, $parentid);
-echo $renderer->render_display_search($data);
-$data = new faq_list($USER->id, $parentid, false, $entryid);
-echo $renderer->render_list_faq($data);
-echo $OUTPUT->footer();
+redirect(new moodle_url($urls->category($record ? $id : 0)));

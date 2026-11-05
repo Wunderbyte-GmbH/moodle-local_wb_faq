@@ -13,217 +13,79 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/*
- * @package    local_wunderbyte_table
- * @copyright  Wunderbyte GmbH <info@wunderbyte.at>
+/**
+ * Opens the FAQ in a modal from the help menu in the navigation bar.
+ *
+ * @module     local_wb_faq/faqnavbar
+ * @copyright  2024 Wunderbyte GmbH <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-//
-import {get_strings as getstrings} from "core/str";
-import Ajax from "core/ajax";
-import Templates from "core/templates";
-import MyModal from 'local_wb_faq/custommodal';
-// Import ModalEvents from 'core/modal_events'.
+import Ajax from 'core/ajax';
+import Modal from 'core/modal';
+import Notification from 'core/notification';
+import Templates from 'core/templates';
+import {get_string as getString} from 'core/str';
 
-var modal = null;
-var counterlimit = 0; // Can be overridden.
-var counter = 0;
+const UID = 'navbarmodal';
+const SELECTOR = '[data-action="local_wb_faq-open-modal"]';
 
-var SELECTORS = {
-  TABS: 'faq-page-navbar-tab a.nav-link',
-  FAQTAB: '#faq-nav-pillsone-tab',
-  SUPPORTMESSAGEBUTTON: '[data-id="supportmessage-form"]',
-  THANKYOUTAB: '#faq-nav-pillsthree-tab',
+let modal = null;
+
+/**
+ * Creates the modal with the top level of the FAQ.
+ *
+ * @param {number} minlength
+ * @returns {Promise<Modal>}
+ */
+const createModal = async minlength => {
+    const pageurl = M.cfg.wwwroot + '/local/wb_faq/index.php';
+    const category = await Ajax.call([{
+        methodname: 'local_wb_faq_get_category',
+        args: {uid: UID, pageurl},
+    }])[0];
+
+    return Modal.create({
+        title: getString('faq', 'local_wb_faq'),
+        large: true,
+        removeOnClose: false,
+        body: Templates.render('local_wb_faq/faq_list', {
+            uid: UID,
+            root: 0,
+            categoryid: 0,
+            entryid: 0,
+            page: 0,
+            query: '',
+            allowedit: false,
+            nologin: false,
+            history: false,
+            pageurl,
+            formaction: pageurl,
+            hiddenparams: [],
+            minlength,
+            showsearch: true,
+            category,
+        }),
+    });
 };
 
 /**
- * Gets called from mustache template.
- *
+ * Starts the menu entry.
  */
-export function init() {
-
-  addEvents();
-  addLinks();
-}
-
-/**
- * Function to increase counter. Also enables message tab, if counter is high enough.
- */
-/**
- *
- * @param {boolean} max
- */
-export function increaseCounter(max = false) {
-
-  // If max is true, we enable message.
-  if (max) {
-    counter = counterlimit;
-  }
-
-  counter++;
-
-  if (counter >= counterlimit) {
-    const tabs = document.querySelectorAll(SELECTORS.SUPPORTMESSAGEBUTTON);
-
-    tabs.forEach(tab => {
-      tab.classList.remove('hidden');
-    });
-  }
-}
-
-/**
- * Adds Evente to menu button
- */
-async function addEvents() {
-  let button = document.querySelector("[data-id='wb-faq-navbar-open-modal']");
-
-  if (!button) {
-
-    return;
-  }
-
-  if (button.initialized) {
-    return;
-  }
-
-  button.initialized = true;
-
-  button.addEventListener('click', async () => {
-
-    Ajax.call([
-      {
-        methodname: "local_wb_faq_get_faq_data",
-        args: {},
-        done: async function(faqdata) {
-
-          if (button.dataset.supportthankyou.length > 0) {
-            faqdata.thankyou = button.dataset.supportthankyou;
-          }
-          const data = await returnDataForModal(faqdata);
-
-          if (!modal) {
-            createModal(data, modal);
-          } else {
-            modal.show();
-          }
-
-        },
-        fail: function(ex) {
-          // eslint-disable-next-line no-console
-          console.log(ex);
-        },
-      },
-    ]);
-  });
-}
-
-/**
- * Function to create modal from data.
- * @param {*} data
- */
-async function createModal(data) {
-
-  modal = await MyModal.create({
-    large: true,
-    body: Templates.render('local_wb_faq/navbar/body', data),
-    footer: '',
-  });
-  modal.setRemoveOnClose(false);
-  modal.show();
-}
-
-/**
- * Function do create the data structure for the modal.
- * @param {*} faqdata
- * @returns {object}
- */
-async function returnDataForModal(faqdata) {
-
-  const loadstrings = [
-    {
-      key: 'searchfaqs',
-      component: 'local_wb_faq',
-    },
-  ];
-
-  const strings = await getstrings(loadstrings);
-
-  let data = {
-    tabs: [
-      {
-          "name": strings[0],
-          "id": 'one',
-          "active": true,
-          "success": true
-      }
-    ],
-    body: {
-      thankyou: faqdata.thankyou ?? false
+export const init = () => {
+    const button = document.querySelector(SELECTOR);
+    if (!button || button.dataset.initialized) {
+        return;
     }
-  };
+    button.dataset.initialized = '1';
 
-  data.json = JSON.parse(faqdata.json);
-  data.root = faqdata.root;
-  data.uid = faqdata.uid;
-  data.canedit = false;
-  data.allowedit = false;
-
-  return data;
-}
-
-/**
- * Function to add links.
- */
-function addLinks() {
-
-  // First, fetch the url from the corresponding but hidden link in the navbar.
-
-  const ticketbuttons = document.querySelectorAll('a[data-id="ticket-aufgeben"]');
-
-  if (ticketbuttons) {
-    ticketbuttons.forEach(button => {
-      button.addEventListener('click', () => {
-        document.querySelector('[data-id="wb-faq-navbar-open-modal"]').click();
-
-      });
+    button.addEventListener('click', async e => {
+        e.preventDefault();
+        try {
+            modal = modal ?? await createModal(Number(button.dataset.minlength));
+            modal.show();
+        } catch (error) {
+            Notification.exception(error);
+        }
     });
-  }
-
-  const vertriebslink = document.querySelector('[data-id="link-vertrieb"]');
-  const vertriebbuttons = document.querySelectorAll('a[data-id="anfrage-vertrieb"]');
-  if (vertriebbuttons) {
-    vertriebbuttons.forEach(button => {
-      button.setAttribute('href', vertriebslink);
-      button.setAttribute('target', "_blank");
-    });
-  }
-
-  const stoerunglink = document.querySelector('[data-id="link-stoerung"]');
-  const stoerungsbuttons = document.querySelectorAll('a[data-id="stoerung-melden"]');
-  if (stoerungsbuttons) {
-    stoerungsbuttons.forEach(button => {
-      button.setAttribute('href', stoerunglink);
-      button.setAttribute('target', "_blank");
-    });
-  }
-
-  const meinetickets = document.querySelector('[data-id="link-meine-tickets"]');
-  const meineticketsbuttons = document.querySelectorAll('a[data-id="meine-tickets"]');
-  if (meineticketsbuttons) {
-    meineticketsbuttons.forEach(button => {
-      button.setAttribute('href', meinetickets);
-      button.setAttribute('target', "_blank");
-    });
-  }
-
-  const weiterbildungslink = document.querySelector('[data-id="link-weiterbildung"]');
-  const weiterbildungsbuttons = document.querySelectorAll('a[data-id="weiterbildung"]');
-  if (weiterbildungsbuttons) {
-    weiterbildungsbuttons.forEach(button => {
-      button.setAttribute('href', weiterbildungslink);
-      button.setAttribute('target', "_blank");
-    });
-  }
-
-}
+};

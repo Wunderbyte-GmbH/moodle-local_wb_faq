@@ -1,55 +1,30 @@
 {{!
     This file is part of Moodle - http://moodle.org/
+
     Moodle is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
+
     Moodle is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
+
     You should have received a copy of the GNU General Public License
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template mod_mooduell/viewpage
-    Template which defines a mooduell view page.
-    Classes required for JS:
-    * none
-    Data attributes required for JS:
-    * none
-    Context variables required for this template:
+    @template local_wb_faq/display_search
+
+    The search form. It also works as a plain form if JavaScript is not available.
+
     Example context (json):
-    {
-        "categories" : [
-            [
-               {
-                  "catid":"7",
-                  "contextid":"1",
-                  "catname":"MooDuell Pr\u00e4sentation",
-                  "courseid":"50"
-               }
-            ]
-        ]
-    }
+    {"uid": "abc", "query": "", "formaction": "#", "hiddenparams": [], "minlength": 3}
 }}
-
-<div class="faq-search-container">
-  <input class='my-2 w-auto form-control searchfaq-{{uid}}' type='text' id='searchfaq-{{uid}}' placeholder='{{#str}} searchfaq, local_wb_faq {{/str}}'>
-</div>
-
-<div id="wb_faq_searchbox" class="wb_faq_searchbox-{{uid}}"></div>
-
-<script>
-  if (typeof require == 'function') {
-    require(['local_wb_faq/searchinput'], function(search) {
-      search.init('input.searchfaq-{{uid}}', '.wb_faq_searchbox-{{uid}}', '.wb_faq_searchbox-{{uid}} .accordion-item','.wb_faq_searchbox-{{uid}} .accordion-body', {{{json}}});
-    });
-  }
-</script>
-
-{{#js}}
-  require(['local_wb_faq/searchinput'], function(search) {
-    search.init('input.searchfaq-{{uid}}', '.wb_faq_searchbox-{{uid}}', '.wb_faq_searchbox-{{uid}} .accordion-item','.wb_faq_searchbox-{{uid}} .accordion-body', {{{json}}});
-  });
-{{/js}}
+<form class="wb-faq-search mb-3" method="get" action="{{{formaction}}}" role="search" data-region="faq-search-form">
+    {{#hiddenparams}}<input type="hidden" name="{{name}}" value="{{value}}">{{/hiddenparams}}
+    <label for="wb-faq-search-{{uid}}" class="sr-only visually-hidden">{{#str}} searchfaq, local_wb_faq {{/str}}</label>
+    <input id="wb-faq-search-{{uid}}" class="form-control wb-faq-search-input" type="search" name="faqq" value="{{query}}" placeholder="{{#str}} searchfaq, local_wb_faq {{/str}}" autocomplete="off" data-region="faq-search-input">
+    <small class="d-none form-text" data-region="faq-search-hint">{{#str}} stringtooshort, local_wb_faq, {{minlength}} {{/str}}</small>
+</form>

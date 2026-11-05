@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,77 +12,75 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * FAQ search
+ * Search area of the plugin.
  *
  * @package    local_wb_faq
- * @copyright  2022 Thomas Winkler
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+declare(strict_types=1);
 
 namespace local_wb_faq\search;
 
-use local_wb_faq\wb_faq;
-
-defined('MOODLE_INTERNAL') || die();
+use context;
+use context_system;
+use core_search\base;
+use core_search\document;
+use core_search\document_factory;
+use core_search\manager;
+use local_wb_faq\local\access;
+use local_wb_faq\local\entry_repository;
+use moodle_recordset;
+use moodle_url;
+use stdClass;
 
 /**
- * FAQ search area.
+ * Makes the FAQ findable by the global search.
  *
  * @package    local_wb_faq
- * @copyright  2022 Wunderbyte GmbH
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class faqentry extends \core_search\base {
-
+class faqentry extends base {
     /**
-     * @var array Internal quick static cache.
-     */
-    protected $forumsdata = array();
-
-
-    /**
-     * Returns recordset containing required data for indexing FAQs.
+     * Returns the recordset of the records to index.
      *
-     * @param int $modifiedfrom timestamp
-     * @param \context|null $context Optional context to restrict scope of returned results
-     * @return moodle_recordset|null Recordset (or null if no results)
+     * @param int $modifiedfrom
+     * @param context|null $context
+     * @return moodle_recordset|null
      */
-    public function get_document_recordset($modifiedfrom = 0, \context $context = null) {
+    public function get_document_recordset($modifiedfrom = 0, ?context $context = null) {
         global $DB;
-        $sql = "SELECT * FROM {local_wb_faq_entry}
-                 WHERE timemodified >= ?
-                 AND enabled = 1
-                 ORDER BY timemodified ASC";
-        return $DB->get_recordset_sql($sql, [$modifiedfrom]);
+
+        return $DB->get_recordset_select(
+            entry_repository::TABLE,
+            'timemodified >= ? AND enabled = 1',
+            [$modifiedfrom],
+            'timemodified ASC'
+        );
     }
 
     /**
-     * Returns the document associated with this fAQ id.
+     * Returns the document of a record.
      *
-     * @param stdClass $record FAQ info.
-     * @param array    $options
-     * @return \core_search\document
+     * @param stdClass $record
+     * @param array $options
+     * @return document
      */
-    public function get_document($record, $options = array()) {
-
-        $context = \context_system::instance();
-        // Prepare associative array with data from DB.
-        $doc = \core_search\document_factory::instance($record->id, $this->componentname, $this->areaname);
-        $doc->set('title', content_to_text($record->title, false));
-        $doc->set('content', content_to_text($record->content, FORMAT_HTML));
-        $doc->set('contextid', $context->id);
-        // Not associated with a course
-        $courseid = wb_faq::get_related_courseid_from_entryid($record->id) ?? 1;
-        $doc->set('courseid', $courseid);
-        $doc->set('owneruserid', \core_search\manager::NO_OWNER_ID);
+    public function get_document($record, $options = []) {
+        $doc = document_factory::instance($record->id, $this->componentname, $this->areaname);
+        $doc->set('title', content_to_text($record->title, FORMAT_PLAIN));
+        $doc->set('content', content_to_text((string)$record->content, FORMAT_HTML));
+        $doc->set('contextid', context_system::instance()->id);
+        $doc->set('courseid', SITEID);
+        $doc->set('owneruserid', manager::NO_OWNER_ID);
         $doc->set('modified', $record->timemodified);
 
-        // Check if this document should be considered new.
-        if (isset($options['lastindexedtime']) && ($options['lastindexedtime'] < $record->timemodified)) {
-            // If the document was created after the last index time, it must be new.
+        if (isset($options['lastindexedtime']) && $options['lastindexedtime'] < $record->timecreated) {
             $doc->set_is_new(true);
         }
 
@@ -90,67 +88,37 @@ class faqentry extends \core_search\base {
     }
 
     /**
-     * Returns true if this area uses file indexing.
+     * Whether the current user can access a document.
      *
-     * @return bool
-     */
-    public function uses_file_indexing() {
-        return false;
-    }
-
-
-    /**
-     * Whether the user can access the document or not.
-     *
-     * @throws \dml_missing_record_exception
-     * @throws \dml_exception
-     * @param int $id Forum post id
-     * @return bool
+     * @param int $id
+     * @return int
      */
     public function check_access($id) {
-        global $DB;
-
-        // If the record does not exist anymore.
-        if (!$myobject = $DB->get_record('local_wb_faq_entry', ['id' => $id, 'enabled' => 1])) {
-            return \core_search\manager::ACCESS_DELETED;
+        $record = (new entry_repository())->get((int)$id);
+        if (!$record) {
+            return manager::ACCESS_DELETED;
         }
 
-        // Here we could check for the active courses of the user and deny access.
-        if ($myobject->enabled != 1) {
-            return \core_search\manager::ACCESS_DENIED;
-        }
-
-        return \core_search\manager::ACCESS_GRANTED;
+        return (new access())->can_view_record($record) ? manager::ACCESS_GRANTED : manager::ACCESS_DENIED;
     }
 
     /**
-     * Link to the FAQ entry.
+     * Returns the link to a document.
      *
-     * @param \core_search\document $doc
-     * @return \moodle_url
+     * @param document $doc
+     * @return moodle_url
      */
-    public function get_doc_url(\core_search\document $doc) {
-
-        return new \moodle_url('/local/wb_faq/view.php', array('id' => $doc->get('itemid')));
+    public function get_doc_url(document $doc) {
+        return new moodle_url('/local/wb_faq/view.php', ['id' => $doc->get('itemid')]);
     }
 
     /**
-     * Link to the FAQ.
+     * Returns the link to the context of a document.
      *
-     * @param \core_search\document $doc
-     * @return \moodle_url
+     * @param document $doc
+     * @return moodle_url
      */
-    public function get_context_url(\core_search\document $doc) {
-        return new \moodle_url('/local/wb_faq/view.php', array('id' => $doc->get('itemid')));
-    }
-
-
-    /**
-     * Confirms that data entries support group restrictions.
-     *
-     * @return bool false
-     */
-    public function supports_group_restriction() {
-        return false;
+    public function get_context_url(document $doc) {
+        return $this->get_doc_url($doc);
     }
 }
