@@ -33,6 +33,7 @@ Feature: Access to the FAQ
   Scenario: Users who are not logged in can read public categories if this is allowed
     Given the following config values are set as admin:
       | allowanonymous | 1 | local_wb_faq |
+      | forcelogin     | 0 |              |
     When I open the FAQ page "index"
     And I set the FAQ page reload marker
     Then I should see "Public"

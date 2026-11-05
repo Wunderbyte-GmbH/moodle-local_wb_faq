@@ -138,15 +138,14 @@ final class access_test extends advanced_testcase {
      * Whether users who are not logged in can read depends on the setting and on forcelogin.
      */
     public function test_anonymous_access(): void {
-        global $CFG;
-
         $this->setUser(0);
+        set_config('forcelogin', 0);
         $this->assertFalse(access::can_read());
 
         set_config('allowanonymous', 1, 'local_wb_faq');
         $this->assertTrue(access::can_read());
 
-        $CFG->forcelogin = true;
+        set_config('forcelogin', 1);
         $this->assertFalse(access::can_read());
         $this->expectException(\require_login_exception::class);
         access::require_read();

@@ -225,6 +225,7 @@ final class external_test extends advanced_testcase {
      */
     public function test_read_functions_with_anonymous_access(string $function): void {
         $question = $this->faq->create_question(['title' => 'Public question']);
+        set_config('forcelogin', 0);
         set_config('allowanonymous', 1, 'local_wb_faq');
         $this->setUser(0);
 
@@ -267,6 +268,7 @@ final class external_test extends advanced_testcase {
         $restricted = $this->faq->create_category(['title' => 'Restricted category', 'courseid' => $course->id]);
         $question = $this->faq->create_question(['title' => 'Restricted question', 'parentid' => $restricted->id]);
 
+        set_config('forcelogin', 0);
         set_config('allowanonymous', 1, 'local_wb_faq');
         $this->setUser(0);
 
