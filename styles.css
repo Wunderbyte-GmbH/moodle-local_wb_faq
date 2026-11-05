@@ -93,6 +93,7 @@
     padding: .75rem 1.25rem .75rem 2.75rem;
     border-radius: 50rem;
     box-shadow: var(--wb-faq-shadow);
+    /* stylelint-disable-next-line function-url-scheme-disallowed-list */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236a737b' stroke-width='2' stroke-linecap='round' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
     background-position: 1rem center;
     background-repeat: no-repeat;
@@ -116,6 +117,7 @@
 }
 
 .wb-faq-design-modern .wb-faq-category {
+    /* stylelint-disable-next-line declaration-no-important */
     margin-bottom: 0 !important;
     border: 1px solid var(--wb-faq-border);
     border-radius: var(--wb-faq-radius);
@@ -164,6 +166,7 @@
 
 /* Questions as an accordion with a chevron on the end of the line. */
 .wb-faq-design-modern .wb-faq-entry {
+    /* stylelint-disable-next-line declaration-no-important */
     margin-bottom: .75rem !important;
     border: 1px solid var(--wb-faq-border);
     border-radius: var(--wb-faq-radius);
@@ -226,12 +229,14 @@
 }
 
 .wb-faq-design-modern .wb-faq-excerpt {
+    /* stylelint-disable-next-line declaration-no-important */
     padding: 0 1.25rem .75rem !important;
     opacity: .75;
 }
 
 /* Search results: the category link gets its own line, so that the chevron stays on the end of the title. */
 .wb-faq-design-modern .wb-faq-search-results .wb-faq-category {
+    /* stylelint-disable-next-line declaration-no-important */
     margin-bottom: .75rem !important;
 }
 
