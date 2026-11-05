@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,34 +12,36 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Privacy Subsystem implementation for local_wb_faq
+ * Privacy subsystem implementation.
  *
  * @package    local_wb_faq
- * @copyright  Wunderbyte <info@wunderbyte.at>
- * @author     Thomas Winkler
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+declare(strict_types=1);
+
 namespace local_wb_faq\privacy;
 
-defined('MOODLE_INTERNAL') || die();
+use core_privacy\local\metadata\null_provider;
 
 /**
- * The local_wb_faq module does not store any data.
+ * The plugin does not store any personal data.
  *
- * @copyright  2022  Thomas Winkler <info@wunderbyte.at>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_wb_faq
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class provider implements \core_privacy\local\metadata\null_provider {
+class provider implements null_provider {
     /**
-     * Get the language string identifier with the component's language
-     * file to explain why this plugin stores no data.
+     * Returns the identifier of the string explaining why no data is stored.
      *
-     * @return  string
+     * @return string
      */
-    public static function get_reason() : string {
+    public static function get_reason(): string {
         return 'privacy:metadata';
     }
 }

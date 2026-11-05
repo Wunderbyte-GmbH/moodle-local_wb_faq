@@ -23,14 +23,21 @@ Alternatively, you can run
 
 to complete the installation from the command line.
 
-After every kind of installation, you need to manually create a webservice token for your admin user. To do this, go here:
+## Usage ##
 
-    {your/moodle/dirroot}/admin/webservice/tokens.php
+The FAQ is available at `/local/wb_faq/index.php`. Users with the capability `local/wb_faq:canedit` manage it at
+`/local/wb_faq/wb_faq.php`, which is linked from the FAQ and from the plugin settings.
 
-Make sure you have the webservices enabled on your system, otherwise this won't work.
+It can be embedded with the shortcode `[faq]`, which needs the plugin `filter_shortcodes`. Optional attributes are
+`cat="Name of the category"`, `nosearch=1`, `nolist=1` and `allowedit=1`.
 
-    {your/moodle/dirroot}/admin/settings.php?section=optionalsubsystems
+Links keep their state in the parameters `faqcat`, `faqentry`, `faqpage` and `faqq`.
 
+## Settings ##
+
+* **Allow access without login**: Users who are not logged in can read all categories without a course.
+* **Restrict access to own courses**: Categories linked to a course are only shown to users of this course.
+* **Entries per page**, **Breadcrumb labels**, **Help menu** and its **links**, **Open block drawer after login**.
 
 ## License ##
 

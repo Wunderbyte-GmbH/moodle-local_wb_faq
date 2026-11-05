@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,77 +12,72 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * This class contains a list of webservice functions related to the Shopping Cart Module by Wunderbyte.
+ * Webservice reordering siblings.
  *
  * @package    local_wb_faq
  * @copyright  2022 Georg Maißer <info@wunderbyte.at>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 declare(strict_types=1);
 
 namespace local_wb_faq\external;
 
-use external_api;
-use external_function_parameters;
-use external_value;
-use external_single_structure;
-use external_multiple_structure;
+use context_system;
+use core_external\external_api;
+use core_external\external_function_parameters;
+use core_external\external_multiple_structure;
+use core_external\external_single_structure;
+use core_external\external_value;
 use local_wb_faq\wb_faq;
 
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->libdir . '/externallib.php');
-
+/**
+ * Applies a new order to categories or questions with the same parent.
+ *
+ * @package    local_wb_faq
+ * @copyright  2022 Georg Maißer <info@wunderbyte.at>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class set_wbfaq_order extends external_api {
-
     /**
-     * Describes the paramters for set_wbfaq_order.
+     * Describes the parameters.
      *
      * @return external_function_parameters
      */
     public static function execute_parameters(): external_function_parameters {
         return new external_function_parameters([
-            'ids' => new external_multiple_structure(
-                new external_value(PARAM_INT, 'The request ID', VALUE_REQUIRED)
-            )
+            'ids' => new external_multiple_structure(new external_value(PARAM_INT, 'Id of a category or question')),
         ]);
     }
 
     /**
-     * Webservice for reordering wb_faqs.
+     * Applies the order.
      *
      * @param array $ids
-     *
      * @return array
      */
     public static function execute(array $ids): array {
-        if (!has_capability('local/wb_faq:canedit', \context_system::instance())) {
-            $error = ['status' => 0, 'error' => 'no capability'];
-            return $error;
-        }
-        $params = self::validate_parameters(self::execute_parameters(), [
-            'ids' => $ids,
-        ]);
-        $error = wb_faq::set_order($params['ids']);
+        $params = self::validate_parameters(self::execute_parameters(), ['ids' => $ids]);
+        $context = context_system::instance();
+        self::validate_context($context);
+        require_capability('local/wb_faq:canedit', $context);
 
-        $error = ['status' => 1, 'error' => 'none'];
-        return $error;
+        wb_faq::set_order($params['ids']);
+
+        return ['status' => true];
     }
 
-    /*
-     * Returns description of method result value.
+    /**
+     * Describes the result.
      *
      * @return external_single_structure
      */
     public static function execute_returns(): external_single_structure {
-        return new external_single_structure(array(
-            'status' => new external_value(PARAM_INT, 'Status'),
-            'error' => new external_value(PARAM_TEXT, 'Error')
-            )
-        );
+        return new external_single_structure([
+            'status' => new external_value(PARAM_BOOL, 'Whether the order was applied'),
+        ]);
     }
 }

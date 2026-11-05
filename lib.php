@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - http://moodle.org/
+// This file is part of Moodle - https://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -12,129 +12,103 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
+ * Callbacks of the plugin.
+ *
  * @package    local_wb_faq
- * @copyright  2022 Wunderbyte GmbH
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- define('TRANSMISSION_PENDING', 0);
- define('TRANSMISSION_ERROR', 1);
- define('TRANSMISSION_OK', 2);
+declare(strict_types=1);
+
+use local_wb_faq\local\access;
+use local_wb_faq\local\entry_repository;
+use local_wb_faq\wb_faq;
 
 /**
- * Adds module specific settings to the settings block
- *
- * @param settings_navigation $settings The settings navigation object
- * @param navigation_node $modnode The node to add module settings to
- *
- * $settings is unused, but API requires it. Suppress PHPMD warning.
- *
- */
-
-/**
- * Renders the popup Link.
+ * Renders the help menu in the navigation bar, if it is activated.
  *
  * @param renderer_base $renderer
  * @return string The HTML
  */
-function local_wb_faq_render_navbar_output(\renderer_base $renderer) {
-
-    // Early bail out conditions.
-    if (!isloggedin() || isguestuser()) {
+function local_wb_faq_render_navbar_output(renderer_base $renderer): string {
+    if (!isloggedin() || isguestuser() || empty(get_config('local_wb_faq', 'usesupport'))) {
         return '';
     }
 
-    $usesupport = get_config('local_wb_faq', 'usesupport');
-
-    if (empty($usesupport)) {
-        return '';
-    }
-
-    $modal = $renderer->render_from_template('local_wb_faq/navbar/popoverbutton', []);
-
-    // Create the links to the transfer.php.
-    $supportvertrieburl = new moodle_url('/local/wb_faq/transfer.php', [
-        'type' => 'vertrieb',
+    return $renderer->render_from_template('local_wb_faq/navbar/support_menu', [
+        'links' => local_wb_faq_get_support_links(),
+        'minlength' => \local_wb_faq\output\search_view::MIN_QUERY_LENGTH,
     ]);
-
-    // Create the links to the transfer.php.
-    $supportausbildungburl = new moodle_url('/local/wb_faq/transfer.php', [
-        'type' => 'ausbildung',
-    ]);
-
-    // Create the links to the transfer.php.
-    $supportstoerungburl = new moodle_url('/local/wb_faq/transfer.php', [
-        'type' => 'stoerung',
-    ]);
-
-    $supportmyticketsurl = new moodle_url('/local/wb_faq/transfer.php', [
-        'type' => 'mymessages',
-    ]);
-
-    $teamurl = new moodle_url('/local/wb_faq/transfer.php', [
-        'type' => 'team',
-    ]);
-
-    $output = '<div class="popover-region nav-link icon-no-margin dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button"
-        id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        '. get_string('support', 'local_wb_faq') .'
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">'
-            . $modal . '</a>
-            <a class="dropdown-item"data-id="link-weiterbildung" href="' . $supportausbildungburl->out() . '" target="_blank">'
-                . get_string('supportweiterbildung', 'local_wb_faq') . '</a>
-            <a class="dropdown-item" data-id="link-vertrieb" href="' . $supportvertrieburl->out() . '" target="_blank">'
-                . get_string('supportvertrieb', 'local_wb_faq') . '</a>
-            <a class="dropdown-item" data-id="link-meine-tickets" href="' . $supportmyticketsurl->out() . '" target="_blank">'
-                . get_string('supportmytickets', 'local_wb_faq') . '</a>
-            <a class="dropdown-item" data-id="link-stoerung" href="' . $supportstoerungburl->out() . '" target="_blank">'
-                . get_string('supportstoerung', 'local_wb_faq') . '</a>
-            <a class="dropdown-item" data-id="link-team" href="' . $teamurl->out() . '" target="_blank">'
-                . get_string('team', 'local_wb_faq') . '</a>
-        </div>
-    </div>';
-
-    return $output;
 }
 
 /**
+ * Parses the setting with the links of the help menu. It has one "Label|URL" per line.
  *
- * Get saved files for the page
+ * @return array
+ */
+function local_wb_faq_get_support_links(): array {
+    $links = [];
+    foreach (preg_split('/\R/', (string)get_config('local_wb_faq', 'supportlinks')) as $line) {
+        $parts = array_map('trim', explode('|', $line, 2));
+        if (count($parts) !== 2 || $parts[0] === '') {
+            continue;
+        }
+        $url = clean_param($parts[1], PARAM_URL);
+        if ($url !== '') {
+            $links[] = ['label' => format_string($parts[0]), 'url' => $url];
+        }
+    }
+
+    return $links;
+}
+
+/**
+ * Serves the files embedded into questions, to the users who can see the question.
  *
- * @param mixed $course
- * @param mixed $birecordorcm
- * @param mixed $context
- * @param mixed $filearea
- * @param mixed $args
+ * @param stdClass $course
+ * @param stdClass|null $cm
+ * @param context $context
+ * @param string $filearea
+ * @param array $args
  * @param bool $forcedownload
  * @param array $options
+ * @return bool False if the file does not exist or may not be accessed.
  */
-function local_wb_faq_pluginfile($course, $birecordorcm, $context, $filearea, $args, $forcedownload, array $options = array()) {
-    $fs = get_file_storage();
+function local_wb_faq_pluginfile(
+    $course,
+    $cm,
+    context $context,
+    string $filearea,
+    array $args,
+    bool $forcedownload,
+    array $options = []
+): bool {
+    if ($context->contextlevel !== CONTEXT_SYSTEM || $filearea !== wb_faq::FILEAREA || count($args) < 2) {
+        return false;
+    }
+    if (!access::can_read()) {
+        require_login();
+    }
+
+    $itemid = (int)array_shift($args);
+    $record = (new entry_repository())->get($itemid);
+    if (!$record || !(new access())->can_view_record($record)) {
+        return false;
+    }
 
     $filename = array_pop($args);
     $filepath = $args ? '/' . implode('/', $args) . '/' : '/';
-
-    if ($filearea === 'description') {
-        if (!$file = $fs->get_file($context->id, 'local_wb_faq', 'entitycontent', 0, $filepath, $filename) or $file->is_directory()) {
-            send_file_not_found();
-        }
-    } else if ($filearea === 'image') {
-        $itemid = array_pop($args);
-        $file = $fs->get_file($context->id, 'local_wb_faq', $filearea, $itemid, '/', $filename);
-        // Todo: Maybe put in fall back image.
-    } else {
-        $itemid = array_pop($args);
-        if (!$file = $fs->get_file($context->id, 'local_wb_faq', $filearea, $itemid, '/', $filename) or $file->is_directory()) {
-            send_file_not_found();
-        }
+    $file = get_file_storage()->get_file($context->id, 'local_wb_faq', $filearea, $itemid, $filepath, $filename);
+    if (!$file || $file->is_directory()) {
+        return false;
     }
 
     \core\session\manager::write_close();
     send_stored_file($file, null, 0, $forcedownload, $options);
+
+    return true;
 }

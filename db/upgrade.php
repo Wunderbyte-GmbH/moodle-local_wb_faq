@@ -23,6 +23,8 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+declare(strict_types=1);
+
 /**
  * Execute local_wb_faq upgrade from the given old version.
  *
@@ -34,13 +36,7 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    // For further information please read {@link https://docs.moodle.org/dev/Upgrade_API}.
-    //
-    // You will also have to create the db/install.xml file by using the XMLDB Editor.
-    // Documentation for the XMLDB Editor can be found at {@link https://docs.moodle.org/dev/XMLDB_editor}.
-
     if ($oldversion < 2022090600) {
-
         // Define field courseid to be added to local_wb_faq_entry.
         $table = new xmldb_table('local_wb_faq_entry');
         $field = new xmldb_field('courseid', XMLDB_TYPE_INTEGER, '10', null, null, null, '0', 'content');
@@ -55,7 +51,6 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
     }
 
     if ($oldversion < 2022091700) {
-
         // Define field courseid to be added to local_wb_faq_entry.
         $table = new xmldb_table('local_wb_faq_entry');
         $field = new xmldb_field('enabled', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'courseid');
@@ -77,7 +72,6 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
     }
 
     if ($oldversion < 2023050800) {
-
         // Define field module to be added to local_wb_faq_entry.
         $table = new xmldb_table('local_wb_faq_entry');
         $field = new xmldb_field('module', XMLDB_TYPE_CHAR, '255', null, null, null, null, 'parentid');
@@ -99,7 +93,6 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
     }
 
     if ($oldversion < 2023092901) {
-
         // Define table local_wb_faq_issues to be created.
         $table = new xmldb_table('local_wb_faq_issues');
 
@@ -129,7 +122,6 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
     }
 
     if ($oldversion < 2023092902) {
-
         // Define field status to be added to local_wb_faq_issues.
         $table = new xmldb_table('local_wb_faq_issues');
         $field = new xmldb_field('status', XMLDB_TYPE_INTEGER, '1', null, null, null, '0', 'module');
@@ -144,7 +136,6 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
     }
 
     if ($oldversion < 2023092905) {
-
         // Define field accountid to be added to local_wb_faq_issues.
         $table = new xmldb_table('local_wb_faq_issues');
         $field = new xmldb_field('accountid', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'module');
@@ -156,6 +147,49 @@ function xmldb_local_wb_faq_upgrade($oldversion) {
 
         // Wb_faq savepoint reached.
         upgrade_plugin_savepoint(true, 2023092905, 'local', 'wb_faq');
+    }
+
+    if ($oldversion < 2026110500) {
+        $table = new xmldb_table('local_wb_faq_entry');
+
+        // Records must have a defined place in the tree and in the sort order.
+        $DB->execute("UPDATE {local_wb_faq_entry} SET parentid = 0 WHERE parentid IS NULL");
+        $DB->execute("UPDATE {local_wb_faq_entry} SET sortorder = 0 WHERE sortorder IS NULL");
+        $DB->execute("UPDATE {local_wb_faq_entry} SET courseid = 0 WHERE courseid IS NULL");
+
+        foreach (['parentid', 'sortorder'] as $fieldname) {
+            $field = new xmldb_field($fieldname, XMLDB_TYPE_INTEGER, '10', null, null, null, '0');
+            $dbman->change_field_default($table, $field);
+        }
+
+        // These fields were only used by the removed ticket integration.
+        foreach (['module', 'supplement'] as $fieldname) {
+            $field = new xmldb_field($fieldname);
+            if ($dbman->field_exists($table, $field)) {
+                $dbman->drop_field($table, $field);
+            }
+        }
+
+        // The lists of a category are now read from the database.
+        $index = new xmldb_index('parent_type', XMLDB_INDEX_NOTUNIQUE, ['parentid', 'type']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Nothing writes to this table anymore.
+        $issues = new xmldb_table('local_wb_faq_issues');
+        if ($dbman->table_exists($issues)) {
+            $dbman->drop_table($issues);
+        }
+
+        // Settings of the removed ticket integration. This also removes the stored JWT secret.
+        $obsolete = ['debug', 'groupsnmodules', 'imagetoken', 'jwtapp', 'jwtsecret', 'minmessagelength', 'resturl',
+            'supportmessagebaseurl', 'thankyouforsupportmessage'];
+        foreach ($obsolete as $name) {
+            unset_config($name, 'local_wb_faq');
+        }
+
+        upgrade_plugin_savepoint(true, 2026110500, 'local', 'wb_faq');
     }
 
     return true;

@@ -15,36 +15,21 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Plugin capabilities are defined here.
+ * Capabilities of the plugin.
  *
- * @package     local_wb_faq
- * @category    access
- * @copyright   2022 Wunderbyte GmbH <info@wunderbyte.at>
- * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    local_wb_faq
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+declare(strict_types=1);
 
 defined('MOODLE_INTERNAL') || die();
 
 $capabilities = [
-    'local/wb_faq:cansendsupportmessage' => [
-        'riskbitmask' => RISK_DATALOSS,
-        'captype' => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => [
-            'user' => CAP_ALLOW,
-        ],
-    ],
     'local/wb_faq:canedit' => [
-        'riskbitmask' => RISK_DATALOSS,
+        'riskbitmask' => RISK_DATALOSS | RISK_XSS,
         'captype' => 'write',
-        'contextlevel' => CONTEXT_SYSTEM,
-        'archetypes' => [
-            'manager' => CAP_ALLOW,
-        ],
-    ],
-    'local/wb_faq:accessimages' => [
-        'riskbitmask' => RISK_MANAGETRUST,
-        'captype' => 'read',
         'contextlevel' => CONTEXT_SYSTEM,
         'archetypes' => [
             'manager' => CAP_ALLOW,

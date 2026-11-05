@@ -14,66 +14,48 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Javascript for sorting columns in question bank view.
+ * Drag and drop of categories and questions.
  *
- * @copyright  2022 Wunderbyte GmbH
- * @author     Thomas Winkler
+ * @module     local_wb_faq/reordering
+ * @copyright  2022 Wunderbyte GmbH <info@wunderbyte.at>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
- import {call as fetchMany} from 'core/ajax';
- import SortableList from 'core/sortable_list';
- import jQuery from 'jquery';
+import {call as fetchMany} from 'core/ajax';
+import Notification from 'core/notification';
+import SortableList from 'core/sortable_list';
+import jQuery from 'jquery';
 
- /**
-  * Sets up sortable list in the column sort order page.
-  * @param {Element} listRoot
-  * @param {String} identifier
-  */
- const initSortableLists = (listRoot, identifier) => {
-     new SortableList(listRoot);
+/**
+ * Returns the ids in their current order. A Set, as the copy following the mouse can still be in the list.
+ *
+ * @param {HTMLElement} list
+ * @returns {number[]}
+ */
+const getIdOrder = list => {
+    const items = list.querySelectorAll(':scope > li[data-id]');
 
-     jQuery(identifier + ' > *').on(SortableList.EVENTS.DROP, function(evt, info) {
-        if (info.positionChanged) {
-            const ids = getIdOrder(listRoot);
-            reorder(ids);
-            listRoot.querySelectorAll('.li').forEach(item => item.classList.remove('active'));
-        }
-     });
+    return [...new Set(Array.from(items, item => Number(item.dataset.id)))];
+};
 
-     jQuery(identifier + ' > *').on(SortableList.EVENTS.DRAGSTART, (event) => {
-         event.currentTarget.classList.add('active');
-     });
- };
+/**
+ * Makes the lists of a FAQ instance sortable.
+ *
+ * @param {string} uid
+ */
+export const init = uid => {
+    const region = document.querySelector(`[data-region="wb-faq"][data-uid="${uid}"]`);
 
- /**
-  * Call external function set_order - inserts the updated column in the config_plugins table.
-  *
-  * @param {Array} ids String that contains column order.
-  * @returns {Promise}
-  */
- const reorder = ids => fetchMany([{
-     methodname: 'local_wb_faq_set_wbfaq_order',
-     args: {ids},
- }])[0];
+    region.querySelectorAll('[data-region="faq-sortable"]').forEach(list => {
+        new SortableList(list);
 
- /**
-  * Gets the newly reordered columns to display in the question bank view.
-  * @param {Element} listRoot
-  * @returns {Array}
-  */
- const getIdOrder = listRoot => {
-     const columns = Array.from(listRoot.querySelectorAll('li[data-id]'))
-         .map(column => column.dataset.id);
-    columns.pop();
-    return columns;
- };
-
- /**
-  * Initialize module
-  * @param {String} identifier unique class or id with # . for columns.
-  */
- export const init = identifier => {
-     const listRoot = document.querySelector(`${identifier}`);
-     initSortableLists(listRoot, identifier);
- };
+        jQuery(list).on(SortableList.EVENTS.DROP, (event, info) => {
+            if (info.positionChanged) {
+                fetchMany([{
+                    methodname: 'local_wb_faq_set_wbfaq_order',
+                    args: {ids: getIdOrder(list)},
+                }])[0].catch(Notification.exception);
+            }
+        });
+    });
+};
