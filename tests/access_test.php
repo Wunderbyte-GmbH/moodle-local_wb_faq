@@ -48,6 +48,8 @@ final class access_test extends advanced_testcase {
     protected function setUp(): void {
         parent::setUp();
         $this->resetAfterTest();
+        // Moodle 5.2 turns on forcelogin in new installations, which would override the setting of the plugin.
+        set_config('forcelogin', 0);
         $this->faq = $this->getDataGenerator()->get_plugin_generator('local_wb_faq');
     }
 

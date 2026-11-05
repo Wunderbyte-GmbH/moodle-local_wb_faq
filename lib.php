@@ -42,6 +42,7 @@ function local_wb_faq_render_navbar_output(renderer_base $renderer): string {
     return $renderer->render_from_template('local_wb_faq/navbar/support_menu', [
         'links' => local_wb_faq_get_support_links(),
         'minlength' => \local_wb_faq\output\search_view::MIN_QUERY_LENGTH,
+        'design' => \local_wb_faq\output\faq_list::get_design(),
     ]);
 }
 

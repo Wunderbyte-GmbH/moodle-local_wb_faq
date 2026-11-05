@@ -29,6 +29,18 @@ defined('MOODLE_INTERNAL') || die();
 if ($hassiteconfig) {
     $settings = new admin_settingpage('local_wb_faq_settings', get_string('settings'));
 
+    $designs = [];
+    foreach (\local_wb_faq\output\faq_list::DESIGNS as $design) {
+        $designs[$design] = get_string('design_' . $design, 'local_wb_faq');
+    }
+    $settings->add(new admin_setting_configselect(
+        'local_wb_faq/design',
+        get_string('design', 'local_wb_faq'),
+        get_string('design_desc', 'local_wb_faq'),
+        \local_wb_faq\output\faq_list::DESIGNS[0],
+        $designs
+    ));
+
     $settings->add(new admin_setting_configcheckbox(
         'local_wb_faq/allowanonymous',
         get_string('allowanonymous', 'local_wb_faq'),

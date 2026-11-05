@@ -44,6 +44,9 @@ use templatable;
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class faq_list implements renderable, templatable {
+    /** @var string[] The available designs. Each one has rules in styles.css and a string design_<name>. */
+    public const DESIGNS = ['classic', 'modern'];
+
     /** @var access */
     private access $access;
 
@@ -104,6 +107,17 @@ class faq_list implements renderable, templatable {
     }
 
     /**
+     * Returns the configured design.
+     *
+     * @return string
+     */
+    public static function get_design(): string {
+        $design = (string)get_config('local_wb_faq', 'design');
+
+        return in_array($design, self::DESIGNS, true) ? $design : self::DESIGNS[0];
+    }
+
+    /**
      * Returns the data for the template local_wb_faq/faq_list.
      *
      * @param renderer_base $output
@@ -121,6 +135,7 @@ class faq_list implements renderable, templatable {
 
         $data = [
             'uid' => $this->uid,
+            'design' => self::get_design(),
             'root' => $this->rootid,
             'query' => $query,
             'allowedit' => $canedit,

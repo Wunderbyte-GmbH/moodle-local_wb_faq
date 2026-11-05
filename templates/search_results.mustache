@@ -28,8 +28,16 @@
     {{^tooshort}}{{^hasresults}}<p>{{#str}} noresult, local_wb_faq {{/str}}</p>{{/hasresults}}{{/tooshort}}
     <ul class="list-unstyled">
         {{#results}}
-        {{#iscategory}}{{> local_wb_faq/category }}{{/iscategory}}
-        {{^iscategory}}{{> local_wb_faq/entry }}{{/iscategory}}
+        {{#iscategory}}
+        <li class="wb-faq-category d-flex align-items-center mb-2" data-id="{{id}}">
+            {{> local_wb_faq/category }}
+        </li>
+        {{/iscategory}}
+        {{^iscategory}}
+        <li class="wb-faq-entry card mb-2" data-region="faq-entry" data-id="{{id}}"{{#open}} data-loaded="1"{{/open}}>
+            {{> local_wb_faq/entry }}
+        </li>
+        {{/iscategory}}
         {{/results}}
     </ul>
     {{#pagination}}

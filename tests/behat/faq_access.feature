@@ -5,7 +5,10 @@ Feature: Access to the FAQ
   I want to control who can read which part of the FAQ
 
   Background:
-    Given the following "courses" exist:
+    # Moodle 5.2 turns on forcelogin in new installations, which would override the setting of the plugin.
+    Given the following config values are set as admin:
+      | forcelogin | 0 |
+    And the following "courses" exist:
       | fullname | shortname |
       | Course 1 | C1        |
     And the following "users" exist:

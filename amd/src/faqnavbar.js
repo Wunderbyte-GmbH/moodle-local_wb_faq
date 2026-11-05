@@ -36,9 +36,10 @@ let modal = null;
  * Creates the modal with the top level of the FAQ.
  *
  * @param {number} minlength
+ * @param {string} design
  * @returns {Promise<Modal>}
  */
-const createModal = async minlength => {
+const createModal = async(minlength, design) => {
     const pageurl = M.cfg.wwwroot + '/local/wb_faq/index.php';
     const category = await Ajax.call([{
         methodname: 'local_wb_faq_get_category',
@@ -63,6 +64,7 @@ const createModal = async minlength => {
             formaction: pageurl,
             hiddenparams: [],
             minlength,
+            design,
             showsearch: true,
             category,
         }),
@@ -82,7 +84,7 @@ export const init = () => {
     button.addEventListener('click', async e => {
         e.preventDefault();
         try {
-            modal = modal ?? await createModal(Number(button.dataset.minlength));
+            modal = modal ?? await createModal(Number(button.dataset.minlength), button.dataset.design);
             modal.show();
         } catch (error) {
             Notification.exception(error);

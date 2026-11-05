@@ -20,9 +20,9 @@
     A complete FAQ instance. The current state comes rendered by the server, later states are loaded by local_wb_faq/faq.
 
     Example context (json):
-    {"uid": "abc", "root": 0, "categoryid": 0, "entryid": 0, "page": 0, "query": "", "minlength": 3, "pageurl": "#", "formaction": "#", "showsearch": true, "hiddenparams": []}
+    {"uid": "abc", "design": "classic", "root": 0, "categoryid": 0, "entryid": 0, "page": 0, "query": "", "minlength": 3, "pageurl": "#", "formaction": "#", "showsearch": true, "hiddenparams": []}
 }}
-<div class="local_wb_faq_container" data-region="wb-faq" data-uid="{{uid}}" data-root="{{root}}" data-categoryid="{{categoryid}}" data-entryid="{{entryid}}" data-page="{{page}}" data-query="{{query}}" data-allowedit="{{#allowedit}}1{{/allowedit}}" data-nologin="{{#nologin}}1{{/nologin}}" data-history="{{#history}}1{{/history}}" data-pageurl="{{{pageurl}}}" data-minlength="{{minlength}}">
+<div class="local_wb_faq_container wb-faq-design-{{design}}" data-region="wb-faq" data-uid="{{uid}}" data-root="{{root}}" data-categoryid="{{categoryid}}" data-entryid="{{entryid}}" data-page="{{page}}" data-query="{{query}}" data-allowedit="{{#allowedit}}1{{/allowedit}}" data-nologin="{{#nologin}}1{{/nologin}}" data-history="{{#history}}1{{/history}}" data-pageurl="{{{pageurl}}}" data-minlength="{{minlength}}">
     {{#editurl}}<p class="text-end text-right"><a class="btn btn-secondary" href="{{{editurl}}}">{{#str}} wb_faq:canedit, local_wb_faq {{/str}}</a></p>{{/editurl}}
     {{#showsearch}}
     {{> local_wb_faq/display_search }}

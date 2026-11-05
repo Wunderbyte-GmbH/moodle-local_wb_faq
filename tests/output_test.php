@@ -149,6 +149,21 @@ final class output_test extends advanced_testcase {
     }
 
     /**
+     * The design comes from the setting, and unknown values fall back to the first one.
+     */
+    public function test_design(): void {
+        $this->setUser($this->getDataGenerator()->create_user());
+
+        $this->assertStringContainsString('wb-faq-design-classic', $this->render());
+
+        set_config('design', 'modern', 'local_wb_faq');
+        $this->assertStringContainsString('wb-faq-design-modern', $this->render());
+
+        set_config('design', 'unknown"><script>', 'local_wb_faq');
+        $this->assertSame('classic', faq_list::get_design());
+    }
+
+    /**
      * The page numbers skip what is too far away from the current page.
      */
     public function test_pagination(): void {

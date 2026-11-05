@@ -17,20 +17,18 @@
 {{!
     @template local_wb_faq/category
 
-    A subcategory in a list.
+    The content of a subcategory in a list. The including template provides the list item.
 
     Example context (json):
     {"id": 3, "title": "Network", "url": "#", "sortorder": 1, "enabled": true, "canedit": false}
 }}
-<li class="wb-faq-category d-flex align-items-center mb-2" data-id="{{id}}">
-    {{#canedit}}<span class="wb-faq-handle" data-drag-type="move" tabindex="0" role="button" title="{{#str}} moveentry, local_wb_faq {{/str}}">{{#pix}} i/dragdrop, core {{/pix}}</span>{{/canedit}}
-    <a class="btn btn-primary btn-lg wb-faq-category-link" href="{{{url}}}" data-action="goto" data-categoryid="{{id}}">{{{title}}}</a>
-    {{^enabled}}<span class="wb-faq-hidden-badge">{{#str}} hiddenentry, local_wb_faq {{/str}}</span>{{/enabled}}
-    {{#canedit}}
-    <span class="wb-faq-controls">
+{{#canedit}}<span class="wb-faq-handle" data-drag-type="move" tabindex="0" role="button" title="{{#str}} moveentry, local_wb_faq {{/str}}">{{#pix}} i/dragdrop, core {{/pix}}</span>{{/canedit}}
+<a class="btn btn-primary btn-lg wb-faq-category-link" href="{{{url}}}" data-action="goto" data-categoryid="{{id}}">{{{title}}}</a>
+{{^enabled}}<span class="wb-faq-hidden-badge">{{#str}} hiddenentry, local_wb_faq {{/str}}</span>{{/enabled}}
+{{#canedit}}
+<span class="wb-faq-controls">
     <a href="#" data-edit-action="toggle" data-id="{{id}}" title="{{#str}} togglevisibility, local_wb_faq {{/str}}">{{#enabled}}{{#pix}} t/hide, core, {{#str}} togglevisibility, local_wb_faq {{/str}} {{/pix}}{{/enabled}}{{^enabled}}{{#pix}} t/show, core, {{#str}} togglevisibility, local_wb_faq {{/str}} {{/pix}}{{/enabled}}</a>
     <a href="#" data-edit-action="form" data-type="category" data-id="{{id}}" title="{{#str}} editcategory, local_wb_faq {{/str}}">{{#pix}} t/edit, core, {{#str}} editcategory, local_wb_faq {{/str}} {{/pix}}</a>
     <a href="#" data-edit-action="delete" data-id="{{id}}" title="{{#str}} delete {{/str}}">{{#pix}} t/delete, core, {{#str}} delete {{/str}} {{/pix}}</a>
 </span>
-    {{/canedit}}
-</li>
+{{/canedit}}

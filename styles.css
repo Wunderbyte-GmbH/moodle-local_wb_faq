@@ -73,3 +73,204 @@
     opacity: .5;
     transition: opacity .15s;
 }
+
+/* Modern design. It only overrides the Bootstrap components, so that the same fragments work with both designs.
+   The colours come from the theme, --bs-* in Bootstrap 5 (Moodle 5.x) and --primary in Bootstrap 4 (Moodle 4.5). */
+.wb-faq-design-modern {
+    --wb-faq-primary: var(--bs-primary, var(--primary, #0f6cbf));
+    --wb-faq-surface: var(--bs-body-bg, #fff);
+    --wb-faq-text: var(--bs-body-color, #1d2125);
+    --wb-faq-border: rgba(0, 0, 0, .1);
+    --wb-faq-shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 2px 8px rgba(0, 0, 0, .06);
+    --wb-faq-shadow-hover: 0 2px 4px rgba(0, 0, 0, .08), 0 8px 20px rgba(0, 0, 0, .1);
+    --wb-faq-radius: .75rem;
+}
+
+/* Search. */
+.wb-faq-design-modern .wb-faq-search-input {
+    width: 100%;
+    min-width: 100%;
+    padding: .75rem 1.25rem .75rem 2.75rem;
+    border-radius: 50rem;
+    box-shadow: var(--wb-faq-shadow);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%236a737b' stroke-width='2' stroke-linecap='round' viewBox='0 0 24 24'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m21 21-4.3-4.3'/%3E%3C/svg%3E");
+    background-position: 1rem center;
+    background-repeat: no-repeat;
+}
+
+/* Breadcrumbs. */
+.wb-faq-design-modern .wb-faq-breadcrumb {
+    font-size: .875rem;
+}
+
+/* Categories as a grid of cards. Lists with edit controls stay in one column, as they can be sorted vertically. */
+.wb-faq-design-modern .wb-faq-categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.wb-faq-design-modern[data-allowedit="1"] .wb-faq-categories {
+    grid-template-columns: 1fr;
+}
+
+.wb-faq-design-modern .wb-faq-category {
+    margin-bottom: 0 !important;
+    border: 1px solid var(--wb-faq-border);
+    border-radius: var(--wb-faq-radius);
+    background: var(--wb-faq-surface);
+    box-shadow: var(--wb-faq-shadow);
+    transition: box-shadow .15s, transform .15s;
+}
+
+.wb-faq-design-modern .wb-faq-category:hover,
+.wb-faq-design-modern .wb-faq-category:focus-within {
+    box-shadow: var(--wb-faq-shadow-hover);
+    transform: translateY(-2px);
+}
+
+.wb-faq-design-modern .wb-faq-category-link,
+.wb-faq-design-modern .wb-faq-category-link:hover,
+.wb-faq-design-modern .wb-faq-category-link:focus,
+.wb-faq-design-modern .wb-faq-category-link:active {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    border: 0;
+    border-radius: var(--wb-faq-radius);
+    background: transparent;
+    color: var(--wb-faq-text);
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: start;
+}
+
+.wb-faq-design-modern .wb-faq-category-link::after {
+    content: "";
+    flex: none;
+    width: .5rem;
+    height: .5rem;
+    margin-inline-start: 1rem;
+    border-top: 2px solid var(--wb-faq-primary);
+    border-right: 2px solid var(--wb-faq-primary);
+    transform: rotate(45deg);
+}
+
+[dir="rtl"] .wb-faq-design-modern .wb-faq-category-link::after {
+    transform: rotate(-135deg);
+}
+
+/* Questions as an accordion with a chevron on the end of the line. */
+.wb-faq-design-modern .wb-faq-entry {
+    margin-bottom: .75rem !important;
+    border: 1px solid var(--wb-faq-border);
+    border-radius: var(--wb-faq-radius);
+    box-shadow: var(--wb-faq-shadow);
+    overflow: hidden;
+}
+
+.wb-faq-design-modern .wb-faq-entry .card-header {
+    border-bottom: 0;
+    background: transparent;
+}
+
+.wb-faq-design-modern .wb-faq-entry-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    color: var(--wb-faq-text);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.wb-faq-design-modern .wb-faq-entry-toggle:hover {
+    color: var(--wb-faq-primary);
+    text-decoration: none;
+}
+
+.wb-faq-design-modern .wb-faq-entry-toggle:focus-visible {
+    outline: 2px solid var(--wb-faq-primary);
+    outline-offset: -2px;
+}
+
+.wb-faq-design-modern .wb-faq-entry-toggle[aria-expanded="true"] {
+    color: var(--wb-faq-primary);
+}
+
+.wb-faq-design-modern .wb-faq-entry-toggle::before,
+.wb-faq-design-modern .wb-faq-entry-toggle[aria-expanded="true"]::before {
+    content: none;
+}
+
+.wb-faq-design-modern .wb-faq-entry-toggle::after {
+    content: "";
+    flex: none;
+    width: .5rem;
+    height: .5rem;
+    margin-inline-start: 1rem;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform .15s;
+}
+
+.wb-faq-design-modern .wb-faq-entry-toggle[aria-expanded="true"]::after {
+    transform: rotate(-135deg);
+}
+
+.wb-faq-design-modern .wb-faq-entry .card-body {
+    padding: 0 1.25rem 1.25rem;
+}
+
+.wb-faq-design-modern .wb-faq-excerpt {
+    padding: 0 1.25rem .75rem !important;
+    opacity: .75;
+}
+
+/* Search results: the category link gets its own line, so that the chevron stays on the end of the title. */
+.wb-faq-design-modern .wb-faq-search-results .wb-faq-category {
+    margin-bottom: .75rem !important;
+}
+
+.wb-faq-design-modern .wb-faq-search-results .card-header {
+    flex-wrap: wrap;
+}
+
+.wb-faq-design-modern .wb-faq-search-results .wb-faq-entry-heading {
+    flex-basis: 100%;
+}
+
+.wb-faq-design-modern .wb-faq-search-results .wb-faq-parent-link {
+    margin: -.5rem 1.25rem .5rem;
+}
+
+/* Pagination. */
+.wb-faq-design-modern .wb-faq-pagination .pagination {
+    justify-content: center;
+}
+
+.wb-faq-design-modern .wb-faq-pagination .page-link {
+    margin: 0 .125rem;
+    border-radius: .5rem;
+}
+
+.wb-faq-design-modern .wb-faq-empty {
+    padding: 2rem;
+    text-align: center;
+    opacity: .75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .wb-faq-design-modern .wb-faq-category,
+    .wb-faq-design-modern .wb-faq-entry-toggle::after {
+        transition: none;
+    }
+
+    .wb-faq-design-modern .wb-faq-category:hover,
+    .wb-faq-design-modern .wb-faq-category:focus-within {
+        transform: none;
+    }
+}

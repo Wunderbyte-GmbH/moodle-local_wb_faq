@@ -52,6 +52,19 @@ Feature: Move through the FAQ without page reloads
     When I open the FAQ deep link to question "How do I log in?"
     Then I should see "Use your account"
 
+  Scenario: The FAQ works the same way in the modern design
+    Given the following config values are set as admin:
+      | design | modern | local_wb_faq |
+    And I open the FAQ page "index"
+    And I set the FAQ page reload marker
+    And ".wb-faq-design-modern" "css_element" should exist
+    When I click on "Network" "link" in the "[data-region='faq-content']" "css_element"
+    Then I should see "Wi-Fi"
+    When I click on "Is the cable ok?" "link"
+    Then I should see "Check the plug"
+    And ".wb-faq-design-modern" "css_element" should exist
+    And the FAQ page should not have been reloaded
+
   Scenario: Long lists are paginated
     Given the following config values are set as admin:
       | perpage | 2 | local_wb_faq |

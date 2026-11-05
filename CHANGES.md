@@ -1,6 +1,7 @@
-## Version 0.3.0 (2026110500)
+## Version 0.3.0 (2026110501)
 
 ### Improvements
+* New setting `design`: choose between the classic and a new modern design.
 * Real AJAX navigation: categories, questions, search and pages load only the changed fragment through webservices
   and the shared Mustache templates. Browser history and deep links (`faqcat`, `faqentry`, `faqpage`, `faqq`) work.
 * The first state is rendered by the server. Links and the search form also work without JavaScript.

@@ -20,12 +20,12 @@
     The help menu in the navigation bar. The attributes for both Bootstrap 4 and 5 are set, to support Moodle 4.5 and 5.x.
 
     Example context (json):
-    {"minlength": 3, "links": [{"label": "Contact", "url": "#"}]}
+    {"minlength": 3, "design": "classic", "links": [{"label": "Contact", "url": "#"}]}
 }}
 <div class="popover-region nav-link icon-no-margin dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" id="local_wb_faq-menu" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{#str}} support, local_wb_faq {{/str}}</button>
     <div class="dropdown-menu" aria-labelledby="local_wb_faq-menu">
-        <a class="dropdown-item" href="#" data-action="local_wb_faq-open-modal" data-minlength="{{minlength}}">{{#str}} faq, local_wb_faq {{/str}}</a>
+        <a class="dropdown-item" href="#" data-action="local_wb_faq-open-modal" data-minlength="{{minlength}}" data-design="{{design}}">{{#str}} faq, local_wb_faq {{/str}}</a>
         {{#links}}
         <a class="dropdown-item" href="{{{url}}}" target="_blank" rel="noopener noreferrer">{{label}}</a>
         {{/links}}

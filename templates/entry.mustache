@@ -17,29 +17,28 @@
 {{!
     @template local_wb_faq/entry
 
-    A question which can be opened to show its answer. The link makes it work without JavaScript too.
+    The content of a question which can be opened to show its answer. The link makes it work without JavaScript too.
+    The including template provides the list item.
 
     Example context (json):
     {"id": 7, "uid": "abc", "title": "How do I log in?", "url": "#", "enabled": true, "canedit": false, "open": true, "content": "<p>With your account.</p>"}
 }}
-<li class="wb-faq-entry card mb-2" data-region="faq-entry" data-id="{{id}}"{{#open}} data-loaded="1"{{/open}}>
-    <div class="card-header p-0 d-flex align-items-center">
-        {{#canedit}}<span class="wb-faq-handle" data-drag-type="move" tabindex="0" role="button" title="{{#str}} moveentry, local_wb_faq {{/str}}">{{#pix}} i/dragdrop, core {{/pix}}</span>{{/canedit}}
-        <h3 class="wb-faq-entry-heading m-0" id="wb-faq-heading-{{id}}-{{uid}}">
-            <a class="btn btn-link wb-faq-entry-toggle{{^open}} collapsed{{/open}}" href="{{{url}}}" data-action="toggle-entry" aria-expanded="{{#open}}true{{/open}}{{^open}}false{{/open}}" aria-controls="wb-faq-collapse-{{id}}-{{uid}}">{{{title}}}</a>
-        </h3>
-        {{^enabled}}<span class="wb-faq-hidden-badge">{{#str}} hiddenentry, local_wb_faq {{/str}}</span>{{/enabled}}
-        {{#parenttitle}}<a class="wb-faq-parent-link" href="{{{parenturl}}}" data-action="goto" data-categoryid="{{parentid}}">{{{parenttitle}}}</a>{{/parenttitle}}
-        {{#canedit}}
-        <span class="wb-faq-controls">
-    <a href="#" data-edit-action="toggle" data-id="{{id}}" title="{{#str}} togglevisibility, local_wb_faq {{/str}}">{{#enabled}}{{#pix}} t/hide, core, {{#str}} togglevisibility, local_wb_faq {{/str}} {{/pix}}{{/enabled}}{{^enabled}}{{#pix}} t/show, core, {{#str}} togglevisibility, local_wb_faq {{/str}} {{/pix}}{{/enabled}}</a>
-    <a href="#" data-edit-action="form" data-type="question" data-id="{{id}}" title="{{#str}} editquestion, local_wb_faq {{/str}}">{{#pix}} t/edit, core, {{#str}} editquestion, local_wb_faq {{/str}} {{/pix}}</a>
-    <a href="#" data-edit-action="delete" data-id="{{id}}" title="{{#str}} delete {{/str}}">{{#pix}} t/delete, core, {{#str}} delete {{/str}} {{/pix}}</a>
-</span>
-        {{/canedit}}
-    </div>
-    {{#excerpt}}<p class="wb-faq-excerpt m-0 px-3 py-2">{{excerpt}}</p>{{/excerpt}}
-    <div id="wb-faq-collapse-{{id}}-{{uid}}" class="collapse{{#open}} show{{/open}}" data-region="faq-entry-content" role="region" aria-labelledby="wb-faq-heading-{{id}}-{{uid}}">
-        <div class="card-body" data-region="faq-entry-body">{{{content}}}</div>
-    </div>
-</li>
+<div class="card-header p-0 d-flex align-items-center">
+    {{#canedit}}<span class="wb-faq-handle" data-drag-type="move" tabindex="0" role="button" title="{{#str}} moveentry, local_wb_faq {{/str}}">{{#pix}} i/dragdrop, core {{/pix}}</span>{{/canedit}}
+    <h3 class="wb-faq-entry-heading m-0" id="wb-faq-heading-{{id}}-{{uid}}">
+        <a class="btn btn-link wb-faq-entry-toggle{{^open}} collapsed{{/open}}" href="{{{url}}}" data-action="toggle-entry" aria-expanded="{{#open}}true{{/open}}{{^open}}false{{/open}}" aria-controls="wb-faq-collapse-{{id}}-{{uid}}">{{{title}}}</a>
+    </h3>
+    {{^enabled}}<span class="wb-faq-hidden-badge">{{#str}} hiddenentry, local_wb_faq {{/str}}</span>{{/enabled}}
+    {{#parenttitle}}<a class="wb-faq-parent-link" href="{{{parenturl}}}" data-action="goto" data-categoryid="{{parentid}}">{{{parenttitle}}}</a>{{/parenttitle}}
+    {{#canedit}}
+    <span class="wb-faq-controls">
+        <a href="#" data-edit-action="toggle" data-id="{{id}}" title="{{#str}} togglevisibility, local_wb_faq {{/str}}">{{#enabled}}{{#pix}} t/hide, core, {{#str}} togglevisibility, local_wb_faq {{/str}} {{/pix}}{{/enabled}}{{^enabled}}{{#pix}} t/show, core, {{#str}} togglevisibility, local_wb_faq {{/str}} {{/pix}}{{/enabled}}</a>
+        <a href="#" data-edit-action="form" data-type="question" data-id="{{id}}" title="{{#str}} editquestion, local_wb_faq {{/str}}">{{#pix}} t/edit, core, {{#str}} editquestion, local_wb_faq {{/str}} {{/pix}}</a>
+        <a href="#" data-edit-action="delete" data-id="{{id}}" title="{{#str}} delete {{/str}}">{{#pix}} t/delete, core, {{#str}} delete {{/str}} {{/pix}}</a>
+    </span>
+    {{/canedit}}
+</div>
+{{#excerpt}}<p class="wb-faq-excerpt m-0 px-3 py-2">{{excerpt}}</p>{{/excerpt}}
+<div id="wb-faq-collapse-{{id}}-{{uid}}" class="collapse{{#open}} show{{/open}}" data-region="faq-entry-content" role="region" aria-labelledby="wb-faq-heading-{{id}}-{{uid}}">
+    <div class="card-body" data-region="faq-entry-body">{{{content}}}</div>
+</div>
